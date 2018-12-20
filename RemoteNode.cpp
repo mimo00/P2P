@@ -13,7 +13,7 @@
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
     receiverTasks = new vector<Task>;
     senderTasks=new vector<Task>;
-    receiver = new Receiver(receiverTasks);
+    receiver = new Receiver(receiverTasks,senderTasks);
     sender = new Sender(senderTasks);
     start();
 }

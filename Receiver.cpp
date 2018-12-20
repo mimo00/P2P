@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Receiver::Receiver(vector<Task>* tasks): tasks(tasks){};
+Receiver::Receiver(vector<Task>* receiverTasks,vector<Task>* senderTasks): receiverTasks(receiverTasks), senderTasks(senderTasks) {};
 
 void Receiver::run()
 {

@@ -14,11 +14,10 @@ using namespace std;
 
 class Sender: public Stoppable {
 public:
-    Sender(vector<Task>* tasks);
+    Sender(vector<Task>* senderTasks);
     void run();
 private:
-    vector<Task>* tasks;
-
+    vector<Task>* senderTasks;
 };
 
 
