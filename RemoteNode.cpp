@@ -7,31 +7,40 @@
 #include <thread>
 #include <future>
 #include <unistd.h>
+#include "Tasks/Task.h"
 
 
-void initiazer(promise<vector<string>> *promObj)
+RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
+    receiverTasks = new vector<Task>;
+    receiver = new Receiver(receiverTasks);
+    start_receiver();
+}
+
+RemoteNode::RemoteNode(RemoteNode && obj) : receiver(obj.receiver)
 {
-    vector<string> a;
-    a.emplace_back("a");
-    a.emplace_back("ab");
-    a.emplace_back("abc");
-    sleep(1);
-    promObj->set_value(a);
-    return;
+    std::cout << "Move RemoteNode Constructor is called" << std::endl;
 }
 
+RemoteNode& RemoteNode::operator=(RemoteNode && obj)
+{
+    std::cout << "Move RemoteNode Assignment is called" << std::endl;
+    receiver = std::move(obj.receiver);
+    return *this;
+}
 
-RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){}
+RemoteNode::~RemoteNode(){};
 
 
-vector<string> RemoteNode::get_files(){
-    promise<vector<string>> promiseObj;
-    future<vector<string>> futureObj = promiseObj.get_future();
-    thread th(initiazer, &promiseObj);
-    vector<string> fileList = futureObj.get();
+void RemoteNode::start_receiver(){
+    std::thread th([&](){receiver->run();});
     th.detach();
-    return fileList;
 }
+
+
+void RemoteNode::addReceiverTask(Task& task){
+    receiverTasks->emplace_back(task);
+}
+
 
 bool RemoteNode::operator==(const RemoteNode &other){
     return this->getSockfd() == other.getSockfd();

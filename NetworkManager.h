@@ -6,7 +6,7 @@
 #define P2P_NETWORKMANAGER_H
 
 
-#include <vector>
+#include <list>
 #include <set>
 #include "RemoteNode.h"
 
@@ -14,11 +14,11 @@ using  namespace std;
 
 class NetworkManager {
 private:
-    vector<RemoteNode> remoteNodes;
+    list<RemoteNode> remoteNodes;
 public:
-    set<string> getFiles();
-    void registerRemoteNode(RemoteNode remoteNode);
-    void unregisterRemoteNode(RemoteNode remoteNode);
+    NetworkManager();
+    void registerRemoteNode(int sockfd);
+    void unregisterRemoteNode(int sockfd);
 };
 
 
