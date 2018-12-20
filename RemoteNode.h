@@ -10,6 +10,7 @@
 #include <iostream>
 #include "Tasks/Task.h"
 #include "Receiver.h"
+#include "Sender.h"
 #include <thread>
 #include <future>
 #include <unistd.h>
@@ -21,15 +22,18 @@ class RemoteNode {
 private:
     int sockfd;
     vector<Task>* receiverTasks;
-    void start_receiver();
+    vector<Task>* senderTasks;
+    void start();
 public:
     Receiver* receiver;
+    Sender* sender;
     RemoteNode(int sockfd);
     RemoteNode& operator=(RemoteNode && obj);
     RemoteNode(RemoteNode && obj);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
     void addReceiverTask(Task&);
+    void addSenderTask(Task&);
     int getSockfd()const{ return this->sockfd; }
 };
 

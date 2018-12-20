@@ -12,8 +12,10 @@
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
     receiverTasks = new vector<Task>;
+    senderTasks=new vector<Task>;
     receiver = new Receiver(receiverTasks);
-    start_receiver();
+    sender = new Sender(senderTasks);
+    start();
 }
 
 RemoteNode::RemoteNode(RemoteNode && obj) : receiver(obj.receiver)
@@ -31,14 +33,20 @@ RemoteNode& RemoteNode::operator=(RemoteNode && obj)
 RemoteNode::~RemoteNode(){};
 
 
-void RemoteNode::start_receiver(){
-    std::thread th([&](){receiver->run();});
-    th.detach();
+void RemoteNode::start(){
+    std::thread th1([&](){receiver->run();});
+    th1.detach();
+    std::thread th2([&](){sender->run();});
+    th2.detach();
 }
 
 
 void RemoteNode::addReceiverTask(Task& task){
     receiverTasks->emplace_back(task);
+}
+
+void RemoteNode::addSenderTask(Task& task){
+    senderTasks->emplace_back(task);
 }
 
 
