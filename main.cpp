@@ -9,11 +9,13 @@
 #include <unistd.h>
 
 int main() {
+    RemoteNode* rm1 = new RemoteNode(1);
+    RemoteNode* rm2 = new RemoteNode(2);
     NetworkManager nm;
-    nm.registerRemoteNode(2);
-    nm.registerRemoteNode(3);
+    nm.registerRemoteNode(rm1);
+    nm.registerRemoteNode(rm2);
     sleep(2);
-    nm.unregisterRemoteNode(2);
+    nm.unregisterRemoteNode(rm1);
     sleep(2);
     return 0;
 }

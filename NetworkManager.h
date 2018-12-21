@@ -14,11 +14,11 @@ using  namespace std;
 
 class NetworkManager {
 private:
-    list<RemoteNode> remoteNodes;
+    list<RemoteNode*> remoteNodes;
 public:
     NetworkManager();
-    void registerRemoteNode(int sockfd);
-    void unregisterRemoteNode(int sockfd);
+    void registerRemoteNode(RemoteNode* remoteNode);
+    void unregisterRemoteNode(RemoteNode* remoteNode);
 };
 
 

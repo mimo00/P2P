@@ -13,7 +13,6 @@ void Sender::run() {
     {
         cout<<"sender working"<<senderTasks->size()<<endl;
         this_thread::sleep_for(chrono::milliseconds(2000));
-        //cout<<"adding task to receiver list"<<endl;
 
     }
     cout<<"sender ended";

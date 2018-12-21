@@ -11,14 +11,12 @@
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
-    receiverTasks = new vector<Task>;
-    senderTasks=new vector<Task>;
-    receiver = new Receiver(receiverTasks,senderTasks);
-    sender = new Sender(senderTasks);
+    receiver = new Receiver(&receiverTasks, &senderTasks);
+    sender = new Sender(&senderTasks);
     start();
 }
 
-RemoteNode::RemoteNode(RemoteNode && obj) : receiver(obj.receiver)
+RemoteNode::RemoteNode(RemoteNode && obj): receiver(obj.receiver)
 {
     std::cout << "Move RemoteNode Constructor is called" << std::endl;
 }
@@ -42,14 +40,30 @@ void RemoteNode::start(){
 
 
 void RemoteNode::addReceiverTask(Task& task){
-    receiverTasks->emplace_back(task);
+    receiverTasks.emplace_back(task);
 }
 
 void RemoteNode::addSenderTask(Task& task){
-    senderTasks->emplace_back(task);
+    senderTasks.emplace_back(task);
 }
 
 
 bool RemoteNode::operator==(const RemoteNode &other){
     return this->getSockfd() == other.getSockfd();
+}
+
+const vector<Task> &RemoteNode::getReceiverTasks() const {
+    return receiverTasks;
+}
+
+const vector<Task> &RemoteNode::getSenderTasks() const {
+    return senderTasks;
+}
+
+Receiver *RemoteNode::getReceiver() const {
+    return receiver;
+}
+
+Sender *RemoteNode::getSender() const {
+    return sender;
 }
