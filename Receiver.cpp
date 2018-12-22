@@ -13,7 +13,6 @@ Receiver::Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTask)
 void Receiver::run()
 {
     cout << "Start Receiver" << endl;
-    SenderSerializer requestSerializer;
     while (!stopRequested())
     {
         //Package* package = requestSerializer.getPackage();

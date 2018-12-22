@@ -10,7 +10,11 @@
 
 class SenderSerializer {
 public:
+    SenderSerializer(int);
     void send(Package package);
+
+private:
+    int socketDescriptor;
 };
 
 

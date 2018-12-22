@@ -8,7 +8,8 @@
 
 using namespace std;
 
-Sender::Sender(vector<SenderTask*>* senderTasks): senderTasks(senderTasks) {};
+Sender::Sender(vector<SenderTask*>* senderTasks, int socketDescriptor)
+: senderTasks(senderTasks), socketDescriptor(socketDescriptor), senderSerializer(socketDescriptor) {};
 
 void Sender::run() {
     cout<<"sender started"<<endl;
@@ -18,7 +19,7 @@ void Sender::run() {
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
             Package package = senderTask->getPackage();
-            requestSerializer.send(package);
+            senderSerializer.send(package);
         } else {
             cout << "Pusty wektor nie biorę nic" << endl;
         }

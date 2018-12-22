@@ -16,10 +16,11 @@ using namespace std;
 
 class Sender: public Stoppable {
 public:
-    Sender(vector<SenderTask*>* senderTasks);
+    Sender(vector<SenderTask*>* senderTasks, int socketDescriptor);
     void run();
 private:
-    SenderSerializer requestSerializer;
+    int socketDescriptor;
+    SenderSerializer senderSerializer;
     vector<SenderTask*>* senderTasks;
 };
 
