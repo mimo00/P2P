@@ -12,6 +12,7 @@ class Task {
 protected:
     int id;
 public:
+    Task(int id): id(id){};
 //    virtual void execute();
 };
 

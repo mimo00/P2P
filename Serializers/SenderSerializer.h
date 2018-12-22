@@ -6,11 +6,11 @@
 #define P2P_REQUESTSERIALIZER_H
 
 
-#include "Packages/Package.h"
+#include "../Packages/Package.h"
 
-class RequestSerializer {
+class SenderSerializer {
 public:
-    Package* getPackage();
+    void send(Package package);
 };
 
 

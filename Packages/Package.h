@@ -11,8 +11,9 @@ protected:
     int operationCode;
     int taskId;
 public:
-    Package(int taskId): taskId(taskId) {};
-    int getTaskId() {return taskId;};
+    Package(int taskId, int operationCode): taskId(taskId), operationCode(operationCode) {};
+    int getOperationCode() const { return operationCode; }
+    int getTaskId() const { return taskId; }
 };
 
 

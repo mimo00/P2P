@@ -8,6 +8,7 @@
 #include <future>
 #include <unistd.h>
 #include "Tasks/Task.h"
+#include "Tasks/SendFilesListRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
@@ -32,18 +33,18 @@ RemoteNode::~RemoteNode(){};
 
 
 void RemoteNode::start(){
-    std::thread th1([&](){receiver->run();});
-    th1.detach();
+//    std::thread th1([&](){receiver->run();});
+//    th1.detach();
     std::thread th2([&](){sender->run();});
     th2.detach();
 }
 
 
-void RemoteNode::addReceiverTask(Task& task){
+void RemoteNode::addReceiverTask(Task* task){
     receiverTasks.emplace_back(task);
 }
 
-void RemoteNode::addSenderTask(Task& task){
+void RemoteNode::addSenderTask(SenderTask* task){
     senderTasks.emplace_back(task);
 }
 
@@ -52,11 +53,11 @@ bool RemoteNode::operator==(const RemoteNode &other){
     return this->getSockfd() == other.getSockfd();
 }
 
-const vector<Task> &RemoteNode::getReceiverTasks() const {
+const vector<Task*> &RemoteNode::getReceiverTasks() const {
     return receiverTasks;
 }
 
-const vector<Task> &RemoteNode::getSenderTasks() const {
+const vector<SenderTask*> &RemoteNode::getSenderTasks() const {
     return senderTasks;
 }
 
@@ -66,4 +67,9 @@ Receiver *RemoteNode::getReceiver() const {
 
 Sender *RemoteNode::getSender() const {
     return sender;
+}
+
+void RemoteNode::getFilesList(){
+    SendFilesListRequest* senderTask =  new SendFilesListRequest(20);
+    addSenderTask(senderTask);
 }

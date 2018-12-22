@@ -8,16 +8,19 @@
 
 #include "Stoppable.h"
 #include "Tasks/Task.h"
+#include "Tasks/SenderTask.h"
+#include "Serializers/SenderSerializer.h"
 #include <vector>
 
 using namespace std;
 
 class Sender: public Stoppable {
 public:
-    Sender(vector<Task>* senderTasks);
+    Sender(vector<SenderTask*>* senderTasks);
     void run();
 private:
-    vector<Task>* senderTasks;
+    SenderSerializer requestSerializer;
+    vector<SenderTask*>* senderTasks;
 };
 
 

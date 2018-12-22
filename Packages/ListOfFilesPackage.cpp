@@ -6,6 +6,6 @@
 
 
 ListOfFilesPackage::ListOfFilesPackage(int taskId, int numberOfFiles)
-        : Package(taskId), numberOfFiles(numberOfFiles){};
+        : Package(taskId, 10), numberOfFiles(numberOfFiles){};
 
 int ListOfFilesPackage::getNumberOfFiles() { return numberOfFiles; }

@@ -8,17 +8,18 @@
 #include <vector>
 #include "Stoppable.h"
 #include "Tasks/Task.h"
+#include "Tasks/SenderTask.h"
 
 using namespace std;
 
 class Receiver: public Stoppable
 {
 public:
-    Receiver(vector<Task>* receiverTasks,vector<Task>* senderTasks);
+    Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTasks);
     void run();
 private:
-    vector<Task>* receiverTasks;
-    vector<Task>* senderTasks;
+    vector<Task*>* receiverTasks;
+    vector<SenderTask*>* senderTask;
 };
 
 #endif //P2P_REVEIVER_H

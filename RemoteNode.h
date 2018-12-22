@@ -11,6 +11,7 @@
 #include "Tasks/Task.h"
 #include "Receiver.h"
 #include "Sender.h"
+#include "Tasks/SenderTask.h"
 #include <thread>
 #include <future>
 #include <unistd.h>
@@ -21,8 +22,8 @@ using  namespace std;
 class RemoteNode {
 private:
     int sockfd;
-    vector<Task> receiverTasks;
-    vector<Task> senderTasks;
+    vector<Task*> receiverTasks;
+    vector<SenderTask*> senderTasks;
     Receiver* receiver;
     Sender* sender;
     void start();
@@ -32,13 +33,14 @@ public:
     RemoteNode(RemoteNode && obj);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
-    const vector<Task> &getReceiverTasks() const;
-    const vector<Task> &getSenderTasks() const;
-    void addReceiverTask(Task&);
-    void addSenderTask(Task&);
+    const vector<Task*> &getReceiverTasks() const;
+    const vector<SenderTask*> &getSenderTasks() const;
+    void addReceiverTask(Task*);
+    void addSenderTask(SenderTask*);
     Receiver *getReceiver() const;
     Sender *getSender() const;
     int getSockfd()const{ return this->sockfd; }
+    void getFilesList();
 };
 
 
