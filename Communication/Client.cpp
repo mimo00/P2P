@@ -8,7 +8,10 @@
 
 Client::Client(int socketDescriptor): socketDescriptor(socketDescriptor) {}
 
+using namespace std;
+
 void Client::sendOperationCode(int operationCode){
-    std::cout<<operationCode<<std::endl;
-    write(socketDescriptor, &operationCode, sizeof(int));
+//    std::cout<<operationCode<<std::endl;
+    ssize_t ile_bitow = write(socketDescriptor, &operationCode, sizeof(int));
+//    cout<< "Ile bitow zapisano" <<  ile_bitow << endl;
 }

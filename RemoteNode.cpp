@@ -12,7 +12,7 @@
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
-    receiver = new Receiver(&receiverTasks, &senderTasks);
+    receiver = new Receiver(&receiverTasks, &senderTasks, sockfd);
     sender = new Sender(&senderTasks, sockfd);
     start();
 }
@@ -33,10 +33,10 @@ RemoteNode::~RemoteNode(){};
 
 
 void RemoteNode::start(){
-//    std::thread th1([&](){receiver->run();});
-//    th1.detach();
-    std::thread th2([&](){sender->run();});
-    th2.detach();
+    std::thread receiverThread([&](){receiver->run();});
+    receiverThread.detach();
+    std::thread senderThread([&](){sender->run();});
+    senderThread.detach();
 }
 
 
@@ -70,6 +70,6 @@ Sender *RemoteNode::getSender() const {
 }
 
 void RemoteNode::getFilesList(){
-    SendFilesListRequest* senderTask =  new SendFilesListRequest(20);
+    auto senderTask =  new SendFilesListRequest(20);
     addSenderTask(senderTask);
 }

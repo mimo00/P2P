@@ -15,11 +15,13 @@ using namespace std;
 class Receiver: public Stoppable
 {
 public:
-    Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTasks);
+    Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTasks, int socketDescriptor);
     void run();
 private:
+    int socketDescriptor;
     vector<Task*>* receiverTasks;
     vector<SenderTask*>* senderTask;
+    bool canRead();
 };
 
 #endif //P2P_REVEIVER_H

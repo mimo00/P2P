@@ -12,7 +12,7 @@ Sender::Sender(vector<SenderTask*>* senderTasks, int socketDescriptor)
 : senderTasks(senderTasks), socketDescriptor(socketDescriptor), senderSerializer(socketDescriptor) {};
 
 void Sender::run() {
-    cout<<"sender started"<<endl;
+//    cout<<"sender started"<<endl;
     while(!stopRequested())
     {
         if (!senderTasks->empty()){
@@ -21,9 +21,9 @@ void Sender::run() {
             Package package = senderTask->getPackage();
             senderSerializer.send(package);
         } else {
-            cout << "Pusty wektor nie biorę nic" << endl;
+//            cout << "Pusty wektor nie biorę nic" << endl;
         }
         this_thread::sleep_for(chrono::milliseconds(2000));
     }
-    cout<<"sender ended";
+//    cout<<"sender ended";
 }

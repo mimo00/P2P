@@ -10,16 +10,17 @@
 #include <fcntl.h>
 
 int main() {
-    int descriptor = open("/home/michal/Desktop/TIN_TEST/dane.txt", O_WRONLY);
-    auto rm1 = new RemoteNode(descriptor);
-//    auto rm2 = new RemoteNode(2);
-    NetworkManager nm;
-    nm.registerRemoteNode(rm1);
+    int descriptor1 = open("/home/michal/Desktop/TIN_TEST/dane1.txt", O_WRONLY);
+    int descriptor2 = open("/home/michal/Desktop/TIN_TEST/dane2.txt", O_RDONLY);
+    auto rm1 = new RemoteNode(descriptor1);
+    auto rm2 = new RemoteNode(descriptor2);
+//    NetworkManager nm;
+//    nm.registerRemoteNode(rm1);
 //    nm.registerRemoteNode(rm2);
     rm1->getFilesList();
-    sleep(3);
+    sleep(120);
 //    rm1->getFilesList();
-    nm.unregisterRemoteNode(rm1);
+//    nm.unregisterRemoteNode(rm1);
     sleep(2);
     return 0;
 }
