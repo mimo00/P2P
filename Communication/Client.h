@@ -9,7 +9,7 @@
 class Client {
 public:
     Client(int);
-    void sendOperationCode(int operationCode);
+    void sendInteger(int operationCode);
 
 private:
     int socketDescriptor;

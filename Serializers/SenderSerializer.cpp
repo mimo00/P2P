@@ -13,7 +13,8 @@ SenderSerializer::SenderSerializer(int socketDescriptor): socketDescriptor(socke
 
 
 void SenderSerializer::send(Package package){
-    cout<<"Wysylam pakiet "<< package.getTaskId() << " " << package.getOperationCode() << endl;
+    cout<<"Wysylam pakiet "<< endl;
     Client client(socketDescriptor);
-    client.sendOperationCode(package.getOperationCode());
+    client.sendInteger(package.getOperationCode());
+    client.sendInteger(package.getTaskId());
 }

@@ -10,7 +10,7 @@
 using namespace std;
 
 Receiver::Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor)
-: receiverTasks(receiverTasks), senderTask(senderTask), socketDescriptor(socketDescriptor) {};
+: receiverTasks(receiverTasks), senderTask(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor) {};
 
 
 bool Receiver::canRead(){
@@ -32,11 +32,7 @@ void Receiver::run()
     while (!stopRequested())
     {
         if (canRead()) {
-            int a;
-            ssize_t ilosc_bitow = read(socketDescriptor, &a, sizeof(a));
-//            if (ilosc_bitow > 0)
-            cout << "Wartosc" << a << endl;
-            cout << "Przeczytano: " << ilosc_bitow << endl;
+            receiverDeserializer.readData();
         }
         sleep(1);
     }
