@@ -6,13 +6,12 @@
 #define P2P_SENDFILESLIST_H
 
 #include "SenderTask.h"
-#include "../OperationCode.h"
+#include "../../OperationCode.h"
 
 class SendFilesList: public SenderTask {
 public:
-    int id;
     const int operatinoCode = OperationCode::FILES_LIST;
-    SendFilesList(int id): id(id){};
+    SendFilesList(int id): SenderTask(id){};
     Package getPackage() override;
 };
 

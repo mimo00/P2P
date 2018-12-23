@@ -6,12 +6,15 @@
 #define P2P_SENDERTASK_H
 
 
-#include "Task.h"
-#include "../Packages/Package.h"
+#include "../Task.h"
+#include "../../Packages/Package.h"
 
 class SenderTask {
 public:
-    virtual Package getPackage() {};
+    SenderTask(int id): id(id){};
+    virtual Package getPackage() = 0;
+protected:
+    int id;
 };
 
 

@@ -6,7 +6,7 @@
 #include "Serializers/SenderSerializer.h"
 #include "Packages/ListOfFilesPackage.h"
 #include "OperationCode.h"
-#include "Tasks/SendFilesList.h"
+#include "Tasks/SenderTasks/SendFilesList.h"
 #include <unistd.h>
 #include <list>
 #include <algorithm>
