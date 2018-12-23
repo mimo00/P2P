@@ -10,11 +10,20 @@ using namespace std;
 
 ReceiverDeserializer::ReceiverDeserializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
 
-Package* ReceiverDeserializer::readData(){
+Package ReceiverDeserializer::readData(){
+    ssize_t readSize;
     int operationCode;
-    ssize_t ilosc_bitow = read(socketDescriptor, &operationCode, sizeof(int));
-    cout << "Wartosc" << operationCode << endl;
+    readSize = read(socketDescriptor, &operationCode, sizeof(int));
+    if (readSize == 0)
+        throw BrokenConnectionException();
+    else
+        cout << "Wartosc " << operationCode << endl;
     int taskId;
-    ssize_t ilosc_bitow2 = read(socketDescriptor, &taskId, sizeof(int));
-    cout << "Task Id" << taskId << endl;
+    readSize = read(socketDescriptor, &taskId, sizeof(int));
+    if (readSize == 0)
+        throw BrokenConnectionException();
+    else
+        cout << "Task Id " << taskId << endl;
+    Package package(taskId, operationCode);
+    return package;
 }

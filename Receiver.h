@@ -21,9 +21,12 @@ public:
 private:
     int socketDescriptor;
     vector<Task*>* receiverTasks;
-    vector<SenderTask*>* senderTask;
+    vector<SenderTask*>* senderTasks;
     ReceiverDeserializer receiverDeserializer;
     bool canRead();
+    bool isRequest(Package&);
+    void createResponse(Package&);
+    void processRequest(Package&);
 };
 
 #endif //P2P_REVEIVER_H

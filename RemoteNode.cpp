@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "Tasks/Task.h"
 #include "Tasks/SendFilesListRequest.h"
+#include "OperationCode.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){

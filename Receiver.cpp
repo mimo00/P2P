@@ -5,12 +5,16 @@
 #include "Receiver.h"
 #include "Serializers/SenderSerializer.h"
 #include "Packages/ListOfFilesPackage.h"
+#include "OperationCode.h"
+#include "Tasks/SendFilesList.h"
 #include <unistd.h>
+#include <list>
+#include <algorithm>
 
 using namespace std;
 
 Receiver::Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor)
-: receiverTasks(receiverTasks), senderTask(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor) {};
+: receiverTasks(receiverTasks), senderTasks(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor) {};
 
 
 bool Receiver::canRead(){
@@ -26,13 +30,44 @@ bool Receiver::canRead(){
     return retval != 0;
 }
 
+bool Receiver::isRequest(Package& package){
+    const list<int> requestOperationCodes = list<int>({OperationCode::FILES_LIST_REQUEST});
+    return find(requestOperationCodes.begin(), requestOperationCodes.end(), package.getOperationCode()) != requestOperationCodes.end();
+}
+
+void Receiver::createResponse(Package& package){
+    /*Funkcja powinna stworzyć odpowiedni Task dla sendera */
+    cout<<"Tworze odpowiedz" << endl;
+    int operationCode = package.getOperationCode();
+    int id = package.getTaskId();
+    SenderTask* senderTask;
+    switch (operationCode)
+    {
+        case OperationCode::FILES_LIST_REQUEST:
+            senderTask = new SendFilesList(id);
+            senderTasks->emplace_back(senderTask);
+            break;
+    }
+}
+
+void Receiver::processRequest(Package& package){
+    cout<<"Przetwarzam request" << endl;
+}
 
 void Receiver::run()
 {
     while (!stopRequested())
     {
         if (canRead()) {
-            receiverDeserializer.readData();
+            try{
+                auto package = receiverDeserializer.readData();
+                if (isRequest(package))
+                    createResponse(package);
+                else
+                    processRequest(package);
+            }catch (BrokenConnectionException& e){
+                //Wyrejestrowanie noda
+            }
         }
         sleep(1);
     }

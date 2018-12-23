@@ -7,11 +7,17 @@
 
 
 #include "../Packages/Package.h"
+#include <exception>
+
+using namespace std;
+
+class BrokenConnectionException : public exception
+{};
 
 class ReceiverDeserializer {
 public:
     ReceiverDeserializer(int);
-    Package* readData();
+    Package readData();
 
 private:
     int socketDescriptor;
