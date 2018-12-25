@@ -13,4 +13,9 @@ public:
 };
 
 
+struct File {
+    char name[64];
+    int hash;
+    int size;
+};
 #endif //P2P_OPERATIONCODE_H
