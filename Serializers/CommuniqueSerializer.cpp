@@ -3,16 +3,16 @@
 //
 #include "../Packages/ListOfFilesPackage.h"
 
-#include "SenderSerializer.h"
+#include "CommuniqueSerializer.h"
 #include <iostream>
 #include "../Communication/Client.h"
 
 using namespace std;
 
-SenderSerializer::SenderSerializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
+CommuniqueSerializer::CommuniqueSerializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
 
 
-void SenderSerializer::send(Package package){
+void CommuniqueSerializer::send(Package package){
     cout<<"Wysylam pakiet "<< endl;
     Client client(socketDescriptor);
     client.sendInteger(package.getOperationCode());

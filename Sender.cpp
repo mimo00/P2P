@@ -4,12 +4,12 @@
 
 #include "Sender.h"
 #include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/SenderSerializer.h"
+#include "Serializers/CommuniqueSerializer.h"
 
 using namespace std;
 
 Sender::Sender(vector<SenderTask*>* senderTasks, int socketDescriptor)
-: senderTasks(senderTasks), socketDescriptor(socketDescriptor), senderSerializer(socketDescriptor) {};
+: senderTasks(senderTasks), socketDescriptor(socketDescriptor) {};
 
 void Sender::run() {
 //    cout<<"sender started"<<endl;
@@ -18,8 +18,7 @@ void Sender::run() {
         if (!senderTasks->empty()){
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
-            Package package = senderTask->getPackage();
-            senderSerializer.send(package);
+            senderTask->send(socketDescriptor);
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;
         }

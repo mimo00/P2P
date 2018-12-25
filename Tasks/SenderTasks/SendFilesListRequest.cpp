@@ -3,7 +3,11 @@
 //
 
 #include "SendFilesListRequest.h"
+#include "../../Serializers/CommuniqueSerializer.h"
 
-Package SendFilesListRequest::getPackage() {
-    return {id, operatinoCode};
+
+void SendFilesListRequest::send(int socket) {
+    Package package(id, operatinoCode);
+    CommuniqueSerializer communiqueSerializer(socket);
+    communiqueSerializer.send(package);
 }

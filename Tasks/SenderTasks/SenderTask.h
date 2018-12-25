@@ -12,7 +12,7 @@
 class SenderTask {
 public:
     SenderTask(int id): id(id){};
-    virtual Package getPackage() = 0;
+    virtual void send(int) = 0;
 protected:
     int id;
 };

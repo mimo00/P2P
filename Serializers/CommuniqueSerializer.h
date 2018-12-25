@@ -8,9 +8,9 @@
 
 #include "../Packages/Package.h"
 
-class SenderSerializer {
+class CommuniqueSerializer {
 public:
-    SenderSerializer(int);
+    CommuniqueSerializer(int);
     void send(Package package);
 
 private:

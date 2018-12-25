@@ -3,7 +3,9 @@
 //
 
 #include "SendFilesList.h"
+#include "../../Serializers/CommuniqueSerializer.h"
+#include <iostream>
 
-Package SendFilesList::getPackage() {
-    return {id, operatinoCode};
+void SendFilesList::send(int socket) {
+    std::cout<<"Wysylam liste plikow" << std::endl;
 }

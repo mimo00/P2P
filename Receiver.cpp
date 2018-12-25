@@ -3,7 +3,7 @@
 //
 
 #include "Receiver.h"
-#include "Serializers/SenderSerializer.h"
+#include "Serializers/CommuniqueSerializer.h"
 #include "Packages/ListOfFilesPackage.h"
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"

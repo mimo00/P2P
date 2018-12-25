@@ -9,7 +9,7 @@
 #include "Stoppable.h"
 #include "Tasks/Task.h"
 #include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/SenderSerializer.h"
+#include "Serializers/CommuniqueSerializer.h"
 #include <vector>
 
 using namespace std;
@@ -20,7 +20,6 @@ public:
     void run();
 private:
     int socketDescriptor;
-    SenderSerializer senderSerializer;
     vector<SenderTask*>* senderTasks;
 };
 

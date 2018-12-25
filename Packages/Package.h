@@ -10,10 +10,16 @@ class Package {
 protected:
     int operationCode;
     int taskId;
+    void* data;
+    int numberOfRows;
 public:
-    Package(int taskId, int operationCode): taskId(taskId), operationCode(operationCode) {};
+    Package(int taskId, int operationCode);
+    Package(int taskId, int operationCode, void* data, int numberOfRows);
     int getOperationCode() const { return operationCode; }
     int getTaskId() const { return taskId; }
+    void *getData() const;
+    int getNumberOfRows() const;
+    bool hasData();
 };
 
 
