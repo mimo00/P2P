@@ -11,7 +11,7 @@
 
 int main() {
 //    int descriptor1 = open("/home/michal/Desktop/TIN_TEST/dane1.txt", O_WRONLY);
-    int descriptor2 = open("/home/michal/Desktop/TIN_TEST/dane2.txt", O_RDONLY);
+    int descriptor2 = open("/home/michal/Desktop/TIN_TEST/dane2.txt", O_RDWR);
 //    auto rm1 = new RemoteNode(descriptor1);
     auto rm2 = new RemoteNode(descriptor2);
 //    NetworkManager nm;

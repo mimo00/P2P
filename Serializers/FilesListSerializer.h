@@ -6,7 +6,6 @@
 #define P2P_FILESLISTSERIALIZER_H
 
 
-#include "../Packages/Package.h"
 #include "../OperationCode.h"
 #include <vector>
 

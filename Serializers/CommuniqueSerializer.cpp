@@ -1,7 +1,6 @@
 //
 // Created by michal on 20.12.18.
 //
-#include "../Packages/ListOfFilesPackage.h"
 
 #include "CommuniqueSerializer.h"
 #include <iostream>
@@ -9,12 +8,12 @@
 
 using namespace std;
 
-CommuniqueSerializer::CommuniqueSerializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
+CommuniqueSerializer::CommuniqueSerializer(int socketDescriptor, int operationCode, int taskId)
+: socketDescriptor(socketDescriptor), operationCode(operationCode), taskId(taskId) {}
 
 
-void CommuniqueSerializer::send(Package package){
-    cout<<"Wysylam pakiet "<< endl;
+void CommuniqueSerializer::send(){
     Client client(socketDescriptor);
-    client.sendInteger(package.getOperationCode());
-    client.sendInteger(package.getTaskId());
+    client.sendInteger(operationCode);
+    client.sendInteger(taskId);
 }

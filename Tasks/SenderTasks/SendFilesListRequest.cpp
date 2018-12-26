@@ -7,7 +7,6 @@
 
 
 void SendFilesListRequest::send(int socket) {
-    Package package(id, operatinoCode);
-    CommuniqueSerializer communiqueSerializer(socket);
-    communiqueSerializer.send(package);
+    CommuniqueSerializer communiqueSerializer(socket, operatinoCode, id);
+    communiqueSerializer.send();
 }

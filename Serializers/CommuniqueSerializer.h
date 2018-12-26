@@ -6,15 +6,15 @@
 #define P2P_REQUESTSERIALIZER_H
 
 
-#include "../Packages/Package.h"
-
 class CommuniqueSerializer {
 public:
-    CommuniqueSerializer(int);
-    void send(Package package);
+    CommuniqueSerializer(int socketDescriptor, int operationCode, int taskId);
+    void send();
 
 private:
     int socketDescriptor;
+    int operationCode;
+    int taskId;
 };
 
 

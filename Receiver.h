@@ -24,9 +24,9 @@ private:
     vector<SenderTask*>* senderTasks;
     ReceiverDeserializer receiverDeserializer;
     bool canRead();
-    bool isRequest(Package&);
-    void createResponse(Package&);
-    void processRequest(Package&);
+    bool isRequest(int operationCode);
+    void createResponse(int operationCode, int taskId);
+    void processRequest();
 };
 
 #endif //P2P_REVEIVER_H

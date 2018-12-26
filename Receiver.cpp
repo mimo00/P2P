@@ -4,7 +4,6 @@
 
 #include "Receiver.h"
 #include "Serializers/CommuniqueSerializer.h"
-#include "Packages/ListOfFilesPackage.h"
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include <unistd.h>
@@ -30,27 +29,25 @@ bool Receiver::canRead(){
     return retval != 0;
 }
 
-bool Receiver::isRequest(Package& package){
+bool Receiver::isRequest(int operationCode){
     const list<int> requestOperationCodes = list<int>({OperationCode::FILES_LIST_REQUEST});
-    return find(requestOperationCodes.begin(), requestOperationCodes.end(), package.getOperationCode()) != requestOperationCodes.end();
+    return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
 }
 
-void Receiver::createResponse(Package& package){
+void Receiver::createResponse(int operationCode, int taskId){
     /*Funkcja powinna stworzyć odpowiedni Task dla sendera */
     cout<<"Tworze odpowiedz" << endl;
-    int operationCode = package.getOperationCode();
-    int id = package.getTaskId();
     SenderTask* senderTask;
     switch (operationCode)
     {
         case OperationCode::FILES_LIST_REQUEST:
-            senderTask = new SendFilesList(id);
+            senderTask = new SendFilesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
     }
 }
 
-void Receiver::processRequest(Package& package){
+void Receiver::processRequest(){
     cout<<"Przetwarzam request" << endl;
 }
 
@@ -60,11 +57,13 @@ void Receiver::run()
     {
         if (canRead()) {
             try{
-                auto package = receiverDeserializer.readData();
-                if (isRequest(package))
-                    createResponse(package);
+                auto data = receiverDeserializer.readData();
+                int operationCode = get<0>(data);
+                int taskId = get<0>(data);
+                if (isRequest(operationCode))
+                    createResponse(operationCode, taskId);
                 else
-                    processRequest(package);
+                    processRequest();
             }catch (BrokenConnectionException& e){
                 //Wyrejestrowanie noda
             }

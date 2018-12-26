@@ -7,7 +7,6 @@
 
 
 #include "../Task.h"
-#include "../../Packages/Package.h"
 
 class SenderTask {
 public:

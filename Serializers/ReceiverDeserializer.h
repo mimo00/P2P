@@ -6,8 +6,8 @@
 #define P2P_RECEIVERDESERIALIZER_H
 
 
-#include "../Packages/Package.h"
 #include <exception>
+#include <tuple>
 
 using namespace std;
 
@@ -17,7 +17,7 @@ class BrokenConnectionException : public exception
 class ReceiverDeserializer {
 public:
     ReceiverDeserializer(int);
-    Package readData();
+    tuple<int, int> readData();
 
 private:
     int socketDescriptor;

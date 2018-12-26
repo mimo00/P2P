@@ -10,7 +10,7 @@ using namespace std;
 
 ReceiverDeserializer::ReceiverDeserializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
 
-Package ReceiverDeserializer::readData(){
+tuple<int, int> ReceiverDeserializer::readData(){
     ssize_t readSize;
     int operationCode;
     readSize = read(socketDescriptor, &operationCode, sizeof(int));
@@ -24,6 +24,5 @@ Package ReceiverDeserializer::readData(){
         throw BrokenConnectionException();
     else
         cout << "Task Id " << taskId << endl;
-    Package package(taskId, operationCode);
-    return package;
+    return make_tuple(operationCode, taskId);
 }
