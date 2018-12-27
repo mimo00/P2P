@@ -6,7 +6,6 @@
 #define P2P_SENDERTASK_H
 
 
-#include "../Task.h"
 
 class SenderTask {
 public:

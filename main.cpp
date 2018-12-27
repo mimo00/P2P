@@ -1,7 +1,6 @@
 #include <iostream>
 #include "RemoteNode.h"
 #include "NetworkManager.h"
-//#include "Tasks/ReceiveKnownNodesTask.h"
 
 #include <set>
 #include <thread>

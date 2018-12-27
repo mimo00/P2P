@@ -7,20 +7,20 @@
 
 #include <vector>
 #include "Stoppable.h"
-#include "Tasks/Task.h"
 #include "Tasks/SenderTasks/SenderTask.h"
 #include "Serializers/ReceiverDeserializer.h"
+#include "Tasks/ReceiverTasks/ReceiverTask.h"
 
 using namespace std;
 
 class Receiver: public Stoppable
 {
 public:
-    Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTasks, int socketDescriptor);
+    Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTasks, int socketDescriptor);
     void run();
 private:
     int socketDescriptor;
-    vector<Task*>* receiverTasks;
+    vector<ReceiverTask*>* receiverTasks;
     vector<SenderTask*>* senderTasks;
     ReceiverDeserializer receiverDeserializer;
     bool canRead();

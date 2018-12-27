@@ -6,7 +6,6 @@
 #define P2P_SENDFILESLIST_H
 
 
-#include "../Task.h"
 #include "SenderTask.h"
 #include "../../OperationCode.h"
 

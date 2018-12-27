@@ -5,6 +5,7 @@
 #ifndef P2P_SENDFILESLIST_H
 #define P2P_SENDFILESLIST_H
 
+#include <vector>
 #include "SenderTask.h"
 #include "../../OperationCode.h"
 

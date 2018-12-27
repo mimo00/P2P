@@ -7,7 +7,6 @@
 
 
 #include "Stoppable.h"
-#include "Tasks/Task.h"
 #include "Tasks/SenderTasks/SenderTask.h"
 #include "Serializers/CommuniqueSerializer.h"
 #include <vector>

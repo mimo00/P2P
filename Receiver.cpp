@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Receiver::Receiver(vector<Task*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor)
+Receiver::Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor)
 : receiverTasks(receiverTasks), senderTasks(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor) {};
 
 

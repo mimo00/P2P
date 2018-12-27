@@ -7,7 +7,6 @@
 #include <thread>
 #include <future>
 #include <unistd.h>
-#include "Tasks/Task.h"
 #include "Tasks/SenderTasks/SendFilesListRequest.h"
 #include "OperationCode.h"
 
@@ -41,7 +40,7 @@ void RemoteNode::start(){
 }
 
 
-void RemoteNode::addReceiverTask(Task* task){
+void RemoteNode::addReceiverTask(ReceiverTask* task){
     receiverTasks.emplace_back(task);
 }
 
@@ -54,7 +53,7 @@ bool RemoteNode::operator==(const RemoteNode &other){
     return this->getSockfd() == other.getSockfd();
 }
 
-const vector<Task*> &RemoteNode::getReceiverTasks() const {
+const vector<ReceiverTask*> &RemoteNode::getReceiverTasks() const {
     return receiverTasks;
 }
 
