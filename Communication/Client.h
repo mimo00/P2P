@@ -15,6 +15,7 @@ public:
     Client(int);
     void sendInteger(int operationCode);
     void sendFilesNames(vector<File> files);
+    void sendNodeAddr(vector<NodeAddr> nodeAddr);
 private:
     int socketDescriptor;
 };

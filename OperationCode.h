@@ -6,8 +6,13 @@
 #define P2P_OPERATIONCODE_H
 
 
+#include <zconf.h>
+#include <netinet/in.h>
+
 class OperationCode {
 public:
+    const static int NODES_LIST_REQUEST = 102;
+    const static int NODES_LIST = 103;
     const static int FILES_LIST_REQUEST = 300;
     const static int FILES_LIST = 302;
 };
@@ -18,4 +23,11 @@ struct File {
     int hash;
     int size;
 };
+
+
+struct NodeAddr{
+    in_addr addr;
+    in_port_t port;
+};
+
 #endif //P2P_OPERATIONCODE_H

@@ -24,3 +24,10 @@ void Client::sendFilesNames(vector<File> files){
     }
     cout<< "Wyslano liste plikow !!!" << endl;
 }
+
+void Client::sendNodeAddr(vector<NodeAddr> nodeAddr) {
+    for(int i=0;i<nodeAddr.size();i++){
+        ssize_t ile_bitow=write(socketDescriptor,&nodeAddr[i], sizeof(nodeAddr));
+    }
+    cout<<"Wyslano liste node'ów!"<<endl;
+}

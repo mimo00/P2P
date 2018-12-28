@@ -6,6 +6,7 @@
 #include "Serializers/CommuniqueSerializer.h"
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
+#include "Tasks/SenderTasks/SendNodesList.h"
 #include <unistd.h>
 #include <list>
 #include <algorithm>
@@ -42,6 +43,10 @@ void Receiver::createResponse(int operationCode, int taskId){
     {
         case OperationCode::FILES_LIST_REQUEST:
             senderTask = new SendFilesList(taskId);
+            senderTasks->emplace_back(senderTask);
+            break;
+        case OperationCode::NODES_LIST_REQUEST:
+            senderTask = new SendNodesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
     }
