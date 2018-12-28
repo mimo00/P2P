@@ -10,7 +10,9 @@ class ReceiverTask {
     public:
         ReceiverTask(int id): id(id){};
         virtual void handle(int socket) = 0;
-    protected:
+        int getId() const;
+
+protected:
         int id;
 };
 

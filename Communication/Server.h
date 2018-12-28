@@ -6,6 +6,8 @@
 #define P2P_SERVER_H
 
 #include <exception>
+#include <vector>
+#include "../OperationCode.h"
 
 using  namespace std;
 
@@ -16,6 +18,7 @@ class Server {
 public:
     Server(int socketDescriptor);
     int readInteger();
+    vector<File> receiveFilesNames(int numberOfFiles);
 private:
     int socketDescriptor;
 };
