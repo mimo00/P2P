@@ -19,10 +19,10 @@ void Sender::run() {
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
             senderTask->send(socketDescriptor);
+            delete senderTask;
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;
         }
         this_thread::sleep_for(chrono::milliseconds(2000));
     }
-//    cout<<"sender ended";
 }
