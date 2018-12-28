@@ -7,13 +7,13 @@
 
 
 class ReceiverTask {
-    public:
-        ReceiverTask(int id): id(id){};
-        virtual void handle(int socket) = 0;
-        int getId() const;
+public:
+    ReceiverTask(int id): id(id){};
+    virtual void handle(int socket) = 0;
+    int getId() const;
 
 protected:
-        int id;
+    int id;
 };
 
 #endif //P2P_RECEIVERTASK_H
