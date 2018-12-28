@@ -5,24 +5,22 @@
 #include <zconf.h>
 #include <iostream>
 #include "ReceiverDeserializer.h"
+#include "../Communication/Server.h"
 
 using namespace std;
 
 ReceiverDeserializer::ReceiverDeserializer(int socketDescriptor): socketDescriptor(socketDescriptor) {}
 
 tuple<int, int> ReceiverDeserializer::readData(){
-    ssize_t readSize;
+    Server server(socketDescriptor);
     int operationCode;
-    readSize = read(socketDescriptor, &operationCode, sizeof(int));
-    if (readSize == 0)
-        throw BrokenConnectionException();
-    else
-        cout << "Wartosc " << operationCode << endl;
     int taskId;
-    readSize = read(socketDescriptor, &taskId, sizeof(int));
-    if (readSize == 0)
-        throw BrokenConnectionException();
-    else
-        cout << "Task Id " << taskId << endl;
-    return make_tuple(operationCode, taskId);
+    try{
+        operationCode = server.readInteger();
+        taskId = server.readInteger();
+        return make_tuple(operationCode, taskId);
+    }
+    catch (BrokenConnectionException& e){
+        throw ReceiverDeserializerException();
+    }
 }

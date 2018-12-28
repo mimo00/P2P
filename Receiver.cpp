@@ -64,7 +64,7 @@ void Receiver::run()
                     createResponse(operationCode, taskId);
                 else
                     processRequest();
-            }catch (BrokenConnectionException& e){
+            }catch (ReceiverDeserializerException& e){
                 //Wyrejestrowanie noda
             }
         }

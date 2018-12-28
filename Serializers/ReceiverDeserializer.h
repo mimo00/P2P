@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class BrokenConnectionException : public exception
+class ReceiverDeserializerException : public exception
 {};
 
 class ReceiverDeserializer {
