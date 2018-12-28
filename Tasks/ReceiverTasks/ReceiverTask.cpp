@@ -3,3 +3,8 @@
 //
 
 #include "ReceiverTask.h"
+
+
+int ReceiverTask::getId() const {
+    return id;
+}

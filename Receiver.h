@@ -26,7 +26,7 @@ private:
     bool canRead();
     bool isRequest(int operationCode);
     void createResponse(int operationCode, int taskId);
-    void processRequest();
+    void processRequest(int taskId);
 };
 
 #endif //P2P_REVEIVER_H

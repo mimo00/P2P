@@ -19,3 +19,16 @@ int Server::readInteger() {
     else
         return value;
 };
+
+vector<File> Server::receiveFilesNames(int numberOfFiles){
+    ssize_t readSize;
+    vector<File> filesNames;
+    for(int i=0;i<numberOfFiles;i++){
+        File fileName;
+        readSize = read(socketDescriptor, &fileName, sizeof(File));
+        if (readSize == 0)
+            throw BrokenConnectionException();
+        filesNames.push_back(fileName);
+    }
+    return filesNames;
+}
