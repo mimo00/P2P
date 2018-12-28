@@ -17,8 +17,8 @@ int main() {
 //    auto rm1 = new RemoteNode(descriptor1);
     auto rm2 = new RemoteNode(descriptor2);
     //rm2->getFilesList();
-    auto test = new SendFilesList(10);
-    test->send(descriptor1);
+    //auto test = new SendFilesList(10);
+    //test->send(descriptor1);
 //    NetworkManager nm;
 //    nm.registerRemoteNode(rm1);
 //    nm.registerRemoteNode(rm2);

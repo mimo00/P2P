@@ -32,3 +32,16 @@ vector<File> Server::receiveFilesNames(int numberOfFiles){
     }
     return filesNames;
 }
+
+vector<NodeAddr> Server::receiveNodeAddr(int numberOfFiles){
+    ssize_t readSize;
+    vector<NodeAddr> nodeAddr;
+    for(int i=0;i<numberOfFiles;i++){
+        NodeAddr addr;
+        readSize = read(socketDescriptor, &addr, sizeof(NodeAddr));
+        if (readSize == 0)
+            throw BrokenConnectionException();
+        nodeAddr.push_back(addr);
+    }
+    return nodeAddr;
+}
