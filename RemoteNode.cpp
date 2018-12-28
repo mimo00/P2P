@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "Tasks/SenderTasks/SendFilesListRequest.h"
 #include "OperationCode.h"
+#include "Tasks/ReceiverTasks/ReceiveFileList.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
@@ -69,7 +70,13 @@ Sender *RemoteNode::getSender() const {
     return sender;
 }
 
-void RemoteNode::getFilesList(){
-    auto senderTask =  new SendFilesListRequest(20);
+vector<File> RemoteNode::getFilesList(){
+    int taskId = 20;
+    auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
+    promise<vector<File>> fileNamesPromise;
+//    future<vector<File>> fileNamesFuture = fileNamesPromise.get_future();
+//    auto receiveTask = new ReceiveFileList(taskId, &fileNamesPromise);
+//    addReceiverTask(receiveTask);
+//    vector<File> a = fileNamesFuture.get();
 }

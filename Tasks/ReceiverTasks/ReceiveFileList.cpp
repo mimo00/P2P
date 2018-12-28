@@ -9,5 +9,6 @@
 
 void ReceiveFileList::handle(int socket) {
     FileListDeserializer fileListDeserializer(socket);
-    vector<File> a = fileListDeserializer.receive();
+    vector<File> fileNames_ = fileListDeserializer.receive();
+    fileNames->set_value(fileNames_);
 }

@@ -12,6 +12,7 @@
 #include "Sender.h"
 #include "Tasks/SenderTasks/SenderTask.h"
 #include "Tasks/ReceiverTasks/ReceiverTask.h"
+#include "OperationCode.h"
 #include <thread>
 #include <future>
 #include <unistd.h>
@@ -40,7 +41,7 @@ public:
     Receiver *getReceiver() const;
     Sender *getSender() const;
     int getSockfd()const{ return this->sockfd; }
-    void getFilesList();
+    vector<File> getFilesList();
 };
 
 
