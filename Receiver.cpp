@@ -47,8 +47,14 @@ void Receiver::createResponse(int operationCode, int taskId){
     }
 }
 
-void Receiver::processRequest(){
+void Receiver::processRequest(int taskId){
+    /*Funkcja znajduje Taks o podanym id i odpala go*/
     cout<<"Przetwarzam request" << endl;
+    auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getId() == taskId;});
+    if (it != receiverTasks->end())
+        (*it)->handle(socketDescriptor);
+    else
+        cout<<"Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
 }
 
 void Receiver::run()
@@ -59,11 +65,12 @@ void Receiver::run()
             try{
                 auto data = receiverDeserializer.readData();
                 int operationCode = get<0>(data);
-                int taskId = get<0>(data);
+                int taskId = get<1>(data);
+                cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
                 if (isRequest(operationCode))
                     createResponse(operationCode, taskId);
                 else
-                    processRequest();
+                    processRequest(taskId);
             }catch (ReceiverDeserializerException& e){
                 //Wyrejestrowanie noda
             }
