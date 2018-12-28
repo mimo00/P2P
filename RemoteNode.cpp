@@ -30,7 +30,11 @@ RemoteNode& RemoteNode::operator=(RemoteNode && obj)
     return *this;
 }
 
-RemoteNode::~RemoteNode(){};
+RemoteNode::~RemoteNode(){
+    cout<<"Destruktor" << endl;
+    receiver->stop();
+    sender->stop();
+};
 
 
 void RemoteNode::start(){
@@ -75,8 +79,8 @@ vector<File> RemoteNode::getFilesList(){
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
     promise<vector<File>> fileNamesPromise;
-//    future<vector<File>> fileNamesFuture = fileNamesPromise.get_future();
-//    auto receiveTask = new ReceiveFileList(taskId, &fileNamesPromise);
-//    addReceiverTask(receiveTask);
-//    vector<File> a = fileNamesFuture.get();
+    future<vector<File>> fileNamesFuture = fileNamesPromise.get_future();
+    auto receiveTask = new ReceiveFileList(taskId, &fileNamesPromise);
+    addReceiverTask(receiveTask);
+    vector<File> a = fileNamesFuture.get();
 }
