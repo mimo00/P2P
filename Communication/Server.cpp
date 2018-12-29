@@ -45,3 +45,17 @@ vector<NodeAddr> Server::receiveNodeAddr(int numberOfFiles){
     }
     return nodeAddr;
 }
+
+FileFragment Server::receiveFileFragment(int size,int hash) {
+    ssize_t readSize;
+    FileFragment fileFragment;
+    fileFragment.file.size=size;
+    fileFragment.file.hash=hash;
+    for(int i=0;i<fileFragment.file.size;i++){
+        readSize=read(socketDescriptor,&fileFragment.data[i],(size_t)fileFragment.file.size);
+        if (readSize == 0)
+            throw BrokenConnectionException();
+    }
+
+    return fileFragment;
+}

@@ -43,6 +43,21 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendNodesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
+        case OperationCode::FILE_FRAGMENT_REQUEST:
+
+            //sprawdzic czy mamy dany fragment pliku i wyslac OK lub DONT_HAVE_FILE
+            SendFilesList sendFilesList(taskId);
+            vector<File> files=sendFilesList.getFilesNames();
+            File file;
+            file.hash=lfhash;
+            if (find(files.begin()->hash,files.end()->hash,file.hash)!=files.end()->hash){
+                //znaleziono plik
+            } else {
+                //nie znaleziono pliku
+            }
+            //senderTask = new SenderTask(taskId);
+            //senderTasks->emplace_back(senderTask);
+            break;
     }
 }
 
@@ -62,7 +77,7 @@ void Receiver::run()
     {
         if (canRead()) {
             try{
-                auto data = receiverDeserializer.readData();
+                auto data = receiverDeserializer.readData();    //deserializuje 2 atrybuty, a potrzeba 4 przy fileRequest
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;

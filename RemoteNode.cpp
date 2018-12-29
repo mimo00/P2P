@@ -12,6 +12,7 @@
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "Tasks/SenderTasks/SendNodesListRequest.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "Tasks/SenderTasks/FileRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
@@ -97,4 +98,22 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
     addReceiverTask(receiveTask);
     vector<NodeAddr> nodesAddress = nodeAddressFuture.get();
     return nodesAddress;
+}
+
+
+FileFragment RemoteNode::getFileFragment() {
+    int taskId=30;
+    //zapytanie czy node ma dany fragment pliku
+    auto senderTask = new FileRequest(taskId,0,12345);
+    addSenderTask(senderTask);
+    promise<int> fileRequestResponsePromise;
+    future<int> fileRequestResponseFuture=fileRequestResponsePromise.get_future();
+    //oczekiwanie na potwierdzenie wysylania pliku
+    auto receiveTask=new ReceiveFileReqtResponse();
+    addReceiverTask(receiveTask);
+    promise<FileFragment> fileFragmentPromise;
+    future<FileFragment> fileFragmentFuture = fileFragmentPromise.get_future();
+    //TODO:auto receiveTask=new ReceiveFileRequestResp();
+    //addReceiverTask(receiveTask);
+    FileFragment fragment=fileFragmentFuture.get();
 }

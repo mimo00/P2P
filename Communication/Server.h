@@ -20,6 +20,7 @@ public:
     int readInteger();
     vector<File> receiveFilesNames(int numberOfFiles);
     vector<NodeAddr> receiveNodeAddr(int numberOfAddr);
+    FileFragment receiveFileFragment(int size,int hash);
 private:
     int socketDescriptor;
 };

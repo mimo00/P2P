@@ -44,14 +44,6 @@ vector<File> SendFilesList::getFilesNames(){
     }
     closedir(dp);
 
-    File f;
-    f.size = 10;
-    f.hash = 3;
-    string s = "Jakis napis";
-    s.copy(f.name, 64);
-    files.push_back(f);
-
-
     cout<<"Lista plików"<<endl;
     for(int i=0;i<files.size();i++)
         cout<<files[i].name<<" : "<<files[i].size<<"B"<<endl;

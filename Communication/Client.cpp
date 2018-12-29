@@ -44,3 +44,16 @@ int Client::connectWithHost(NodeAddr addr) {
         return -1;
     return sock;
 }
+
+
+void Client::sendFileFragment(FileFragment* fileFragment,int offset) {
+
+    int bity=1048576;
+    int fragmentSize=offset+bity;
+    if(fragmentSize>fileFragment->file.size)
+        fragmentSize=fileFragment->file.size;
+    for(int i=offset;i<fragmentSize;i++){
+        ssize_t ile_bitow=write(socketDescriptor,&fileFragment->data[i],(size_t)fileFragment->file.size);
+    }
+    cout<<"Wyslanow fragment pliku"<<endl;
+}

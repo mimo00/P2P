@@ -17,6 +17,7 @@ public:
     void sendInteger(int operationCode);
     void sendFilesNames(vector<File> files);
     void sendNodeAddr(vector<NodeAddr> nodeAddr);
+    void sendFileFragment(FileFragment* fileFragment,int offset);
 private:
     int socketDescriptor;
 };
