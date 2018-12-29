@@ -9,16 +9,22 @@
 #include <list>
 #include <set>
 #include "RemoteNode.h"
+#include "NetworkData.h"
 
 using  namespace std;
 
 class NetworkManager {
 private:
     list<RemoteNode*> remoteNodes;
+    NetworkData networkData;
+public:
+    NetworkData &getNetworkData();
+
 public:
     NetworkManager();
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
+    int connectToNetwork(NodeAddr addr);
 };
 
 

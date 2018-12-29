@@ -31,3 +31,16 @@ void Client::sendNodeAddr(vector<NodeAddr> nodeAddr) {
     }
     cout<<"Wyslano liste node'ów!"<<endl;
 }
+
+int Client::connectWithHost(NodeAddr addr) {
+    struct sockaddr_in host_addr;
+    host_addr.sin_family = AF_INET;
+    host_addr.sin_port = addr.port;
+    host_addr.sin_addr = addr.addr;
+    int sock;
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        return -1;
+    if (connect(sock, (struct sockaddr *) &host_addr, sizeof(host_addr)) < 0)
+        return -1;
+    return sock;
+}
