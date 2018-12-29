@@ -42,6 +42,7 @@ public:
     Sender *getSender() const;
     int getSockfd()const{ return this->sockfd; }
     vector<File> getFilesList();
+    vector<NodeAddr> getNodeAddress();
 };
 
 

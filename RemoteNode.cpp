@@ -10,6 +10,8 @@
 #include "Tasks/SenderTasks/SendFilesListRequest.h"
 #include "OperationCode.h"
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
+#include "Tasks/SenderTasks/SendNodesListRequest.h"
+#include "Tasks/ReceiverTasks/ReceiveNodesList.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
@@ -83,4 +85,16 @@ vector<File> RemoteNode::getFilesList(){
     auto receiveTask = new ReceiveFileList(taskId, &fileNamesPromise);
     addReceiverTask(receiveTask);
     vector<File> a = fileNamesFuture.get();
+}
+
+vector<NodeAddr> RemoteNode::getNodeAddress() {
+    int taskId = 10;
+    auto senderTask =  new SendNodesListRequest(taskId);
+    addSenderTask(senderTask);
+    promise<vector<NodeAddr>> nodeAddressPromise;
+    future<vector<NodeAddr>> nodeAddressFuture = nodeAddressPromise.get_future();
+    auto receiveTask = new ReceiveNodesList(taskId, &nodeAddressPromise);
+    addReceiverTask(receiveTask);
+    vector<NodeAddr> nodesAddress = nodeAddressFuture.get();
+    return nodesAddress;
 }

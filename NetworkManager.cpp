@@ -3,6 +3,7 @@
 //
 #include "NetworkManager.h"
 #include "RemoteNode.h"
+#include "Communication/Client.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -21,4 +22,20 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
         throw invalid_argument("Non existing remote node.");
     (*foundRemoteNode)->getReceiver()->stop();
     remoteNodes.erase(foundRemoteNode);
+}
+
+int NetworkManager::connectToNetwork(NodeAddr addr) {
+    int sockDescriptor;
+    if((sockDescriptor = Client::connectWithHost(addr))>=0){
+        networkData.addNodeAddress(addr);
+        auto remoteNode = new RemoteNode(sockDescriptor);
+        registerRemoteNode(remoteNode);
+        networkData.addNodeAddresses(remoteNode->getNodeAddress());
+        return 0;
+    } else
+        return 1;
+}
+
+NetworkData &NetworkManager::getNetworkData() {
+    return networkData;
 }
