@@ -8,7 +8,6 @@
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/SenderTasks/SendNodesList.h"
 #include <unistd.h>
-#include <list>
 #include <algorithm>
 
 using namespace std;
@@ -28,11 +27,6 @@ bool Receiver::canRead(){
     if (retval == -1)
         perror("select()");
     return retval != 0;
-}
-
-bool Receiver::isRequest(int operationCode){
-    const list<int> requestOperationCodes = list<int>({OperationCode::FILES_LIST_REQUEST});
-    return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
 }
 
 void Receiver::createResponse(int operationCode, int taskId){
@@ -72,7 +66,7 @@ void Receiver::run()
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
-                if (isRequest(operationCode))
+                if (OperationCode::isRequest(operationCode))
                     createResponse(operationCode, taskId);
                 else
                     processRequest(taskId);

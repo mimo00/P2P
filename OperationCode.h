@@ -8,6 +8,10 @@
 
 #include <zconf.h>
 #include <netinet/in.h>
+#include <list>
+#include <algorithm>
+
+using namespace std;
 
 class OperationCode {
 public:
@@ -15,6 +19,14 @@ public:
     const static int NODES_LIST = 103;
     const static int FILES_LIST_REQUEST = 300;
     const static int FILES_LIST = 302;
+
+    static bool isRequest(int operationCode){
+        const list<int> requestOperationCodes = list<int>({
+            FILES_LIST_REQUEST,
+            NODES_LIST_REQUEST,
+        });
+        return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
+    }
 };
 
 
