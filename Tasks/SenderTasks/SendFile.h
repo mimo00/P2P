@@ -11,10 +11,11 @@
 class SendFile: public SenderTask {
 public:
     const int operationCode = OperationCode::FILE_FRAGMENT;
-    SendFile(int id): SenderTask(id){};
+    SendFile(int id,int hash,int offset): SenderTask(id),hash(hash),offset(offset){};
     void send(int) override;
 private:
-    FileFragment fileFragment;
+    int hash;
+    int offset;
 };
 
 

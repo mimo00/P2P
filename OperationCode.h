@@ -32,6 +32,10 @@ public:
         return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
     }
 
+    static bool isFileRequest(int operationCode){
+
+    }
+
 };
 
 

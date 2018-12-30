@@ -109,11 +109,11 @@ FileFragment RemoteNode::getFileFragment() {
     promise<int> fileRequestResponsePromise;
     future<int> fileRequestResponseFuture=fileRequestResponsePromise.get_future();
     //oczekiwanie na potwierdzenie wysylania pliku
-    auto receiveTask=new ReceiveFileReqtResponse();
-    addReceiverTask(receiveTask);
-    promise<FileFragment> fileFragmentPromise;
-    future<FileFragment> fileFragmentFuture = fileFragmentPromise.get_future();
+    //auto receiveTask=new ReceiveFileReqtResponse();
+    //addReceiverTask(receiveTask);
+    //promise<FileFragment> fileFragmentPromise;
+    //future<FileFragment> fileFragmentFuture = fileFragmentPromise.get_future();
     //TODO:auto receiveTask=new ReceiveFileRequestResp();
     //addReceiverTask(receiveTask);
-    FileFragment fragment=fileFragmentFuture.get();
+    //FileFragment fragment=fileFragmentFuture.get();
 }

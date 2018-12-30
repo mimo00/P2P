@@ -7,6 +7,8 @@
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/SenderTasks/SendNodesList.h"
+#include "Tasks/SenderTasks/SendFile.h"
+#include "Tasks/SenderTasks/SendResponse.h"
 #include <unistd.h>
 #include <algorithm>
 
@@ -33,8 +35,7 @@ void Receiver::createResponse(int operationCode, int taskId){
     /*Funkcja powinna stworzyć odpowiedni Task dla sendera */
     cout<<"Tworze odpowiedz" << endl;
     SenderTask* senderTask;
-    switch (operationCode)
-    {
+    switch (operationCode) {
         case OperationCode::FILES_LIST_REQUEST:
             senderTask = new SendFilesList(taskId);
             senderTasks->emplace_back(senderTask);
@@ -43,22 +44,30 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendNodesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
-        case OperationCode::FILE_FRAGMENT_REQUEST:
-
-            //sprawdzic czy mamy dany fragment pliku i wyslac OK lub DONT_HAVE_FILE
-            SendFilesList sendFilesList(taskId);
-            vector<File> files=sendFilesList.getFilesNames();
-            File file;
-            file.hash=lfhash;
-            if (find(files.begin()->hash,files.end()->hash,file.hash)!=files.end()->hash){
-                //znaleziono plik
-            } else {
-                //nie znaleziono pliku
-            }
-            //senderTask = new SenderTask(taskId);
-            //senderTasks->emplace_back(senderTask);
-            break;
     }
+}
+
+
+void Receiver::createFileResponse(int operationCode, int taskId, int hash, int offset){
+    cout<<"Tworze odpowiedz na pytanie o plik"<<endl;
+    SenderTask* senderTask;
+    SenderTask* senderTask1;
+    SendFilesList sendFilesList(taskId);
+    vector<File> files=sendFilesList.getFilesNames();
+    int opCode;
+    //File file;
+    //file.hash=hash;
+    for(int i=0;i<files.size();i++) if(files.at(i).hash=hash){
+    //if(find(files.begin()->hash,files.end()->hash,hash)!=files.end()->hash){
+        opCode=OperationCode::OK;
+        senderTask1=new SendFile(taskId,hash,offset);
+    } else {
+        opCode=OperationCode::DONT_HAVE_FILE;
+    }
+    senderTask = new SendResponse(taskId,opCode);
+    senderTasks->emplace_back(senderTask);
+    senderTasks->emplace_back(senderTask1);
+
 }
 
 void Receiver::processRequest(int taskId){
@@ -80,9 +89,17 @@ void Receiver::run()
                 auto data = receiverDeserializer.readData();    //deserializuje 2 atrybuty, a potrzeba 4 przy fileRequest
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
+                int hash,offset;
+                if(operationCode==OperationCode::FILE_FRAGMENT_REQUEST){
+                    auto data2=receiverDeserializer.readData();
+                    hash=get<0>(data2);
+                    offset=get<1>(data2);
+                }
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
                 if (OperationCode::isRequest(operationCode))
                     createResponse(operationCode, taskId);
+                else if(operationCode==OperationCode::FILE_FRAGMENT_REQUEST)
+                    createFileResponse(operationCode,taskId,hash,offset);
                 else
                     processRequest(taskId);
             }catch (ReceiverDeserializerException& e){

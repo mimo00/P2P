@@ -16,7 +16,7 @@ public:
     ReceiveFileReqResponse(int id): ReceiverTask(id){};
     void handle(int socket) override;
 private:
-    promise<?> cos;
+    //promise<?> cos;
 
 };
 

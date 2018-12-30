@@ -9,6 +9,6 @@
 #include <string.h>
 
 void SendFile::send(int socket) {
-    FileSerializer fileSerializer(socket,operationCode,id,fileFragment,fileOffset);
+    FileSerializer fileSerializer(socket,operationCode,id,hash,offset);
     fileSerializer.send();
 }

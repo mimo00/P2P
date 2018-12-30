@@ -5,6 +5,7 @@
 #include <zconf.h>
 #include "Client.h"
 #include <iostream>
+#include "../Tasks/SenderTasks/SendFilesList.h"
 
 
 Client::Client(int socketDescriptor): socketDescriptor(socketDescriptor) {}
@@ -46,14 +47,22 @@ int Client::connectWithHost(NodeAddr addr) {
 }
 
 
-void Client::sendFileFragment(FileFragment* fileFragment,int offset) {
+void Client::sendFileFragment(int hash,int offset) {
+    SendFilesList filesList(0);
+    vector<File> files = filesList.getFilesNames();
+    FileFragment fileFragment;
+    for (int i = 0; i < files.size(); i++) {
+        if (files.at(i).hash == hash)
+            fileFragment.file = files.at(i);
+    }
+    //TODO:Wyciąganie pliku, zmiana offsetu i wyslanie
 
     int bity=1048576;
     int fragmentSize=offset+bity;
-    if(fragmentSize>fileFragment->file.size)
-        fragmentSize=fileFragment->file.size;
+    if(fragmentSize>fileFragment.file.size)
+        fragmentSize=fileFragment.file.size;
     for(int i=offset;i<fragmentSize;i++){
-        ssize_t ile_bitow=write(socketDescriptor,&fileFragment->data[i],(size_t)fileFragment->file.size);
+        ssize_t ile_bitow=write(socketDescriptor,&fileFragment.data[i],(size_t)fileFragment.file.size);
     }
     cout<<"Wyslanow fragment pliku"<<endl;
 }

@@ -7,13 +7,13 @@
 
 #include "../../OperationCode.h"
 #include "ReceiverTask.h"
-#include <future
+#include <future>
 
 using namespace std;
 
 class ReceiveFile: public ReceiverTask {
 public:
-    ReceiveFile(int id,promise<FileFragment>* fileFragment):ReceiverTask(id),fileFragment(fileFragment);
+    ReceiveFile(int id,promise<FileFragment>* fileFragment):ReceiverTask(id),fileFragment(fileFragment){};
     void handle(int socket) override;
 private:
     promise<FileFragment>* fileFragment;

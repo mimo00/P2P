@@ -13,7 +13,7 @@ FileFragment FileDeserializer::receive() {
     int taskId=server.readInteger();
     FileFragment fileFragment;
     //TODO:dokonczyc
-    fileFragment=server.receiveFileFragment();
+    //fileFragment=server.receiveFileFragment();
 
     return fileFragment;
 }
