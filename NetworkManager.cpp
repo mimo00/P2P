@@ -56,3 +56,9 @@ vector<File> NetworkManager::getFiles() {
     }
     return files;
 }
+
+void NetworkManager::fileDownloadManage(File file){
+    cout<<"Pobieram plik "<<file.name<<endl;
+    
+    //tutaj pobieranie pliku
+}

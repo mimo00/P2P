@@ -54,30 +54,6 @@ void Receiver::createResponse(int operationCode, int taskId){
     }
 }
 
-/**
-void Receiver::createFileResponse(int operationCode, int taskId, int hash, int offset){
-    cout<<"Tworze odpowiedz na pytanie o plik"<<endl;
-   //TODO:wywalic to i przeniesc do tasku
-    SenderTask* senderTask;
-    SenderTask* senderTask1;
-    SendFilesList sendFilesList(taskId);
-    vector<File> files=sendFilesList.getFilesNames();
-    int opCode;
-    //File file;
-    //file.hash=hash;
-    for(int i=0;i<files.size();i++) if(files.at(i).hash=hash){
-    //if(find(files.begin()->hash,files.end()->hash,hash)!=files.end()->hash){
-        opCode=OperationCode::OK;
-        senderTask1=new SendFile(taskId,hash,offset);
-    } else {
-        opCode=OperationCode::DONT_HAVE_FILE;
-    }
-    senderTask = new SendResponse(taskId,opCode);
-    senderTasks->emplace_back(senderTask);
-    senderTasks->emplace_back(senderTask1);
-
-}*/
-
 void Receiver::processRequest(int taskId){
     /*Funkcja znajduje Taks o podanym id i odpala go*/
     cout<<"Przetwarzam request" << endl;
@@ -94,7 +70,7 @@ void Receiver::run()
     {
         if (canRead()) {
             try{
-                auto data = receiverDeserializer.readData();    //deserializuje 2 atrybuty, a potrzeba 4 przy fileRequest
+                auto data = receiverDeserializer.readData();
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;

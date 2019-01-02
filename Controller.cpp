@@ -40,4 +40,8 @@ vector<File> Controller::getFiles() {
     return networkManager->getFiles();
 }
 
+void Controller::downloadFile(File file){
+    networkManager->fileDownloadManage(file);
+}
+
 

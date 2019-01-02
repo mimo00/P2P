@@ -19,7 +19,7 @@ off_t fsize(const char *filename){
 }
 
 int hashFunction(char name[],int nameSize,int size){
-    int hash;
+    int hash=0;
     for(int i=0; i<nameSize;i++)
         hash=hash+(int)name[i];
     hash+=size;
