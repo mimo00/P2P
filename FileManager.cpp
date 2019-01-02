@@ -19,7 +19,7 @@ off_t fsize(const char *filename){
 }
 
 int hashFunction(char name[],int nameSize,int size){
-    int hash;
+    int hash=0;
     for(int i=0; i<nameSize;i++)
         hash=hash+(int)name[i];
     hash+=size;
@@ -30,23 +30,28 @@ int hashFunction(char name[],int nameSize,int size){
 vector<File> FileManager:: getFilesNames(){
     vector<File> files;
     DIR *dp;
-    string dir="./Files";
+    string dir="/home/michal/Desktop/TIN_TEST";
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
-    }
-
-    while ((dirp = readdir(dp)) != NULL) {
-        if(dirp->d_type!=DT_DIR) {
-            File file;
-            string path=dir+"/"+dirp->d_name;
-            strcpy(file.name,dirp->d_name);
-            file.size=(int)fsize(path.c_str());
-            file.hash=hashFunction(file.name,strlen(file.name),file.size);//rand()%1024;  //zmienic na funcke hashującą
-            files.push_back(file);
+        return files;
+    } else {
+        while ((dirp = readdir(dp)) != NULL) {
+            if(dirp->d_type!=DT_DIR) {
+                File file;
+                string path=dir+"/"+dirp->d_name;
+                strcpy(file.name,dirp->d_name);
+                file.size=(int)fsize(path.c_str());
+                file.hash=hashFunction(file.name,strlen(file.name),file.size);//rand()%1024;  //zmienic na funcke hashującą
+                files.push_back(file);
+            }
         }
+        closedir(dp);
+        return files;
     }
-    closedir(dp);
+}
 
-    return files;
+string FileManager:: getFilePath(File file) {
+    string dir = "/home/michal/Desktop/TIN_TEST";
+    return dir + "/" + file.name;
 }

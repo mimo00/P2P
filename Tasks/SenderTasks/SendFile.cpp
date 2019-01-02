@@ -13,46 +13,27 @@
 #include <sys/types.h>
 
 
-
-bool SendFile::isFile(int hash) {
+FILE* SendFile::getFile(int hash){
     vector <File> files=FileManager::getFilesNames();
-    bool isFile=false;
-    for(int i=0; i<files.size();i++)
-        if(files.at(i).hash==hash)
-            isFile=true;
-    return isFile;
-}
-
-
-int SendFile::readyToSend() {
-    vector<File> files = FileManager::getFilesNames();
-    int portion=OperationCode::PORTION;
-    FILE *file;
-    for (int i = 0; i < files.size(); i++) {
-        if (files.at(i).hash == hash)
-            file = fopen(files.at(i).name, "rb");
-        if(files.at(i).size <portion)
-            portion=files.at(i).size;
-        if (file == NULL)
-            cout << "File openerror"<<endl;
+    for(int i=0; i<files.size();i++) {
+        cout<<"Sprawdzanie hash'a " << hash << endl;
+        if (files.at(i).hash == hash) {
+            cout<<"TAKI SAM !!! " << hash << endl;
+            FILE *file;
+            file = fopen(FileManager::getFilePath(files.at(i)).c_str(), "rb");
+            return file;
+        }
     }
-    //unsigned char buffer[1024]={0};
-
-    //unsigned char buffer[OperationCode::PORTION]={0};
-
-
-    size_t nread=fread(buffer,1,OperationCode::PORTION,file);
-    if(nread>0)
-        cout<<"Wyslano fragment pliku"<<endl;
-    fclose(file);
-    return nread;
+    return nullptr;
 }
 
 void SendFile::send(int socket) {
-    if(isFile(hash)&&readyToSend()>0) {
-        FileSerializer fileSerializer(socket, OperationCode::FILE_FRAGMENT,id,buffer,readyToSend());
+    cout<<"Probuje wyslac plik " << endl;
+    auto file = getFile(hash);
+    if(file != nullptr) {
+        FileSerializer fileSerializer(socket, OperationCode::FILE_FRAGMENT, id, file);
         fileSerializer.send();
-
+        fclose(file);
     }else {
         CommuniqueSerializer communiqueSerializer(socket, OperationCode::DONT_HAVE_FILE, id);
         communiqueSerializer.send();

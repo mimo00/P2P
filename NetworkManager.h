@@ -15,7 +15,7 @@ using  namespace std;
 
 class NetworkManager {
 private:
-    list<RemoteNode*> remoteNodes;
+    vector<RemoteNode*> remoteNodes;
     NetworkData networkData;
 public:
     NetworkData &getNetworkData();

@@ -7,11 +7,13 @@
 
 #include "OperationCode.h"
 #include <vector>
+#include <string>
 
 
 class FileManager {
 public:
     static vector<File> getFilesNames();
+    static string getFilePath(File file);
 };
 
 

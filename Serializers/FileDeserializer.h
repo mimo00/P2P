@@ -12,7 +12,8 @@
 class FileDeserializer {
 public:
     FileDeserializer(int socketDescriptor);
-    tuple<unsigned char *,int> receive();
+    int receiveFileSize();
+    void receive(unsigned char* buff, int nread);
 private:
     int socketDescriptor;
 };

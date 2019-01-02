@@ -47,10 +47,8 @@ int Client::connectWithHost(NodeAddr addr) {
 }
 
 
-void Client::sendFileFragment(unsigned char buff[],int nread) {
-    unsigned char *buffer;
-    buffer = buff;
+void Client::sendFileFragment(char* buff,int nread) {
     if(nread>0)
-        ssize_t ile_bitow=write(socketDescriptor,&buffer,nread);
+        ssize_t ile_bitow=write(socketDescriptor, buff, nread);
     cout<<"Wyslanow fragment pliku"<<endl;
 }
