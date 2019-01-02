@@ -17,23 +17,12 @@
 
 void ReceiveFile::handle(int socket) {
     FileDeserializer fileDeserializer(socket);
-    auto data= fileDeserializer.receive();
-    FileFragment fFragment_;
-    fFragment_.file=file;
-    unsigned char * fragment=get<0>(data);
-    int nread=get<1>(data);
-    char buffer[nread];
-    memset(buffer,'0', sizeof(buffer));
-    for(int i=0; i<nread;i++)
-        buffer[i]=*(fragment+1);
-    FILE *fp;
-    fp=fopen(file.name,"ab");
-    if(fp==NULL)
-        cout<<"Error while opening file"<<endl;
-    else {
-        fwrite(buffer, 1, nread, fp);
-        memcpy(fFragment_.data, buffer, nread);
-    }
-    fclose(fp);
-   fileFragment->set_value(fFragment_);
+    int fileSize = fileDeserializer.receiveFileSize();
+    unsigned char buff[OperationCode::PORTION];
+    fileDeserializer.receive(buff, fileSize);
+    FileFragment fileFragment_;
+    fileFragment_.file=file;
+    memcpy(fileFragment_.data, buff, fileSize);
+    fileFragment_.size = fileSize;
+    fileFragment->set_value(fileFragment_);
 }

@@ -7,6 +7,7 @@
 #include <thread>
 #include <future>
 #include <unistd.h>
+#include <cstdlib>
 #include "Tasks/SenderTasks/SendFilesListRequest.h"
 #include "OperationCode.h"
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
@@ -78,8 +79,14 @@ Sender *RemoteNode::getSender() const {
     return sender;
 }
 
-vector<File> RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
-    int taskId = 20;
+int getId(){
+    srand(time(NULL));
+    return rand();
+}
+
+void RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
+    cout<<"ODPALAM getFilesList" << endl;
+    int taskId = getId();
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
     auto receiveTask = new ReceiveFileList(taskId, fileNamesPromise);
@@ -87,7 +94,7 @@ vector<File> RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
 }
 
 vector<NodeAddr> RemoteNode::getNodeAddress() {
-    int taskId = 10;
+    int taskId = getId();
     auto senderTask =  new SendNodesListRequest(taskId);
     addSenderTask(senderTask);
     promise<vector<NodeAddr>> nodeAddressPromise;
@@ -100,8 +107,9 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
 
 
 FileFragment RemoteNode::getFileFragment(File file, int offset) {
-    int taskId=30;
+    int taskId=getId();
     //zapytanie czy node ma dany fragment pliku
+    cout<<"TUUUTTTT "<< file.hash << endl;
     auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
     promise<FileFragment> filePromise;

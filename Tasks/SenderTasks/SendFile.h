@@ -7,18 +7,21 @@
 
 #include "SenderTask.h"
 #include "../../OperationCode.h"
+#include <iostream>
+#include <string.h>
+#include <vector>
+#include <unistd.h>
+#include <sys/types.h>
 
 class SendFile: public SenderTask {
 public:
     const int operationCode = OperationCode::FILE_FRAGMENT;
-    SendFile(int id,int hash,int offset): SenderTask(id),hash(hash),offset(offset){buffer[OperationCode::PORTION]={0};};
+    SendFile(int id,int hash,int offset): SenderTask(id),hash(hash),offset(offset){};
     void send(int) override;
 private:
-    bool isFile(int hash);
-    int readyToSend();
+    FILE * getFile(int hash);
     int hash;
     int offset;
-    unsigned char buffer[];
 };
 
 

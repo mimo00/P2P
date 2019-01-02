@@ -46,8 +46,8 @@ void Receiver::createResponse(int operationCode, int taskId){
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:
             auto data=receiverDeserializer.readData();
-            int hash=get<0>(data);
-            int offset=get<1>(data);
+            int offset=get<0>(data);
+            int hash=get<1>(data);
             senderTask = new SendFile(taskId,hash,offset);
             senderTasks->emplace_back(senderTask);
             break;

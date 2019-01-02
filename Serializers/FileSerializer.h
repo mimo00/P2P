@@ -5,18 +5,18 @@
 #ifndef P2P_FILESERIALIZER_H
 #define P2P_FILESERIALIZER_H
 
+#include <cstdio>
 #include "../OperationCode.h"
 
 class FileSerializer {
 public:
-    FileSerializer(int socketDescriptor, int operationCode, int taskId, unsigned char buffer[],int nread);
+    FileSerializer(int socketDescriptor, int operationCode, int taskId, FILE* file);
     void send();
 private:
     int socketDescriptor;
     int operationCode;
     int taskId;
-    int nread;
-    unsigned char *buff;
+    FILE* file;
 };
 
 

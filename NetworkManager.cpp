@@ -13,7 +13,7 @@ using namespace std;
 NetworkManager::NetworkManager(){}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
-    remoteNodes.emplace_back(remoteNode);
+    remoteNodes.push_back(remoteNode);
 }
 
 void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
@@ -43,9 +43,9 @@ NetworkData &NetworkManager::getNetworkData() {
 vector<File> NetworkManager::getFiles() {
     vector<promise<vector<File>>*> promises(this->remoteNodes.size());
     int i = 0;
-    for(auto it=this->remoteNodes.begin(); it != this->remoteNodes.end(); ++it) {
+    for(int j=0;j<remoteNodes.size();j++) {
         promises[i] = new promise<vector<File>>;
-        (*it)->getFilesList(promises[i]);
+        remoteNodes[i]->getFilesList(promises[i]);
         i++;
     }
     vector<File> files;
@@ -54,6 +54,20 @@ vector<File> NetworkManager::getFiles() {
         vector<File> node_files = fileNamesFuture.get();
         files.insert(files.end(), node_files.begin(), node_files.end());
     }
+    cout<<"Hash " << files[0].hash << endl;
+    FileFragment a = remoteNodes[0]->getFileFragment(files[0], 0);
+    FILE *fp;
+    string dir = "/home/michal/Desktop/TIN_TEST/aaaa";
+    string file__ =  dir + "/" + a.file.name;
+
+
+    fp=fopen(file__.c_str(),"ab");
+    if(fp == nullptr)
+        cout<<"Error while opening file"<<endl;
+    else {
+        fwrite(a.data, sizeof(char), a.size, fp);
+    }
+    fclose(fp);
     return files;
 }
 

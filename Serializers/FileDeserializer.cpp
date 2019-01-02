@@ -11,14 +11,13 @@
 using namespace std;
 FileDeserializer::FileDeserializer(int socketDescriptor):socketDescriptor(socketDescriptor) {};
 
-tuple<unsigned char *,int> FileDeserializer::receive() {
+void FileDeserializer::receive(unsigned char* buff, int nread) {
+    Server server(socketDescriptor);
+    server.receiveFileFragment(buff, nread);
+}
+
+int FileDeserializer::receiveFileSize() {
     Server server(socketDescriptor);
     int nread = server.readInteger();
-    unsigned char *buffp=server.receiveFileFragment(nread);
-
-    //FileFragment fileFragment;
-    //TODO:dokonczyc
-    //fileFragment=server.receiveFileFragment();
-
-    return make_tuple(buffp,nread);
+    return nread;
 }
