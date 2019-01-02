@@ -27,6 +27,7 @@ public:
     int connectToNetwork(NodeAddr addr);
     vector<File> getFiles();
     void fileDownloadManage(File file);
+    vector<File> findFile(string name);
 };
 
 

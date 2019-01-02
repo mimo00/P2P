@@ -15,6 +15,7 @@ void ConsoleMenu::run() {
         cout << "1 - Dostepny wezly." << endl;
         cout << "2 - Dostepne pliki w sieci" << endl;
         cout << "3 - Pobierz plik" << endl;
+        cout << "4 - Szukanie pliku" << endl;
         cout << "exit - wyjscie." << endl;
         string line;
         getline(cin, line);
@@ -54,6 +55,17 @@ void ConsoleMenu::run() {
             }
             controller->downloadFile(choosenFile);
 
+        }
+        if (line == "4"){
+            string searched;
+            cout<<"Podaj nazwę szukanego pliku"<<endl;
+            cin>>searched;
+            vector<File> foundFiles=controller->searchFile(searched);
+            File choosenFile;
+            cout<<"Znalezione pliki zawierające frazę "<<searched<<" :"<<endl;
+            for(int i=0;i<foundFiles.size(); i++) {
+                    cout<<foundFiles.at(i).name<<"    "<<foundFiles.at(i).size<<endl;
+            }
         }
         if (line == "exit"){
             return;

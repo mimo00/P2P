@@ -10,6 +10,7 @@
 #include "Listener.h"
 #include "NetworkManager.h"
 #include "NetworkData.h"
+#include <string>
 
 using namespace std;
 
@@ -21,6 +22,7 @@ public:
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
     void downloadFile(File file);
+    vector<File> searchFile(string name);
 private:
     NetworkManager* networkManager;
     Listener* listener;
