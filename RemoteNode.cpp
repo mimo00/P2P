@@ -112,3 +112,17 @@ FileFragment RemoteNode::getFileFragment(File file, int offset) {
     FileFragment fragment=fileFuture.get();
     return fragment;
 }
+
+void RemoteNode::getSearchedFile(promise<vector<File>> *, string name) {
+    int taskId=40;
+    //zapytanie czy node ma dany fragment pliku
+    auto senderTask = new FileRequest(taskId,file.hash,offset);
+    addSenderTask(senderTask);
+    promise<FileFragment> filePromise;
+    future<FileFragment> fileFuture=filePromise.get_future();
+    //oczekiwanie na potwierdzenie wysylania pliku
+    auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
+    addReceiverTask(receiveTask);
+    FileFragment fragment=fileFuture.get();
+    //return fragment;
+}
