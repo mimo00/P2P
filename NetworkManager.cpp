@@ -30,7 +30,7 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
         Client client(sockDescriptor);
         client.sendInteger(me.port);
         networkData.addNodeAddress(addr);
-        auto remoteNode = new RemoteNode(sockDescriptor);
+        auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
         registerRemoteNode(remoteNode);
         networkData.addNodeAddresses(remoteNode->getNodeAddress());
         return 0;

@@ -27,9 +27,10 @@ private:
     vector<SenderTask*> senderTasks;
     Receiver* receiver;
     Sender* sender;
+    NetworkData* networkData;
     void start();
 public:
-    RemoteNode(int sockfd);
+    RemoteNode(int sockfd, NetworkData* networkData);
     RemoteNode& operator=(RemoteNode && obj);
     RemoteNode(RemoteNode && obj);
     ~RemoteNode();

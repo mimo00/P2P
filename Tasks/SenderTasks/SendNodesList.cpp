@@ -11,15 +11,7 @@
 #include <unistd.h>
 
 vector<NodeAddr> SendNodesList::getNodeAddresses() {
-    vector<NodeAddr> addresses;
-    NodeAddr nodeAddr;
-    //TODO: dodać logikę pobierania listy nodes
-    nodeAddr.addr.s_addr = inet_addr("127.0.0.1");
-    nodeAddr.port = htons(3000);
-
-    addresses.push_back(nodeAddr);
-
-    return addresses;
+    return nodeAddress;
 }
 
 void SendNodesList::send(int socket) {
