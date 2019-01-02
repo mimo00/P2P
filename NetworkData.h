@@ -17,7 +17,6 @@ public:
     void addNodeAddress(NodeAddr nodeAddr);
     void addNodeAddresses(vector<NodeAddr> nodeAddr);
     const vector<NodeAddr> &getNodeAddress() const;
-    int getLiczbe();
 private:
     vector<NodeAddr> nodeAddress;
 

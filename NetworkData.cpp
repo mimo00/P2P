@@ -17,10 +17,6 @@ void NetworkData::addNodeAddresses(vector<NodeAddr> nodeAddr) {
 }
 
 
-int NetworkData::getLiczbe() {
-    return 666;
-}
-
 const vector<NodeAddr> &NetworkData::getNodeAddress() const {
     return nodeAddress;
 }
