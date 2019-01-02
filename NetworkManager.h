@@ -18,14 +18,12 @@ private:
     list<RemoteNode*> remoteNodes;
     NetworkData networkData;
 public:
-    NetworkData &getNetworkData();
-
-public:
     NetworkManager();
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
     vector<File> getFiles();
+    NetworkData &getNetworkData();
 };
 
 
