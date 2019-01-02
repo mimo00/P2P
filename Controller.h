@@ -19,6 +19,7 @@ public:
     void startNewNetwork(NodeAddr me);
     int connectToNetwork(NodeAddr me, NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();
+    vector<File> getFiles();
 private:
     NetworkManager* networkManager;
     Listener* listener;

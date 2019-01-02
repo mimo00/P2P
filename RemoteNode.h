@@ -41,7 +41,7 @@ public:
     Receiver *getReceiver() const;
     Sender *getSender() const;
     int getSockfd()const{ return this->sockfd; }
-    vector<File> getFilesList();
+    vector<File> getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
 };
 

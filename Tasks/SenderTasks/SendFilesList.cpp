@@ -26,36 +26,24 @@ vector<File> SendFilesList::getFilesNames(){
     vector<File> files;
     srand(time(NULL));
     DIR *dp;
-    string dir="./Files";
+    string dir="/home/michal/Desktop/TIN_TEST"; //to musi być konfigurowalne
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
-    }
-
-    while ((dirp = readdir(dp)) != NULL) {
-        if(dirp->d_type!=DT_DIR) {
-            File file;
-            string path=dir+"/"+dirp->d_name;
-            strcpy(file.name,dirp->d_name);
-            file.size=(int)fsize(path.c_str());
-            file.hash=rand()%1024;  //zmienic na funcke hashującą
-            files.push_back(file);
+        return files;
+    } else{
+        while ((dirp = readdir(dp)) != NULL) {
+            if(dirp->d_type!=DT_DIR) {
+                File file;
+                string path=dir+"/"+dirp->d_name;
+                strcpy(file.name,dirp->d_name);
+                file.size=(int)fsize(path.c_str());
+                file.hash=rand()%1024;  //zmienic na funcke hashującą
+                files.push_back(file);
+            }
         }
+        closedir(dp);
     }
-    closedir(dp);
-
-    File f;
-    f.size = 10;
-    f.hash = 3;
-    string s = "Jakis napis";
-    s.copy(f.name, 64);
-    files.push_back(f);
-
-
-    cout<<"Lista plików"<<endl;
-    for(int i=0;i<files.size();i++)
-        cout<<files[i].name<<" : "<<files[i].size<<"B"<<endl;
-
     return files;
 }
 
