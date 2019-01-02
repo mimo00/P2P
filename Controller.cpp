@@ -21,7 +21,7 @@ void Controller::startNewNetwork(NodeAddr me) {
 }
 
 int Controller::connectToNetwork(NodeAddr me, NodeAddr addr) {
-    int result = networkManager->connectToNetwork(addr);
+    int result = networkManager->connectToNetwork(addr, me);
     if (result>0) {
         cout << "Nie udalo sie poloczyc do sieci !" << endl;
         return 1;

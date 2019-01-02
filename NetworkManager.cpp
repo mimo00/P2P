@@ -24,9 +24,11 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     remoteNodes.erase(foundRemoteNode);
 }
 
-int NetworkManager::connectToNetwork(NodeAddr addr) {
+int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     int sockDescriptor;
     if((sockDescriptor = Client::connectWithHost(addr))>=0){
+        Client client(sockDescriptor);
+        client.sendInteger(me.port);
         networkData.addNodeAddress(addr);
         auto remoteNode = new RemoteNode(sockDescriptor);
         registerRemoteNode(remoteNode);

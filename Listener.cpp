@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include "Communication/Server.h"
 
 using namespace std;
 
@@ -44,8 +45,10 @@ void Listener::run() {
                 continue;
             } else{
                 cout<<"Rejestruje Noda !!!" << endl;
+                Server server(clientFd);
+                int port = server.readInteger();
                 NodeAddr clientAddr;
-                clientAddr.port = client_addr.sin_port;
+                clientAddr.port = port;
                 clientAddr.addr = client_addr.sin_addr;
                 networkManager->getNetworkData().addNodeAddress(clientAddr);
                 auto remoteNode = new RemoteNode(clientFd);
