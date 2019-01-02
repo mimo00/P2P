@@ -36,4 +36,8 @@ vector<NodeAddr> Controller::getNodesAddresses() {
     return networkManager->getNetworkData().getNodeAddress();
 }
 
+vector<File> Controller::getFiles() {
+    return networkManager->getFiles();
+}
+
 

@@ -103,6 +103,7 @@ void Receiver::run()
                 else
                     processRequest(taskId);
             }catch (ReceiverDeserializerException& e){
+                cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
                 //Wyrejestrowanie noda
             }
         }

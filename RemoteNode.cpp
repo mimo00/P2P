@@ -78,15 +78,12 @@ Sender *RemoteNode::getSender() const {
     return sender;
 }
 
-vector<File> RemoteNode::getFilesList(){
+vector<File> RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
     int taskId = 20;
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
-    promise<vector<File>> fileNamesPromise;
-    future<vector<File>> fileNamesFuture = fileNamesPromise.get_future();
-    auto receiveTask = new ReceiveFileList(taskId, &fileNamesPromise);
+    auto receiveTask = new ReceiveFileList(taskId, fileNamesPromise);
     addReceiverTask(receiveTask);
-    vector<File> a = fileNamesFuture.get();
 }
 
 vector<NodeAddr> RemoteNode::getNodeAddress() {
