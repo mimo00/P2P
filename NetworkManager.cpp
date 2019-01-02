@@ -39,3 +39,20 @@ int NetworkManager::connectToNetwork(NodeAddr addr) {
 NetworkData &NetworkManager::getNetworkData() {
     return networkData;
 }
+
+vector<File> NetworkManager::getFiles() {
+    vector<promise<vector<File>>*> promises(this->remoteNodes.size());
+    int i = 0;
+    for(auto it=this->remoteNodes.begin(); it != this->remoteNodes.end(); ++it) {
+        promises[i] = new promise<vector<File>>;
+        (*it)->getFilesList(promises[i]);
+        i++;
+    }
+    vector<File> files;
+    for (int i=0;i<promises.size(); i++){
+        future<vector<File>> fileNamesFuture = promises[i]->get_future();
+        vector<File> node_files = fileNamesFuture.get();
+        files.insert(files.end(), node_files.begin(), node_files.end());
+    }
+    return files;
+}

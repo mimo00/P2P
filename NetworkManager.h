@@ -25,6 +25,7 @@ public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr);
+    vector<File> getFiles();
 };
 
 
