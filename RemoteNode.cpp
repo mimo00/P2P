@@ -12,6 +12,8 @@
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "Tasks/SenderTasks/SendNodesListRequest.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "Tasks/ReceiverTasks/ReceiveFile.h"
+#include "Tasks/SenderTasks/FileRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
@@ -94,4 +96,19 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
     addReceiverTask(receiveTask);
     vector<NodeAddr> nodesAddress = nodeAddressFuture.get();
     return nodesAddress;
+}
+
+
+FileFragment RemoteNode::getFileFragment(File file, int offset) {
+    int taskId=30;
+    //zapytanie czy node ma dany fragment pliku
+    auto senderTask = new FileRequest(taskId,file.hash,offset);
+    addSenderTask(senderTask);
+    promise<FileFragment> filePromise;
+    future<FileFragment> fileFuture=filePromise.get_future();
+    //oczekiwanie na potwierdzenie wysylania pliku
+    auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
+    addReceiverTask(receiveTask);
+    FileFragment fragment=fileFuture.get();
+    return fragment;
 }

@@ -25,6 +25,7 @@ private:
     ReceiverDeserializer receiverDeserializer;
     bool canRead();
     void createResponse(int operationCode, int taskId);
+    //void createFileResponse(int operationCode, int taskId,int hash, int offset);
     void processRequest(int taskId);
 };
 
