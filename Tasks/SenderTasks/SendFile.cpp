@@ -44,6 +44,7 @@ int SendFile::readyToSend() {
     size_t nread=fread(buffer,1,OperationCode::PORTION,file);
     if(nread>0)
         cout<<"Wyslano fragment pliku"<<endl;
+    fclose(file);
     return nread;
 }
 

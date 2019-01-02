@@ -34,5 +34,6 @@ void ReceiveFile::handle(int socket) {
         fwrite(buffer, 1, nread, fp);
         memcpy(fFragment_.data, buffer, nread);
     }
+    fclose(fp);
    fileFragment->set_value(fFragment_);
 }

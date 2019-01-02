@@ -5,6 +5,9 @@
 #include "FileDeserializer.h"
 #include "../Communication/Server.h"
 #include <zconf.h>
+#include <iostream>
+#include <tuple>
+
 using namespace std;
 FileDeserializer::FileDeserializer(int socketDescriptor):socketDescriptor(socketDescriptor) {};
 
