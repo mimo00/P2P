@@ -10,7 +10,7 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(){}
+NetworkManager::NetworkManager(NodeAddr me): networkData(me){}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     remoteNodes.emplace_back(remoteNode);

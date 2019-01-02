@@ -6,27 +6,27 @@
 #include "Communication/Client.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
 
-Controller::Controller() {
-    networkManager = new NetworkManager();
+Controller::Controller(NodeAddr me): me(me) {
+    networkManager = new NetworkManager(me);
 }
 
-void Controller::startListener(NodeAddr me) {
+void Controller::startListener() {
     listener = new Listener(me.port, networkManager);
     thread listenerThread([&](){listener->run();});
     listenerThread.detach();
 }
 
-void Controller::startNewNetwork(NodeAddr me) {
-    startListener(me);
+void Controller::startNewNetwork() {
+    startListener();
 }
 
-int Controller::connectToNetwork(NodeAddr me, NodeAddr addr) {
+int Controller::connectToNetwork(NodeAddr addr) {
     int result = networkManager->connectToNetwork(addr, me);
     if (result>0) {
         cout << "Nie udalo sie poloczyc do sieci !" << endl;
         return 1;
     } else{
-        startListener(me);
+        startListener();
         return 0;
     }
 

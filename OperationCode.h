@@ -40,6 +40,7 @@ struct File {
 struct NodeAddr{
     in_addr addr;
     in_port_t port;
+    bool operator == (NodeAddr const& a);
 };
 
 #endif //P2P_OPERATIONCODE_H

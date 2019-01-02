@@ -23,16 +23,16 @@ int main(int argc,  char** argv) {
     uint16_t port = atoi(argv[2]);
     myAddr.addr.s_addr = inet_addr(ip.c_str());
     myAddr.port = htons(port);
-    Controller controller;
+    Controller controller(myAddr);
     if (argc == 3) {
-        controller.startNewNetwork(myAddr);
+        controller.startNewNetwork();
     }else if(argc == 5){
         string knownIp(argv[3]);
         uint16_t knownPort = atoi(argv[4]);
         NodeAddr knownAddr;
         knownAddr.addr.s_addr = inet_addr(ip.c_str());
         knownAddr.port = htons(knownPort);
-        controller.connectToNetwork(myAddr, knownAddr);
+        controller.connectToNetwork(knownAddr);
     }
     ConsoleMenu consoleMenu(&controller);
     consoleMenu.run();

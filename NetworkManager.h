@@ -18,7 +18,7 @@ private:
     list<RemoteNode*> remoteNodes;
     NetworkData networkData;
 public:
-    NetworkManager();
+    NetworkManager(NodeAddr me);
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
