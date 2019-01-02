@@ -9,14 +9,14 @@
 
 class FileSerializer {
 public:
-    FileSerializer(int socketDescriptor, int operationCode, int taskId, int hash,int fileOffset);
+    FileSerializer(int socketDescriptor, int operationCode, int taskId, unsigned char buffer[],int nread);
     void send();
 private:
     int socketDescriptor;
     int operationCode;
     int taskId;
-    int hash;
-    int fileOffset;
+    int nread;
+    unsigned char *buff;
 };
 
 

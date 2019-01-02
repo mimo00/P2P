@@ -47,22 +47,10 @@ int Client::connectWithHost(NodeAddr addr) {
 }
 
 
-void Client::sendFileFragment(int hash,int offset) {
-    SendFilesList filesList(0);
-    vector<File> files = filesList.getFilesNames();
-    FileFragment fileFragment;
-    for (int i = 0; i < files.size(); i++) {
-        if (files.at(i).hash == hash)
-            fileFragment.file = files.at(i);
-    }
-    //TODO:Wyciąganie pliku, zmiana offsetu i wyslanie
-
-    int bity=1048576;
-    int fragmentSize=offset+bity;
-    if(fragmentSize>fileFragment.file.size)
-        fragmentSize=fileFragment.file.size;
-    for(int i=offset;i<fragmentSize;i++){
-        ssize_t ile_bitow=write(socketDescriptor,&fileFragment.data[i],(size_t)fileFragment.file.size);
-    }
+void Client::sendFileFragment(unsigned char buff[],int nread) {
+    unsigned char *buffer;
+    buffer = buff;
+    if(nread>0)
+        ssize_t ile_bitow=write(socketDescriptor,&buffer,nread);
     cout<<"Wyslanow fragment pliku"<<endl;
 }

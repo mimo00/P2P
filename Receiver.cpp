@@ -44,12 +44,20 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendNodesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
+        case OperationCode::FILE_FRAGMENT_REQUEST:
+            auto data=receiverDeserializer.readData();
+            int hash=get<0>(data);
+            int offset=get<1>(data);
+            senderTask = new SendFile(taskId,hash,offset);
+            senderTasks->emplace_back(senderTask);
+            break;
     }
 }
 
-
+/**
 void Receiver::createFileResponse(int operationCode, int taskId, int hash, int offset){
     cout<<"Tworze odpowiedz na pytanie o plik"<<endl;
+   //TODO:wywalic to i przeniesc do tasku
     SenderTask* senderTask;
     SenderTask* senderTask1;
     SendFilesList sendFilesList(taskId);
@@ -68,7 +76,7 @@ void Receiver::createFileResponse(int operationCode, int taskId, int hash, int o
     senderTasks->emplace_back(senderTask);
     senderTasks->emplace_back(senderTask1);
 
-}
+}*/
 
 void Receiver::processRequest(int taskId){
     /*Funkcja znajduje Taks o podanym id i odpala go*/
@@ -89,17 +97,9 @@ void Receiver::run()
                 auto data = receiverDeserializer.readData();    //deserializuje 2 atrybuty, a potrzeba 4 przy fileRequest
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
-                int hash,offset;
-                if(operationCode==OperationCode::FILE_FRAGMENT_REQUEST){
-                    auto data2=receiverDeserializer.readData();
-                    hash=get<0>(data2);
-                    offset=get<1>(data2);
-                }
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
                 if (OperationCode::isRequest(operationCode))
                     createResponse(operationCode, taskId);
-                else if(operationCode==OperationCode::FILE_FRAGMENT_REQUEST)
-                    createFileResponse(operationCode,taskId,hash,offset);
                 else
                     processRequest(taskId);
             }catch (ReceiverDeserializerException& e){

@@ -11,7 +11,7 @@
 class FileRequest: public SenderTask{
 public:
     const int operationCode = OperationCode::FILE_FRAGMENT_REQUEST;
-    FileRequest(int id,int offset,int hash): SenderTask(id), offset(offset),hash(hash){};
+    FileRequest(int id,int hash,int offset): SenderTask(id), offset(offset),hash(hash){};
     void send(int) override;
 private:
     int offset;

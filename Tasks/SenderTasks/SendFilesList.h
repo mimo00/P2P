@@ -16,7 +16,7 @@ public:
     const int operatinoCode = OperationCode::FILES_LIST;
     SendFilesList(int id): SenderTask(id){};
     void send(int) override;
-    //private:
+    private:
     vector<File> getFilesNames();
 };
 

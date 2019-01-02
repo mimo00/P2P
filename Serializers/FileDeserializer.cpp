@@ -4,16 +4,18 @@
 
 #include "FileDeserializer.h"
 #include "../Communication/Server.h"
-
+#include <zconf.h>
+using namespace std;
 FileDeserializer::FileDeserializer(int socketDescriptor):socketDescriptor(socketDescriptor) {};
 
-FileFragment FileDeserializer::receive() {
+tuple<unsigned char *,int> FileDeserializer::receive() {
     Server server(socketDescriptor);
-    int operationCode=server.readInteger();
-    int taskId=server.readInteger();
-    FileFragment fileFragment;
+    int nread = server.readInteger();
+    unsigned char *buffp=server.receiveFileFragment(nread);
+
+    //FileFragment fileFragment;
     //TODO:dokonczyc
     //fileFragment=server.receiveFileFragment();
 
-    return fileFragment;
+    return make_tuple(buffp,nread);
 }

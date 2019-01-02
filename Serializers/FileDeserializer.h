@@ -12,7 +12,7 @@
 class FileDeserializer {
 public:
     FileDeserializer(int socketDescriptor);
-    FileFragment receive();
+    tuple<unsigned char *,int> receive();
 private:
     int socketDescriptor;
 };

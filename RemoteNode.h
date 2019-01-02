@@ -43,7 +43,7 @@ public:
     int getSockfd()const{ return this->sockfd; }
     vector<File> getFilesList();
     vector<NodeAddr> getNodeAddress();
-    FileFragment getFileFragment();
+    FileFragment getFileFragment(File file,int offset);
 };
 
 

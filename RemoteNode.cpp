@@ -12,6 +12,7 @@
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "Tasks/SenderTasks/SendNodesListRequest.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "Tasks/ReceiverTasks/ReceiveFile.h"
 #include "Tasks/SenderTasks/FileRequest.h"
 
 
@@ -101,19 +102,16 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
 }
 
 
-FileFragment RemoteNode::getFileFragment() {
+FileFragment RemoteNode::getFileFragment(File file, int offset) {
     int taskId=30;
     //zapytanie czy node ma dany fragment pliku
-    auto senderTask = new FileRequest(taskId,0,12345);
+    auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
-    promise<int> fileRequestResponsePromise;
-    future<int> fileRequestResponseFuture=fileRequestResponsePromise.get_future();
+    promise<FileFragment> filePromise;
+    future<FileFragment> fileFuture=filePromise.get_future();
     //oczekiwanie na potwierdzenie wysylania pliku
-    //auto receiveTask=new ReceiveFileReqtResponse();
-    //addReceiverTask(receiveTask);
-    //promise<FileFragment> fileFragmentPromise;
-    //future<FileFragment> fileFragmentFuture = fileFragmentPromise.get_future();
-    //TODO:auto receiveTask=new ReceiveFileRequestResp();
-    //addReceiverTask(receiveTask);
-    //FileFragment fragment=fileFragmentFuture.get();
+    auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
+    addReceiverTask(receiveTask);
+    FileFragment fragment=fileFuture.get();
+    return fragment;
 }
