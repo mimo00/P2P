@@ -21,6 +21,9 @@ FILE* SendFile::getFile(int hash){
             cout<<"TAKI SAM !!! " << hash << endl;
             FILE *file;
             file = fopen(FileManager::getFilePath(files.at(i)).c_str(), "rb");
+            //file->_offset=10;
+            //docelowo offset
+            fseek(file,offset,SEEK_SET);
             return file;
         }
     }
