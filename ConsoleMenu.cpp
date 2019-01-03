@@ -37,15 +37,14 @@ void ConsoleMenu::run() {
         }
         if (line == "3"){
             vector<File> files = controller->getFiles();
-
             int choice;
-            cout<<"Name"<< "    "<<"Size"<< endl;
-
+            cout<<"Wybierz numer pliku do pobrania"<<endl;
+            cout<<"Number" << "    "<<"Name"<< "    "<<"Size"<< endl;
             for(int i=0;i<files.size(); i++){
                 File file = files.at(i);
-                cout <<i<<". "<<file.name << "    " << file.size << endl;
+                cout <<i<<" - "<<file.name << "    " << file.size << endl;
             }
-            cout<<"Wybierz plik do pobrania"<<endl;
+
             cin>>choice;
             File choosenFile;
             for(int i=0;i<files.size(); i++) {
@@ -53,7 +52,7 @@ void ConsoleMenu::run() {
                     File choosenFile = files.at(i);
             }
             controller->downloadFile(choosenFile);
-
+            cout<<"Pobrano plik!"<<endl;
         }
         if (line == "exit"){
             return;

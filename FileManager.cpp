@@ -30,7 +30,7 @@ int hashFunction(char name[],int nameSize,int size){
 vector<File> FileManager:: getFilesNames(){
     vector<File> files;
     DIR *dp;
-    string dir="/home/michal/Desktop/TIN_TEST";
+    string dir="./Files";
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
@@ -52,6 +52,6 @@ vector<File> FileManager:: getFilesNames(){
 }
 
 string FileManager:: getFilePath(File file) {
-    string dir = "/home/michal/Desktop/TIN_TEST";
+    string dir = "./Files";
     return dir + "/" + file.name;
 }

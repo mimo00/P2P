@@ -108,15 +108,15 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
 
 FileFragment RemoteNode::getFileFragment(File file, int offset) {
     int taskId=getId();
-    //zapytanie czy node ma dany fragment pliku
-    cout<<"TUUUTTTT "<< file.hash << endl;
     auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
     promise<FileFragment> filePromise;
     future<FileFragment> fileFuture=filePromise.get_future();
-    //oczekiwanie na potwierdzenie wysylania pliku
     auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
     addReceiverTask(receiveTask);
     FileFragment fragment=fileFuture.get();
+
+
+
     return fragment;
 }

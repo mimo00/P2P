@@ -6,6 +6,7 @@
 #include "Communication/Client.h"
 #include <algorithm>
 #include <stdexcept>
+#include <fstream>
 
 using namespace std;
 
@@ -54,25 +55,31 @@ vector<File> NetworkManager::getFiles() {
         vector<File> node_files = fileNamesFuture.get();
         files.insert(files.end(), node_files.begin(), node_files.end());
     }
-    cout<<"Hash " << files[0].hash << endl;
-    FileFragment a = remoteNodes[0]->getFileFragment(files[0], 0);
-    FILE *fp;
-    string dir = "/home/michal/Desktop/TIN_TEST/aaaa";
-    string file__ =  dir + "/" + a.file.name;
-
-
-    fp=fopen(file__.c_str(),"ab");
-    if(fp == nullptr)
-        cout<<"Error while opening file"<<endl;
-    else {
-        fwrite(a.data, sizeof(char), a.size, fp);
-    }
-    fclose(fp);
-    return files;
+return files;
 }
 
-void NetworkManager::fileDownloadManage(File file){
-    cout<<"Pobieram plik "<<file.name<<endl;
-    
-    //tutaj pobieranie pliku
+void NetworkManager::fileDownloadManage(File filee) {
+    cout << "Pobieram plik " << filee.name << endl;
+
+    int part=0;
+    while(part<filee.size) {
+        FileFragment fragment = remoteNodes[0]->getFileFragment(filee, part);
+        //cout<<"nastepna runda"<<endl<<endl;
+        part += 10;//bajtów offsetu
+
+        //TODO:to co ponizej przeniesc do RemoteNode
+        // -> wtedy kazdy watek remoteNode'a bedzie zapisywal do pliku
+        // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
+        // -> lub lepiej dzialac na mutexach
+        FILE *fp;
+        string dir = "./Files/dwnld";
+        string file__ = dir + "/" + fragment.file.name;
+        fp = fopen(file__.c_str(), "ab");
+        if (fp == nullptr)
+            cout << "Error while opening file" << endl;
+        else {
+            fwrite(fragment.data, sizeof(char), fragment.size, fp);
+        }
+        fclose(fp);
+    }
 }

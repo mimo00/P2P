@@ -13,7 +13,7 @@ void FileSerializer::send() {
     client.sendInteger(operationCode);
     client.sendInteger(taskId);
     char buffer[OperationCode::PORTION];
-    size_t nread = fread(buffer, sizeof(char), OperationCode::PORTION, file);
+    size_t nread = fread(buffer, sizeof(char), 10, file);
     client.sendInteger((int)nread);
     client.sendFileFragment(buffer, nread);
 }
