@@ -24,14 +24,64 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     remoteNodes.erase(foundRemoteNode);
 }
 
-int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
+
+int NetworkManager::initConnect(NodeAddr addr, NodeAddr me){
     int sockDescriptor;
     if((sockDescriptor = Client::connectWithHost(addr))>=0){
         Client client(sockDescriptor);
         client.sendInteger(me.port);
+        return sockDescriptor;
+    }
+    return -1;
+}
+
+int NetworkManager::connect(NodeAddr addr, NodeAddr me){
+    int sockDescriptor;
+    if((sockDescriptor = Client::connectWithHost(addr))>=0){
+        Client client(sockDescriptor);
+        client.sendInteger(me.port);
+        return sockDescriptor;
+    }
+    return -1;
+}
+
+
+int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
+    int sockDescriptor;
+    sockDescriptor = initConnect(addr, me);
+    if(sockDescriptor>=0){
         networkData.addNodeAddress(addr);
         auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
         registerRemoteNode(remoteNode);
+        vector<NodeAddr> addresses = remoteNode->getNodeAddress();
+        for(int i=0;i<addresses.size();i++){
+            sockDescriptor = connect(addr, me);
+            auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+            registerRemoteNode(remoteNode);
+        }
+        return 0;
+    } else {
+        cout<<"Nie mozna polaczyc z siecia " << endl;
+        return -1;
+    }
+
+
+    if((sockDescriptor = Client::connectWithHost(addr))>=0){
+        Client client(sockDescriptor);
+        client.sendInteger(me.port);
+//        cout<<"Wysylam numer portu: " << (int) me.port << endl;
+        networkData.addNodeAddress(addr);
+        auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+        registerRemoteNode(remoteNode);
+        vector<NodeAddr> addresses = remoteNode->getNodeAddress();
+        for(int i=0;i<addresses.size();i++){
+            if((sockDescriptor = Client::connectWithHost(addresses[i]))>=0) {
+                Client client(sockDescriptor);
+                client.sendInteger(me.port);
+                auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+                registerRemoteNode(remoteNode);
+            }
+        }
         networkData.addNodeAddresses(remoteNode->getNodeAddress());
         return 0;
     } else

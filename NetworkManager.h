@@ -17,6 +17,8 @@ class NetworkManager {
 private:
     list<RemoteNode*> remoteNodes;
     NetworkData networkData;
+    int initConnect(NodeAddr addr, NodeAddr me);
+    int connect(NodeAddr addr, NodeAddr me);
 public:
     NetworkManager(NodeAddr me);
     void registerRemoteNode(RemoteNode* remoteNode);
