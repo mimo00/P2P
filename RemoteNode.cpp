@@ -7,11 +7,14 @@
 #include <thread>
 #include <future>
 #include <unistd.h>
+#include <cstdlib>
 #include "Tasks/SenderTasks/SendFilesListRequest.h"
 #include "OperationCode.h"
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "Tasks/SenderTasks/SendNodesListRequest.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "Tasks/ReceiverTasks/ReceiveFile.h"
+#include "Tasks/SenderTasks/FileRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd, NetworkData* networkData): sockfd(sockfd), networkData(networkData){
@@ -76,8 +79,14 @@ Sender *RemoteNode::getSender() const {
     return sender;
 }
 
-vector<File> RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
-    int taskId = 20;
+int getId(){
+    srand(time(NULL));
+    return rand();
+}
+
+void RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
+    cout<<"ODPALAM getFilesList" << endl;
+    int taskId = getId();
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
     auto receiveTask = new ReceiveFileList(taskId, fileNamesPromise);
@@ -85,7 +94,7 @@ vector<File> RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
 }
 
 vector<NodeAddr> RemoteNode::getNodeAddress() {
-    int taskId = 10;
+    int taskId = getId();
     auto senderTask =  new SendNodesListRequest(taskId);
     addSenderTask(senderTask);
     promise<vector<NodeAddr>> nodeAddressPromise;
@@ -94,4 +103,20 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
     addReceiverTask(receiveTask);
     vector<NodeAddr> nodesAddress = nodeAddressFuture.get();
     return nodesAddress;
+}
+
+
+FileFragment RemoteNode::getFileFragment(File file, int offset) {
+    int taskId=getId();
+    auto senderTask = new FileRequest(taskId,file.hash,offset);
+    addSenderTask(senderTask);
+    promise<FileFragment> filePromise;
+    future<FileFragment> fileFuture=filePromise.get_future();
+    auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
+    addReceiverTask(receiveTask);
+    FileFragment fragment=fileFuture.get();
+
+
+
+    return fragment;
 }

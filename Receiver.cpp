@@ -7,6 +7,8 @@
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/SenderTasks/SendNodesList.h"
+#include "Tasks/SenderTasks/SendFile.h"
+#include "Tasks/SenderTasks/SendResponse.h"
 #include <unistd.h>
 #include <algorithm>
 
@@ -33,14 +35,20 @@ void Receiver::createResponse(int operationCode, int taskId){
     /*Funkcja powinna stworzyć odpowiedni Task dla sendera */
     cout<<"Tworze odpowiedz" << endl;
     SenderTask* senderTask;
-    switch (operationCode)
-    {
+    switch (operationCode) {
         case OperationCode::FILES_LIST_REQUEST:
             senderTask = new SendFilesList(taskId);
             senderTasks->emplace_back(senderTask);
             break;
         case OperationCode::NODES_LIST_REQUEST:
             senderTask = new SendNodesList(taskId, networkData->getNodeAddress());
+            senderTasks->emplace_back(senderTask);
+            break;
+        case OperationCode::FILE_FRAGMENT_REQUEST:
+            auto data=receiverDeserializer.readData();
+            int offset=get<0>(data);
+            int hash=get<1>(data);
+            senderTask = new SendFile(taskId,hash,offset);
             senderTasks->emplace_back(senderTask);
             break;
     }

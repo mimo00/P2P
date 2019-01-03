@@ -19,14 +19,21 @@ public:
     const static int NODES_LIST = 103;
     const static int FILES_LIST_REQUEST = 300;
     const static int FILES_LIST = 302;
+    const static int FILE_FRAGMENT_REQUEST=400;
+    const static int DONT_HAVE_FILE=402;
+    const static int FILE_FRAGMENT=403;
 
+
+    const static int PORTION=1048576;
     static bool isRequest(int operationCode){
         const list<int> requestOperationCodes = list<int>({
             FILES_LIST_REQUEST,
             NODES_LIST_REQUEST,
+            FILE_FRAGMENT_REQUEST
         });
         return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
     }
+
 };
 
 
@@ -36,6 +43,11 @@ struct File {
     int size;
 };
 
+struct FileFragment {
+    File file;
+    unsigned char data[OperationCode::PORTION];
+    int size;
+};
 
 struct NodeAddr{
     in_addr addr;

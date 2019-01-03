@@ -45,3 +45,11 @@ vector<NodeAddr> Server::receiveNodeAddr(int numberOfFiles){
     }
     return nodeAddr;
 }
+void Server::receiveFileFragment(unsigned char* buff, int nread) {
+    ssize_t readSize;
+    unsigned char bufff[100];
+    readSize=read(socketDescriptor, buff, nread);
+    if (readSize == 0)
+        throw BrokenConnectionException();
+    cout<<"Przeczytano: " << readSize << " bajtow pliku" << endl;
+}

@@ -9,12 +9,16 @@
 class CommuniqueSerializer {
 public:
     CommuniqueSerializer(int socketDescriptor, int operationCode, int taskId);
+    CommuniqueSerializer(int socketDescriptor, int operationCode, int taskId, int offset, int hash);
     void send();
+    void sendFileReq();
 
 private:
     int socketDescriptor;
     int operationCode;
     int taskId;
+    int offset;
+    int hash;
 };
 
 

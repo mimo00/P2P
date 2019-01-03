@@ -6,6 +6,7 @@
 #include "Communication/Client.h"
 #include <algorithm>
 #include <stdexcept>
+#include <fstream>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ using namespace std;
 NetworkManager::NetworkManager(NodeAddr me): networkData(me){}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
-    remoteNodes.emplace_back(remoteNode);
+    remoteNodes.push_back(remoteNode);
 }
 
 void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
@@ -95,9 +96,9 @@ NetworkData &NetworkManager::getNetworkData() {
 vector<File> NetworkManager::getFiles() {
     vector<promise<vector<File>>*> promises(this->remoteNodes.size());
     int i = 0;
-    for(auto it=this->remoteNodes.begin(); it != this->remoteNodes.end(); ++it) {
+    for(int j=0;j<remoteNodes.size();j++) {
         promises[i] = new promise<vector<File>>;
-        (*it)->getFilesList(promises[i]);
+        remoteNodes[i]->getFilesList(promises[i]);
         i++;
     }
     vector<File> files;
@@ -106,5 +107,31 @@ vector<File> NetworkManager::getFiles() {
         vector<File> node_files = fileNamesFuture.get();
         files.insert(files.end(), node_files.begin(), node_files.end());
     }
-    return files;
+return files;
+}
+
+void NetworkManager::fileDownloadManage(File filee) {
+    cout << "Pobieram plik " << filee.name << endl;
+
+    int part=0;
+    while(part<filee.size) {
+        FileFragment fragment = remoteNodes[0]->getFileFragment(filee, part);
+        //cout<<"nastepna runda"<<endl<<endl;
+        part += 10;//bajtów offsetu
+
+        //TODO:to co ponizej przeniesc do RemoteNode
+        // -> wtedy kazdy watek remoteNode'a bedzie zapisywal do pliku
+        // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
+        // -> lub lepiej dzialac na mutexach
+        FILE *fp;
+        string dir = "./Files/dwnld";
+        string file__ = dir + "/" + fragment.file.name;
+        fp = fopen(file__.c_str(), "ab");
+        if (fp == nullptr)
+            cout << "Error while opening file" << endl;
+        else {
+            fwrite(fragment.data, sizeof(char), fragment.size, fp);
+        }
+        fclose(fp);
+    }
 }

@@ -5,6 +5,7 @@
 #include <zconf.h>
 #include "Client.h"
 #include <iostream>
+#include "../Tasks/SenderTasks/SendFilesList.h"
 
 
 Client::Client(int socketDescriptor): socketDescriptor(socketDescriptor) {}
@@ -43,4 +44,12 @@ int Client::connectWithHost(NodeAddr addr) {
     if (connect(sock, (struct sockaddr *) &host_addr, sizeof(host_addr)) < 0)
         return -1;
     return sock;
+}
+
+
+void Client::sendFileFragment(char* buff,int nread) {
+    if(nread>0) {
+        ssize_t ile_bitow = write(socketDescriptor, buff, nread);
+        cout << "Wyslanow fragment pliku:" << (int) ile_bitow << " bajtow" << endl;
+    }
 }

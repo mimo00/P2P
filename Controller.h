@@ -20,6 +20,7 @@ public:
     int connectToNetwork(NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
+    void downloadFile(File file);
 private:
     NodeAddr me;
     NetworkManager* networkManager;

@@ -17,3 +17,15 @@ void CommuniqueSerializer::send(){
     client.sendInteger(operationCode);
     client.sendInteger(taskId);
 }
+
+
+CommuniqueSerializer::CommuniqueSerializer(int socketDescriptor, int operationCode, int taskId, int offset, int hash):
+socketDescriptor(socketDescriptor), operationCode(operationCode), taskId(taskId),offset(offset),hash(hash){};
+
+void CommuniqueSerializer::sendFileReq(){
+    Client client(socketDescriptor);
+    client.sendInteger(operationCode);
+    client.sendInteger(taskId);
+    client.sendInteger(offset);
+    client.sendInteger(hash);
+}
