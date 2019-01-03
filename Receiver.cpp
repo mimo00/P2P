@@ -11,21 +11,22 @@
 #include "Tasks/SenderTasks/SendResponse.h"
 #include <unistd.h>
 #include <algorithm>
+#include "RemoteNode.h"
 
 using namespace std;
 
-Receiver::Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor, NetworkData* networkData)
-: receiverTasks(receiverTasks), senderTasks(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor), networkData(networkData) {};
+
+Receiver::Receiver(RemoteNode* remoteNode): remoteNode(remoteNode) {};
 
 
 bool Receiver::canRead(){
     fd_set rfds;
     FD_ZERO(&rfds);
-    FD_SET(socketDescriptor, &rfds);
+    FD_SET(remoteNode->getSockfd(), &rfds);
     struct timeval tv;
     tv.tv_sec = 1;
     tv.tv_usec = 0;
-    int retval = select(socketDescriptor+1, &rfds, NULL, NULL, &tv);
+    int retval = select(remoteNode->getSockfd()+1, &rfds, NULL, NULL, &tv);
     if (retval == -1)
         perror("select()");
     return retval != 0;
@@ -38,34 +39,35 @@ void Receiver::createResponse(int operationCode, int taskId){
     switch (operationCode) {
         case OperationCode::FILES_LIST_REQUEST:
             senderTask = new SendFilesList(taskId);
-            senderTasks->emplace_back(senderTask);
             break;
         case OperationCode::NODES_LIST_REQUEST:
-            senderTask = new SendNodesList(taskId, networkData->getNodeAddress());
-            senderTasks->emplace_back(senderTask);
+            senderTask = new SendNodesList(taskId, remoteNode->getNetworkData()->getNodeAddress());
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:
+            ReceiverDeserializer receiverDeserializer(remoteNode->getSockfd());
             auto data=receiverDeserializer.readData();
             int offset=get<0>(data);
             int hash=get<1>(data);
             senderTask = new SendFile(taskId,hash,offset);
-            senderTasks->emplace_back(senderTask);
             break;
     }
+    remoteNode->getSenderTasks()->emplace_back(senderTask);
 }
 
 void Receiver::processRequest(int taskId){
     /*Funkcja znajduje Taks o podanym id i odpala go*/
     cout<<"Przetwarzam request" << endl;
+    auto receiverTasks = remoteNode->getReceiverTasks();
     auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getId() == taskId;});
     if (it != receiverTasks->end())
-        (*it)->handle(socketDescriptor);
+        (*it)->handle(remoteNode->getSockfd());
     else
         cout<<"Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
 }
 
 void Receiver::run()
 {
+    ReceiverDeserializer receiverDeserializer(remoteNode->getSockfd());
     while (!stopRequested())
     {
         if (canRead()) {

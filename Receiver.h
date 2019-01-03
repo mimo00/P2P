@@ -14,20 +14,17 @@
 
 using namespace std;
 
+class RemoteNode;
+
 class Receiver: public Stoppable
 {
 public:
-    Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTasks, int socketDescriptor, NetworkData* networkData);
+    Receiver(RemoteNode* remoteNode);
     void run();
 private:
-    int socketDescriptor;
-    vector<ReceiverTask*>* receiverTasks;
-    vector<SenderTask*>* senderTasks;
-    NetworkData* networkData;
-    ReceiverDeserializer receiverDeserializer;
+    RemoteNode* remoteNode;
     bool canRead();
     void createResponse(int operationCode, int taskId);
-    //void createFileResponse(int operationCode, int taskId,int hash, int offset);
     void processRequest(int taskId);
 };
 

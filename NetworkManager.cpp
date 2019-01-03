@@ -21,7 +21,7 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
-    (*foundRemoteNode)->getReceiver()->stop();
+//    (*foundRemoteNode)->getReceiver().stop();
     remoteNodes.erase(foundRemoteNode);
 }
 
@@ -53,12 +53,14 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     if(sockDescriptor>=0){
         networkData.addNodeAddress(addr);
         auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+        remoteNode->start();
         registerRemoteNode(remoteNode);
         vector<NodeAddr> addresses = remoteNode->getNodeAddress();
         for(int i=0;i<addresses.size();i++){
             sockDescriptor = connect(addr, me);
             auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
             registerRemoteNode(remoteNode);
+            remoteNode->start();
         }
         return 0;
     } else {

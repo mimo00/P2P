@@ -13,13 +13,14 @@
 
 using namespace std;
 
+class RemoteNode;
+
 class Sender: public Stoppable {
 public:
-    Sender(vector<SenderTask*>* senderTasks, int socketDescriptor);
+    Sender(RemoteNode* remoteNode);
     void run();
 private:
-    int socketDescriptor;
-    vector<SenderTask*>* senderTasks;
+    RemoteNode* remoteNode;
 };
 
 

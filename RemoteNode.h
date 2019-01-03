@@ -23,28 +23,27 @@ using  namespace std;
 class RemoteNode {
 private:
     int sockfd;
+    Receiver receiver;
+    Sender sender;
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
-    Receiver* receiver;
-    Sender* sender;
     NetworkData* networkData;
-    void start();
 public:
+    void start();
     RemoteNode(int sockfd, NetworkData* networkData);
     RemoteNode& operator=(RemoteNode && obj);
     RemoteNode(RemoteNode && obj);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
-    const vector<ReceiverTask*> &getReceiverTasks() const;
-    const vector<SenderTask*> &getSenderTasks() const;
+    vector<ReceiverTask*>* getReceiverTasks();
+    vector<SenderTask*>* getSenderTasks();
     void addReceiverTask(ReceiverTask*);
     void addSenderTask(SenderTask*);
-    Receiver *getReceiver() const;
-    Sender *getSender() const;
     int getSockfd()const{ return this->sockfd; }
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     FileFragment getFileFragment(File file,int offset);
+    NetworkData *getNetworkData() const;
 };
 
 

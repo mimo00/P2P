@@ -5,20 +5,20 @@
 #include "Sender.h"
 #include "Tasks/SenderTasks/SenderTask.h"
 #include "Serializers/CommuniqueSerializer.h"
+#include "RemoteNode.h"
 
 using namespace std;
 
-Sender::Sender(vector<SenderTask*>* senderTasks, int socketDescriptor)
-: senderTasks(senderTasks), socketDescriptor(socketDescriptor) {};
+Sender::Sender(RemoteNode* remoteNode) : remoteNode(remoteNode) {};
 
 void Sender::run() {
-//    cout<<"sender started"<<endl;
     while(!stopRequested())
     {
+        auto senderTasks = remoteNode->getSenderTasks();
         if (!senderTasks->empty()){
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
-            senderTask->send(socketDescriptor);
+            senderTask->send(remoteNode->getSockfd());
             delete senderTask;
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;
