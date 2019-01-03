@@ -65,28 +65,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
         cout<<"Nie mozna polaczyc z siecia " << endl;
         return -1;
     }
-
-
-    if((sockDescriptor = Client::connectWithHost(addr))>=0){
-        Client client(sockDescriptor);
-        client.sendInteger(me.port);
-//        cout<<"Wysylam numer portu: " << (int) me.port << endl;
-        networkData.addNodeAddress(addr);
-        auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
-        registerRemoteNode(remoteNode);
-        vector<NodeAddr> addresses = remoteNode->getNodeAddress();
-        for(int i=0;i<addresses.size();i++){
-            if((sockDescriptor = Client::connectWithHost(addresses[i]))>=0) {
-                Client client(sockDescriptor);
-                client.sendInteger(me.port);
-                auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
-                registerRemoteNode(remoteNode);
-            }
-        }
-        networkData.addNodeAddresses(remoteNode->getNodeAddress());
-        return 0;
-    } else
-        return 1;
 }
 
 NetworkData &NetworkManager::getNetworkData() {
