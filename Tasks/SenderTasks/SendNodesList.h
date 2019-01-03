@@ -13,10 +13,11 @@ using namespace std;
 class SendNodesList: public SenderTask{
 public:
     const int operationCode = OperationCode::NODES_LIST;
-    SendNodesList(int id): SenderTask(id){};
+    SendNodesList(int id, vector<NodeAddr> nodeAddress): SenderTask(id), nodeAddress(nodeAddress){};
     void send(int) override;
 private:
     vector<NodeAddr> getNodeAddresses();
+    vector<NodeAddr> nodeAddress;
 };
 
 

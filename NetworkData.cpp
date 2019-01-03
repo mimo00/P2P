@@ -6,7 +6,7 @@
 #include "NetworkData.h"
 
 
-NetworkData::NetworkData() {}
+NetworkData::NetworkData(NodeAddr me): me(me) {}
 
 void NetworkData::addNodeAddress(NodeAddr nodeAddr) {
     nodeAddress.push_back(nodeAddr);
@@ -14,11 +14,7 @@ void NetworkData::addNodeAddress(NodeAddr nodeAddr) {
 
 void NetworkData::addNodeAddresses(vector<NodeAddr> nodeAddr) {
     nodeAddress.insert(nodeAddress.end(), nodeAddr.begin(), nodeAddr.end());
-}
-
-
-int NetworkData::getLiczbe() {
-    return 666;
+    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), me), nodeAddress.end());
 }
 
 const vector<NodeAddr> &NetworkData::getNodeAddress() const {

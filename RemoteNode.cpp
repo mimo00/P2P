@@ -17,8 +17,8 @@
 #include "Tasks/SenderTasks/FileRequest.h"
 
 
-RemoteNode::RemoteNode(int sockfd): sockfd(sockfd){
-    receiver = new Receiver(&receiverTasks, &senderTasks, sockfd);
+RemoteNode::RemoteNode(int sockfd, NetworkData* networkData): sockfd(sockfd), networkData(networkData){
+    receiver = new Receiver(&receiverTasks, &senderTasks, sockfd, networkData);
     sender = new Sender(&senderTasks, sockfd);
     start();
 }

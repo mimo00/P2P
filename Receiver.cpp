@@ -14,8 +14,8 @@
 
 using namespace std;
 
-Receiver::Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor)
-: receiverTasks(receiverTasks), senderTasks(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor) {};
+Receiver::Receiver(vector<ReceiverTask*>* receiverTasks,vector<SenderTask*>* senderTask, int socketDescriptor, NetworkData* networkData)
+: receiverTasks(receiverTasks), senderTasks(senderTask), socketDescriptor(socketDescriptor), receiverDeserializer(socketDescriptor), networkData(networkData) {};
 
 
 bool Receiver::canRead(){
@@ -41,7 +41,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTasks->emplace_back(senderTask);
             break;
         case OperationCode::NODES_LIST_REQUEST:
-            senderTask = new SendNodesList(taskId);
+            senderTask = new SendNodesList(taskId, networkData->getNodeAddress());
             senderTasks->emplace_back(senderTask);
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:

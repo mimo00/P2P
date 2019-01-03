@@ -13,14 +13,13 @@ using namespace std;
 
 class NetworkData {
 public:
-    NetworkData();
+    NetworkData(NodeAddr me);
     void addNodeAddress(NodeAddr nodeAddr);
     void addNodeAddresses(vector<NodeAddr> nodeAddr);
     const vector<NodeAddr> &getNodeAddress() const;
-    int getLiczbe();
 private:
+    NodeAddr me;
     vector<NodeAddr> nodeAddress;
-
 };
 
 

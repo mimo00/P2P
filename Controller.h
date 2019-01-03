@@ -15,16 +15,17 @@ using namespace std;
 
 class Controller {
 public:
-    Controller();
-    void startNewNetwork(NodeAddr me);
-    int connectToNetwork(NodeAddr me, NodeAddr addr);
+    Controller(NodeAddr me);
+    void startNewNetwork();
+    int connectToNetwork(NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
     void downloadFile(File file);
 private:
+    NodeAddr me;
     NetworkManager* networkManager;
     Listener* listener;
-    void startListener(NodeAddr me);
+    void startListener();
 };
 
 

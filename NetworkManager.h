@@ -17,15 +17,15 @@ class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
     NetworkData networkData;
+    int initConnect(NodeAddr addr, NodeAddr me);
+    int connect(NodeAddr addr, NodeAddr me);
 public:
-    NetworkData &getNetworkData();
-
-public:
-    NetworkManager();
+    NetworkManager(NodeAddr me);
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
-    int connectToNetwork(NodeAddr addr);
+    int connectToNetwork(NodeAddr addr, NodeAddr me);
     vector<File> getFiles();
+    NetworkData &getNetworkData();
     void fileDownloadManage(File file);
 };
 
