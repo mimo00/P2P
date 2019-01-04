@@ -10,7 +10,6 @@
 #include "Tasks/SenderTasks/SenderTask.h"
 #include "Serializers/ReceiverDeserializer.h"
 #include "Tasks/ReceiverTasks/ReceiverTask.h"
-#include "NetworkData.h"
 
 using namespace std;
 

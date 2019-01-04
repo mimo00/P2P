@@ -25,7 +25,7 @@ add_executable(P2P main.cpp NetworkManager.cpp NetworkManager.h
         Controller.cpp Controller.h Listener.cpp Listener.h
         Tasks/ReceiverTasks/ReceiveNodesList.cpp Tasks/ReceiverTasks/ReceiveNodesList.h
         Serializers/NodeListDeserializer.cpp Serializers/NodeListDeserializer.h
-        NetworkData.cpp NetworkData.h ConsoleMenu.cpp ConsoleMenu.h
+        ConsoleMenu.cpp ConsoleMenu.h
         Tasks/SenderTasks/SendFile.cpp Tasks/SenderTasks/SendFile.h
         Serializers/FileSerializer.cpp Serializers/FileSerializer.h
         Serializers/FileDeserializer.cpp Serializers/FileDeserializer.h

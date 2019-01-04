@@ -9,7 +9,6 @@
 #include "OperationCode.h"
 #include "Listener.h"
 #include "NetworkManager.h"
-#include "NetworkData.h"
 
 using namespace std;
 

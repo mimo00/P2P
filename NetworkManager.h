@@ -9,7 +9,6 @@
 #include <list>
 #include <set>
 #include "RemoteNode.h"
-#include "NetworkData.h"
 
 using  namespace std;
 
