@@ -11,7 +11,7 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(NodeAddr me): networkData(me){}
+NetworkManager::NetworkManager(NodeAddr me) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     remoteNodes.push_back(remoteNode);
@@ -47,20 +47,37 @@ int NetworkManager::connect(NodeAddr addr, NodeAddr me){
 }
 
 
+void NetworkManager::addNodeAddress(NodeAddr nodeAddr) {
+    nodeAddress.push_back(nodeAddr);
+}
+
+void NetworkManager::addNodeAddresses(vector<NodeAddr> nodeAddr) {
+    nodeAddress.insert(nodeAddress.end(), nodeAddr.begin(), nodeAddr.end());
+    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), me), nodeAddress.end());
+}
+
+const vector<NodeAddr> &NetworkManager::getNodeAddress() const {
+    return nodeAddress;
+}
+
+
 int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     int sockDescriptor;
     sockDescriptor = initConnect(addr, me);
     if(sockDescriptor>=0){
-        networkData.addNodeAddress(addr);
-        auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+        addNodeAddress(addr);
+        auto remoteNode = new RemoteNode(sockDescriptor, this);
         remoteNode->start();
         registerRemoteNode(remoteNode);
         vector<NodeAddr> addresses = remoteNode->getNodeAddress();
         for(int i=0;i<addresses.size();i++){
-            sockDescriptor = connect(addr, me);
-            auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
-            registerRemoteNode(remoteNode);
-            remoteNode->start();
+            sockDescriptor = connect(addresses[i], me);
+            if(sockDescriptor>=0){
+                auto remoteNode = new RemoteNode(sockDescriptor, this);
+                registerRemoteNode(remoteNode);
+                remoteNode->start();
+                addNodeAddress(addresses[i]);
+            }
         }
         return 0;
     } else {
@@ -69,9 +86,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     }
 }
 
-NetworkData &NetworkManager::getNetworkData() {
-    return networkData;
-}
 
 vector<File> NetworkManager::getFiles() {
     vector<promise<vector<File>>*> promises(this->remoteNodes.size());

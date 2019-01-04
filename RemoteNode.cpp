@@ -17,21 +17,10 @@
 #include "Tasks/SenderTasks/FileRequest.h"
 
 
-RemoteNode::RemoteNode(int sockfd, NetworkData* networkData)
-: sockfd(sockfd), networkData(networkData), receiver(this), sender(this) {
+RemoteNode::RemoteNode(int sockfd, NetworkManager* networkManager)
+: sockfd(sockfd), networkManager(networkManager), receiver(this), sender(this) {
 }
 
-//RemoteNode::RemoteNode(RemoteNode && obj): receiver(obj.receiver)
-//{
-//    std::cout << "Move RemoteNode Constructor is called" << std::endl;
-//}
-
-//RemoteNode& RemoteNode::operator=(RemoteNode && obj)
-//{
-//    std::cout << "Move RemoteNode Assignment is called" << std::endl;
-//    receiver = std::move(obj.receiver);
-//    return *this;
-//}
 
 RemoteNode::~RemoteNode(){
     cout<<"Destruktor" << endl;
@@ -54,8 +43,6 @@ void RemoteNode::addReceiverTask(ReceiverTask* task){
 
 void RemoteNode::addSenderTask(SenderTask* task){
     senderTasks.emplace_back(task);
-    cout<<"Dodaje task do sendera"<<endl;
-    cout<<senderTasks.size()<<endl;
 }
 
 
@@ -71,13 +58,6 @@ vector<SenderTask*>* RemoteNode::getSenderTasks(){
     return &senderTasks;
 }
 
-//Receiver *RemoteNode::getReceiver() const {
-//    return receiver;
-//}
-//
-//Sender *RemoteNode::getSender() const {
-//    return sender;
-//}
 
 int getId(){
     srand(time(nullptr));
@@ -85,7 +65,6 @@ int getId(){
 }
 
 void RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
-    cout<<"ODPALAM getFilesList" << endl;
     int taskId = getId();
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
@@ -115,20 +94,10 @@ FileFragment RemoteNode::getFileFragment(File file, int offset) {
     auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
     addReceiverTask(receiveTask);
     FileFragment fragment=fileFuture.get();
-
-
-
     return fragment;
 }
 
-NetworkData *RemoteNode::getNetworkData() const {
-    return networkData;
+NetworkManager *RemoteNode::getNetworkManager() const {
+    return networkManager;
 }
 
-const Receiver &RemoteNode::getReceiver() const {
-    return receiver;
-}
-
-const Sender &RemoteNode::getSender() const {
-    return sender;
-}

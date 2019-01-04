@@ -16,7 +16,8 @@ using  namespace std;
 class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
-    NetworkData networkData;
+    NodeAddr me;
+    vector<NodeAddr> nodeAddress;
     int initConnect(NodeAddr addr, NodeAddr me);
     int connect(NodeAddr addr, NodeAddr me);
 public:
@@ -24,6 +25,9 @@ public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
+    void addNodeAddress(NodeAddr nodeAddr);
+    void addNodeAddresses(vector<NodeAddr> nodeAddr);
+    const vector<NodeAddr> &getNodeAddress() const;
     vector<File> getFiles();
     NetworkData &getNetworkData();
     void fileDownloadManage(File file);

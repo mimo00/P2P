@@ -33,7 +33,7 @@ int Controller::connectToNetwork(NodeAddr addr) {
 }
 
 vector<NodeAddr> Controller::getNodesAddresses() {
-    return networkManager->getNetworkData().getNodeAddress();
+    return networkManager->getNodeAddress();
 }
 
 vector<File> Controller::getFiles() {

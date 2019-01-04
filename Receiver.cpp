@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include "RemoteNode.h"
+#include "NetworkManager.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendFilesList(taskId);
             break;
         case OperationCode::NODES_LIST_REQUEST:
-            senderTask = new SendNodesList(taskId, remoteNode->getNetworkData()->getNodeAddress());
+            senderTask = new SendNodesList(taskId, remoteNode->getNetworkManager()->getNodeAddress());
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:
             ReceiverDeserializer receiverDeserializer(remoteNode->getSockfd());

@@ -19,20 +19,19 @@
 
 using  namespace std;
 
+class NetworkManager;
 
 class RemoteNode {
 private:
     int sockfd;
+    NetworkManager* networkManager;
     Receiver receiver;
     Sender sender;
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
-    NetworkData* networkData;
 public:
     void start();
-    RemoteNode(int sockfd, NetworkData* networkData);
-    RemoteNode& operator=(RemoteNode && obj);
-    RemoteNode(RemoteNode && obj);
+    RemoteNode(int sockfd, NetworkManager* networkManager);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
     vector<ReceiverTask*>* getReceiverTasks();
@@ -43,7 +42,7 @@ public:
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     FileFragment getFileFragment(File file,int offset);
-    NetworkData *getNetworkData() const;
+    NetworkManager *getNetworkManager() const;
 };
 
 
