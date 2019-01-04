@@ -51,7 +51,7 @@ void Listener::run() {
                 clientAddr.port = port;
                 clientAddr.addr = client_addr.sin_addr;
                 networkManager->addNodeAddress(clientAddr);
-                auto remoteNode = new RemoteNode(clientFd, networkManager);
+                auto remoteNode = new RemoteNode(clientFd, clientAddr, networkManager);
                 remoteNode->start();
                 networkManager->registerRemoteNode(remoteNode);
             }

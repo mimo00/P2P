@@ -21,7 +21,8 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
-//    (*foundRemoteNode)->getReceiver().stop();
+    removeNodeAddress(remoteNode->getNodeAddr());
+    delete remoteNode;
     remoteNodes.erase(foundRemoteNode);
 }
 
@@ -48,13 +49,15 @@ int NetworkManager::connect(NodeAddr addr, NodeAddr me){
 
 
 void NetworkManager::addNodeAddress(NodeAddr nodeAddr) {
-    nodeAddress.push_back(nodeAddr);
+    if (nodeAddr != me)
+        nodeAddress.push_back(nodeAddr);
 }
 
-void NetworkManager::addNodeAddresses(vector<NodeAddr> nodeAddr) {
-    nodeAddress.insert(nodeAddress.end(), nodeAddr.begin(), nodeAddr.end());
-    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), me), nodeAddress.end());
+
+void NetworkManager::removeNodeAddress(NodeAddr nodeAddr) {
+    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), nodeAddr), nodeAddress.end());
 }
+
 
 const vector<NodeAddr> &NetworkManager::getNodeAddress() const {
     return nodeAddress;
@@ -66,14 +69,14 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     sockDescriptor = initConnect(addr, me);
     if(sockDescriptor>=0){
         addNodeAddress(addr);
-        auto remoteNode = new RemoteNode(sockDescriptor, this);
+        auto remoteNode = new RemoteNode(sockDescriptor, addr, this);
         remoteNode->start();
         registerRemoteNode(remoteNode);
         vector<NodeAddr> addresses = remoteNode->getNodeAddress();
         for(int i=0;i<addresses.size();i++){
             sockDescriptor = connect(addresses[i], me);
             if(sockDescriptor>=0){
-                auto remoteNode = new RemoteNode(sockDescriptor, this);
+                auto remoteNode = new RemoteNode(sockDescriptor, addresses[i], this);
                 registerRemoteNode(remoteNode);
                 remoteNode->start();
                 addNodeAddress(addresses[i]);

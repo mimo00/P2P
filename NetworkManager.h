@@ -25,10 +25,9 @@ public:
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
     void addNodeAddress(NodeAddr nodeAddr);
-    void addNodeAddresses(vector<NodeAddr> nodeAddr);
+    void removeNodeAddress(NodeAddr nodeAddr);
     const vector<NodeAddr> &getNodeAddress() const;
     vector<File> getFiles();
-    NetworkData &getNetworkData();
     void fileDownloadManage(File file);
 };
 

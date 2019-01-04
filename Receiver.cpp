@@ -83,7 +83,7 @@ void Receiver::run()
                     processRequest(taskId);
             }catch (ReceiverDeserializerException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
-                //Wyrejestrowanie noda
+                remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
             }
         }
         sleep(1);

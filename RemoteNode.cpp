@@ -17,8 +17,8 @@
 #include "Tasks/SenderTasks/FileRequest.h"
 
 
-RemoteNode::RemoteNode(int sockfd, NetworkManager* networkManager)
-: sockfd(sockfd), networkManager(networkManager), receiver(this), sender(this) {
+RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager)
+: sockfd(sockfd), nodeAddr(nodeAddr), networkManager(networkManager), receiver(this), sender(this) {
 }
 
 
@@ -99,5 +99,9 @@ FileFragment RemoteNode::getFileFragment(File file, int offset) {
 
 NetworkManager *RemoteNode::getNetworkManager() const {
     return networkManager;
+}
+
+const NodeAddr &RemoteNode::getNodeAddr() const {
+    return nodeAddr;
 }
 

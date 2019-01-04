@@ -24,6 +24,7 @@ class NetworkManager;
 class RemoteNode {
 private:
     int sockfd;
+    NodeAddr nodeAddr;
     NetworkManager* networkManager;
     Receiver receiver;
     Sender sender;
@@ -31,7 +32,7 @@ private:
     vector<SenderTask*> senderTasks;
 public:
     void start();
-    RemoteNode(int sockfd, NetworkManager* networkManager);
+    RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
     vector<ReceiverTask*>* getReceiverTasks();
@@ -43,6 +44,7 @@ public:
     vector<NodeAddr> getNodeAddress();
     FileFragment getFileFragment(File file,int offset);
     NetworkManager *getNetworkManager() const;
+    const NodeAddr &getNodeAddr() const;
 };
 
 
