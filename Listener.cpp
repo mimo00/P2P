@@ -18,6 +18,8 @@ Listener::Listener(in_port_t port, NetworkManager* networkManager): networkManag
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
+    if (setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &socketDescriptor, sizeof(int)) < 0)
+        perror("setsockopt(SO_REUSEADDR) failed");
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = port;
