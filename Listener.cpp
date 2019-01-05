@@ -18,6 +18,8 @@ Listener::Listener(in_port_t port, NetworkManager* networkManager): networkManag
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
+    if (setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &socketDescriptor, sizeof(int)) < 0)
+        perror("setsockopt(SO_REUSEADDR) failed");
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = port;
@@ -29,6 +31,10 @@ Listener::Listener(in_port_t port, NetworkManager* networkManager): networkManag
         printf("Failed to listen\n");
         exit(1);
     }
+}
+
+Listener::~Listener() {
+    close(socketDescriptor);
 }
 
 
@@ -50,12 +56,12 @@ void Listener::run() {
                 NodeAddr clientAddr;
                 clientAddr.port = port;
                 clientAddr.addr = client_addr.sin_addr;
-                networkManager->getNetworkData().addNodeAddress(clientAddr);
-                auto remoteNode = new RemoteNode(clientFd, &networkManager->getNetworkData());
+                networkManager->addNodeAddress(clientAddr);
+                auto remoteNode = new RemoteNode(clientFd, clientAddr, networkManager);
+                remoteNode->start();
                 networkManager->registerRemoteNode(remoteNode);
             }
         }
     }
 }
-
 

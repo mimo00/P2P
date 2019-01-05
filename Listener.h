@@ -12,6 +12,7 @@
 class Listener: public Stoppable {
 public:
     Listener(in_port_t port, NetworkManager* networkManager);
+    ~Listener();
     void run();
 private:
     int socketDescriptor;

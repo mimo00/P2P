@@ -11,7 +11,7 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(NodeAddr me): networkData(me){}
+NetworkManager::NetworkManager(NodeAddr me) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     remoteNodes.push_back(remoteNode);
@@ -21,7 +21,8 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
-    (*foundRemoteNode)->getReceiver()->stop();
+    removeNodeAddress(remoteNode->getNodeAddr());
+    delete remoteNode;
     remoteNodes.erase(foundRemoteNode);
 }
 
@@ -47,18 +48,39 @@ int NetworkManager::connect(NodeAddr addr, NodeAddr me){
 }
 
 
+void NetworkManager::addNodeAddress(NodeAddr nodeAddr) {
+    if (nodeAddr != me)
+        nodeAddress.push_back(nodeAddr);
+}
+
+
+void NetworkManager::removeNodeAddress(NodeAddr nodeAddr) {
+    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), nodeAddr), nodeAddress.end());
+}
+
+
+const vector<NodeAddr> &NetworkManager::getNodeAddress() const {
+    return nodeAddress;
+}
+
+
 int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     int sockDescriptor;
     sockDescriptor = initConnect(addr, me);
     if(sockDescriptor>=0){
-        networkData.addNodeAddress(addr);
-        auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
+        addNodeAddress(addr);
+        auto remoteNode = new RemoteNode(sockDescriptor, addr, this);
+        remoteNode->start();
         registerRemoteNode(remoteNode);
         vector<NodeAddr> addresses = remoteNode->getNodeAddress();
         for(int i=0;i<addresses.size();i++){
-            sockDescriptor = connect(addr, me);
-            auto remoteNode = new RemoteNode(sockDescriptor, &networkData);
-            registerRemoteNode(remoteNode);
+            sockDescriptor = connect(addresses[i], me);
+            if(sockDescriptor>=0){
+                auto remoteNode = new RemoteNode(sockDescriptor, addresses[i], this);
+                registerRemoteNode(remoteNode);
+                remoteNode->start();
+                addNodeAddress(addresses[i]);
+            }
         }
         return 0;
     } else {
@@ -67,9 +89,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     }
 }
 
-NetworkData &NetworkManager::getNetworkData() {
-    return networkData;
-}
 
 vector<File> NetworkManager::getFiles() {
     vector<promise<vector<File>>*> promises(this->remoteNodes.size());
@@ -112,4 +131,10 @@ void NetworkManager::fileDownloadManage(File filee) {
         }
         fclose(fp);
     }
+}
+
+NetworkManager::~NetworkManager() {
+    cout<<"Destruktor NetworkManager"<< endl;
+    for(int i=0;i<remoteNodes.size();i++)
+        delete remoteNodes[i];
 }

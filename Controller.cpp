@@ -21,8 +21,7 @@ void Controller::startNewNetwork() {
 }
 
 int Controller::connectToNetwork(NodeAddr addr) {
-    int result = networkManager->connectToNetwork(addr, me);
-    if (result>0) {
+    if (networkManager->connectToNetwork(addr, me) > 0) {
         cout << "Nie udalo sie poloczyc do sieci !" << endl;
         return 1;
     } else{
@@ -33,7 +32,7 @@ int Controller::connectToNetwork(NodeAddr addr) {
 }
 
 vector<NodeAddr> Controller::getNodesAddresses() {
-    return networkManager->getNetworkData().getNodeAddress();
+    return networkManager->getNodeAddress();
 }
 
 vector<File> Controller::getFiles() {
@@ -42,6 +41,11 @@ vector<File> Controller::getFiles() {
 
 void Controller::downloadFile(File file){
     networkManager->fileDownloadManage(file);
+}
+
+Controller::~Controller() {
+    delete listener;
+    delete networkManager;
 }
 
 

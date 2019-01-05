@@ -9,23 +9,28 @@
 #include <list>
 #include <set>
 #include "RemoteNode.h"
-#include "NetworkData.h"
 
 using  namespace std;
 
 class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
-    NetworkData networkData;
+    NodeAddr me;
+    vector<NodeAddr> nodeAddress;
     int initConnect(NodeAddr addr, NodeAddr me);
     int connect(NodeAddr addr, NodeAddr me);
 public:
     NetworkManager(NodeAddr me);
+    virtual ~NetworkManager();
+    const vector<NodeAddr> &getNodeAddress() const;
+
+public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
+    void addNodeAddress(NodeAddr nodeAddr);
+    void removeNodeAddress(NodeAddr nodeAddr);
     vector<File> getFiles();
-    NetworkData &getNetworkData();
     void fileDownloadManage(File file);
 };
 

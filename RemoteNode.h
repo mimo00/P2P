@@ -19,32 +19,34 @@
 
 using  namespace std;
 
+class NetworkManager;
 
 class RemoteNode {
 private:
     int sockfd;
+    NodeAddr nodeAddr;
+    NetworkManager* networkManager;
+    Receiver receiver;
+    Sender sender;
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
-    Receiver* receiver;
-    Sender* sender;
-    NetworkData* networkData;
-    void start();
 public:
-    RemoteNode(int sockfd, NetworkData* networkData);
-    RemoteNode& operator=(RemoteNode && obj);
-    RemoteNode(RemoteNode && obj);
+    RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
-    const vector<ReceiverTask*> &getReceiverTasks() const;
-    const vector<SenderTask*> &getSenderTasks() const;
+    vector<ReceiverTask*>* getReceiverTasks();
+    vector<SenderTask*>* getSenderTasks();
+    NetworkManager *getNetworkManager() const;
+    const NodeAddr &getNodeAddr() const;
+    int getSockfd() const;
+public:
+    void start();
     void addReceiverTask(ReceiverTask*);
     void addSenderTask(SenderTask*);
-    Receiver *getReceiver() const;
-    Sender *getSender() const;
-    int getSockfd()const{ return this->sockfd; }
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     FileFragment getFileFragment(File file,int offset);
+
 };
 
 

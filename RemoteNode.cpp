@@ -17,35 +17,22 @@
 #include "Tasks/SenderTasks/FileRequest.h"
 
 
-RemoteNode::RemoteNode(int sockfd, NetworkData* networkData): sockfd(sockfd), networkData(networkData){
-    receiver = new Receiver(&receiverTasks, &senderTasks, sockfd, networkData);
-    sender = new Sender(&senderTasks, sockfd);
-    start();
+RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager)
+: sockfd(sockfd), nodeAddr(nodeAddr), networkManager(networkManager), receiver(this), sender(this) {
 }
 
-RemoteNode::RemoteNode(RemoteNode && obj): receiver(obj.receiver)
-{
-    std::cout << "Move RemoteNode Constructor is called" << std::endl;
-}
-
-RemoteNode& RemoteNode::operator=(RemoteNode && obj)
-{
-    std::cout << "Move RemoteNode Assignment is called" << std::endl;
-    receiver = std::move(obj.receiver);
-    return *this;
-}
 
 RemoteNode::~RemoteNode(){
-    cout<<"Destruktor" << endl;
-    receiver->stop();
-    sender->stop();
+    receiver.stop();
+    sender.stop();
+    close(sockfd);
 };
 
 
 void RemoteNode::start(){
-    std::thread receiverThread([&](){receiver->run();});
+    std::thread receiverThread([&](){receiver.run();});
     receiverThread.detach();
-    std::thread senderThread([&](){sender->run();});
+    std::thread senderThread([&](){sender.run();});
     senderThread.detach();
 }
 
@@ -63,29 +50,23 @@ bool RemoteNode::operator==(const RemoteNode &other){
     return this->getSockfd() == other.getSockfd();
 }
 
-const vector<ReceiverTask*> &RemoteNode::getReceiverTasks() const {
-    return receiverTasks;
+vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
+    return &receiverTasks;
 }
 
-const vector<SenderTask*> &RemoteNode::getSenderTasks() const {
-    return senderTasks;
+vector<SenderTask*>* RemoteNode::getSenderTasks(){
+    return &senderTasks;
 }
 
-Receiver *RemoteNode::getReceiver() const {
-    return receiver;
-}
 
-Sender *RemoteNode::getSender() const {
-    return sender;
-}
+
 
 int getId(){
-    srand(time(NULL));
+    srand(time(nullptr));
     return rand();
 }
 
 void RemoteNode::getFilesList(promise<vector<File>>* fileNamesPromise){
-    cout<<"ODPALAM getFilesList" << endl;
     int taskId = getId();
     auto senderTask =  new SendFilesListRequest(taskId);
     addSenderTask(senderTask);
@@ -115,8 +96,18 @@ FileFragment RemoteNode::getFileFragment(File file, int offset) {
     auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
     addReceiverTask(receiveTask);
     FileFragment fragment=fileFuture.get();
-
-
-
     return fragment;
 }
+
+NetworkManager *RemoteNode::getNetworkManager() const {
+    return networkManager;
+}
+
+const NodeAddr &RemoteNode::getNodeAddr() const {
+    return nodeAddr;
+}
+
+int RemoteNode::getSockfd() const {
+    return sockfd;
+}
+
