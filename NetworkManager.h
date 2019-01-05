@@ -22,12 +22,14 @@ private:
 public:
     NetworkManager(NodeAddr me);
     virtual ~NetworkManager();
+    const vector<NodeAddr> &getNodeAddress() const;
+
+public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
     void addNodeAddress(NodeAddr nodeAddr);
     void removeNodeAddress(NodeAddr nodeAddr);
-    const vector<NodeAddr> &getNodeAddress() const;
     vector<File> getFiles();
     void fileDownloadManage(File file);
 };

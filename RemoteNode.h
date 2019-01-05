@@ -31,20 +31,22 @@ private:
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
 public:
-    void start();
     RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
     bool operator==(const RemoteNode &other);
     vector<ReceiverTask*>* getReceiverTasks();
     vector<SenderTask*>* getSenderTasks();
+    NetworkManager *getNetworkManager() const;
+    const NodeAddr &getNodeAddr() const;
+    int getSockfd() const;
+public:
+    void start();
     void addReceiverTask(ReceiverTask*);
     void addSenderTask(SenderTask*);
-    int getSockfd()const{ return this->sockfd; }
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     FileFragment getFileFragment(File file,int offset);
-    NetworkManager *getNetworkManager() const;
-    const NodeAddr &getNodeAddr() const;
+
 };
 
 

@@ -59,6 +59,8 @@ vector<SenderTask*>* RemoteNode::getSenderTasks(){
 }
 
 
+
+
 int getId(){
     srand(time(nullptr));
     return rand();
@@ -103,5 +105,9 @@ NetworkManager *RemoteNode::getNetworkManager() const {
 
 const NodeAddr &RemoteNode::getNodeAddr() const {
     return nodeAddr;
+}
+
+int RemoteNode::getSockfd() const {
+    return sockfd;
 }
 
