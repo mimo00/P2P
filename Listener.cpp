@@ -14,23 +14,17 @@ using namespace std;
 Listener::Listener(in_port_t port, NetworkManager* networkManager): networkManager(networkManager) {
     struct sockaddr_in server_addr;
     int addrlen = sizeof(server_addr);
-    if ((socketDescriptor = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
-        perror("socket failed");
-        exit(EXIT_FAILURE);
-    }
+    if ((socketDescriptor = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+        throw ListenerException("socket failed");
     if (setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &socketDescriptor, sizeof(int)) < 0)
-        perror("setsockopt(SO_REUSEADDR) failed");
+        throw ListenerException("socket option SO_REUSEADDR failed");
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = port;
-    if(bind(socketDescriptor, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-        printf("Error in bind\n");
-        exit(1);
-    }
-    if(listen(socketDescriptor, 10) == -1) {
-        printf("Failed to listen\n");
-        exit(1);
-    }
+    if(bind(socketDescriptor, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
+        throw ListenerException("Error while bind");
+    if(listen(socketDescriptor, 10) == -1)
+        throw ListenerException("Error while listen");
 }
 
 Listener::~Listener() {

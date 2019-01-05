@@ -11,9 +11,13 @@ Controller::Controller(NodeAddr me): me(me) {
 }
 
 void Controller::startListener() {
-    listener = new Listener(me.port, networkManager);
-    thread listenerThread([&](){listener->run();});
-    listenerThread.detach();
+    try {
+        listener = new Listener(me.port, networkManager);
+        thread listenerThread([&](){listener->run();});
+        listenerThread.detach();
+    } catch (ListenerException& e){
+        throw ControllerException(e.what());
+    }
 }
 
 void Controller::startNewNetwork() {

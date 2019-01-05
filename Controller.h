@@ -12,6 +12,17 @@
 
 using namespace std;
 
+class ControllerException : public exception {
+private:
+    std::string message;
+public:
+    explicit ControllerException(const std::string& message): message(message){};
+    virtual const char* what() const throw() {
+        return message.c_str();
+    }
+};
+
+
 class Controller {
 public:
     Controller(NodeAddr me);
@@ -23,8 +34,8 @@ public:
     void downloadFile(File file);
 private:
     NodeAddr me;
-    NetworkManager* networkManager;
-    Listener* listener;
+    NetworkManager* networkManager = nullptr;
+    Listener* listener = nullptr;
     void startListener();
 };
 

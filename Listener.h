@@ -9,6 +9,16 @@
 #include "Stoppable.h"
 #include "NetworkManager.h"
 
+class ListenerException : public exception {
+private:
+    std::string message;
+public:
+    explicit ListenerException(const std::string& message): message(message){};
+    virtual const char* what() const throw() {
+        return message.c_str();
+    }
+};
+
 class Listener: public Stoppable {
 public:
     Listener(in_port_t port, NetworkManager* networkManager);
