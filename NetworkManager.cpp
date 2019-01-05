@@ -132,3 +132,9 @@ void NetworkManager::fileDownloadManage(File filee) {
         fclose(fp);
     }
 }
+
+NetworkManager::~NetworkManager() {
+    cout<<"Destruktor NetworkManager"<< endl;
+    for(int i=0;i<remoteNodes.size();i++)
+        delete remoteNodes[i];
+}

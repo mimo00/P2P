@@ -15,6 +15,7 @@ using namespace std;
 class Controller {
 public:
     Controller(NodeAddr me);
+    virtual ~Controller();
     void startNewNetwork();
     int connectToNetwork(NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();

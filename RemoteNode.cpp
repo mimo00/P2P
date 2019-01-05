@@ -23,9 +23,9 @@ RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkMan
 
 
 RemoteNode::~RemoteNode(){
-    cout<<"Destruktor" << endl;
     receiver.stop();
     sender.stop();
+    close(sockfd);
 };
 
 

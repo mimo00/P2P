@@ -33,6 +33,10 @@ Listener::Listener(in_port_t port, NetworkManager* networkManager): networkManag
     }
 }
 
+Listener::~Listener() {
+    close(socketDescriptor);
+}
+
 
 void Listener::run() {
     while (!stopRequested()) {
@@ -60,5 +64,4 @@ void Listener::run() {
         }
     }
 }
-
 

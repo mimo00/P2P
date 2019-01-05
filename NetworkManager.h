@@ -21,6 +21,7 @@ private:
     int connect(NodeAddr addr, NodeAddr me);
 public:
     NetworkManager(NodeAddr me);
+    virtual ~NetworkManager();
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);

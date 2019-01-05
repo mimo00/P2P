@@ -43,4 +43,9 @@ void Controller::downloadFile(File file){
     networkManager->fileDownloadManage(file);
 }
 
+Controller::~Controller() {
+    delete listener;
+    delete networkManager;
+}
+
 
