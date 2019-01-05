@@ -25,16 +25,23 @@ int main(int argc,  char** argv) {
     myAddr.port = htons(port);
     Controller controller(myAddr);
     if (argc == 3) {
-        controller.startNewNetwork();
-    }else if(argc == 5){
+        try{
+            controller.startNewNetwork();
+            ConsoleMenu consoleMenu(&controller);
+            consoleMenu.run();
+        } catch (ControllerException& e){
+            cout<<"Cannot start network "<< e.what() << endl;
+        }
+    }
+    else if(argc == 5){
         string knownIp(argv[3]);
         uint16_t knownPort = atoi(argv[4]);
         NodeAddr knownAddr;
         knownAddr.addr.s_addr = inet_addr(ip.c_str());
         knownAddr.port = htons(knownPort);
         controller.connectToNetwork(knownAddr);
-    }
-    ConsoleMenu consoleMenu(&controller);
-    consoleMenu.run();
+        ConsoleMenu consoleMenu(&controller);
+        consoleMenu.run();
+    };
     return 0;
 }
