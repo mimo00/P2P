@@ -63,7 +63,8 @@ void Receiver::processRequest(int taskId){
     if (it != receiverTasks->end())
         (*it)->handle(remoteNode->getSockfd());
     else
-        cout<<"Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+        cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+
 }
 
 void Receiver::run()
@@ -86,6 +87,6 @@ void Receiver::run()
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
             }
         }
-        sleep(1);
+        //sleep(1);
     }
 }

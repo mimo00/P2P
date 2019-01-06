@@ -24,5 +24,6 @@ void ReceiveFile::handle(int socket) {
     fileFragment_.file=file;
     memcpy(fileFragment_.data, buff, fileSize);
     fileFragment_.size = fileSize;
+    fileFragment_.offset = offset;
     fileFragment->set_value(fileFragment_);
 }

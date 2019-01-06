@@ -45,8 +45,7 @@ public:
     void addSenderTask(SenderTask*);
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
-    FileFragment getFileFragment(File file,int offset);
-
+    void getFileFragment(promise<FileFragment>* fragmentPromises, File file,int offset);
 };
 
 

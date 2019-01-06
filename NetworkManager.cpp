@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -109,28 +111,101 @@ return files;
 
 void NetworkManager::fileDownloadManage(File filee) {
     cout << "Pobieram plik " << filee.name << endl;
+    int portionSize = OperationCode::PORTION;
+    int chunks;
+    if(filee.size%portionSize==0)
+        chunks =filee.size/portionSize;
+    else
+        chunks =filee.size/portionSize+1;
+    int *parts= new int[chunks]();
 
-    int part=0;
-    while(part<filee.size) {
-        FileFragment fragment = remoteNodes[0]->getFileFragment(filee, part);
-        //cout<<"nastepna runda"<<endl<<endl;
-        part += 10;//bajtów offsetu
+    string confDir = "./Files/config/config";
+    fstream config;
+    config.open(confDir,fstream::in | fstream::app);
+    int noHash=0;
 
-        //TODO:to co ponizej przeniesc do RemoteNode
-        // -> wtedy kazdy watek remoteNode'a bedzie zapisywal do pliku
-        // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
-        // -> lub lepiej dzialac na mutexach
-        FILE *fp;
-        string dir = "./Files/dwnld";
-        string file__ = dir + "/" + fragment.file.name;
-        fp = fopen(file__.c_str(), "ab");
-        if (fp == nullptr)
-            cout << "Error while opening file" << endl;
-        else {
-            fwrite(fragment.data, sizeof(char), fragment.size, fp);
+    if (!config)
+        cout << "Error while opening file" << endl;
+    else {
+        string line;
+        while(getline(config, line)) {
+            istringstream row(line);
+            int isHash;
+            row >> isHash;
+            if (isHash == filee.hash) {    //jest hash wiec pobieram do tablicy
+                for (int i = 0; i < chunks; i++)
+                    row >> parts[i];
+                noHash=filee.hash;
+            }
         }
-        fclose(fp);
+        config.close();
     }
+
+    int zeros=0;
+    int part=0;
+    for(int j=0;j<chunks;j++)
+        if(parts[j]==0){
+            zeros+=1;
+        }
+    vector<promise<FileFragment>*> promises(zeros);
+    vector<FileFragment> fileFrags;
+    int i=0;
+    while (zeros>0) {
+        for (int j = 0; j < remoteNodes.size() && part < filee.size; j++) {
+            promises[i] = new promise<FileFragment>;
+            for (int d = 0; d < chunks&&zeros>0; d++) {
+                if (parts[d] == 0) {
+                    part = d * portionSize;
+                    parts[d] = 1;
+                    break;
+                }
+            }
+            zeros--;
+            remoteNodes[j]->getFileFragment(promises[i], filee, part);
+            i++;
+        }
+    }
+    int downloaded=0;
+    for (int j=0;j<promises.size(); j++){
+        future<FileFragment> fileFuture = promises[j]->get_future();
+        FileFragment tempfrag=fileFuture.get();
+        downloaded+=tempfrag.size;
+        //cout<<"Pobrano "<<downloaded<<endl;
+        fileFrags.push_back(tempfrag);
+    }
+
+    config.open(confDir, fstream::out | fstream::app);
+    if (!config)
+        cout << "Error while opening file" << endl;
+    else {
+        if (noHash == 0 && zeros > 0) {         //nie znaleziono hasha, uzupelniam plik config
+            config << filee.hash;
+            for (int j = 0; j < chunks; j++)
+                config << " " <<parts[j];
+        }
+        config.close();
+    }
+
+
+    FILE *fp;
+    string dir = "./Files/dwnld";
+    string file__ = dir + "/" + filee.name;
+    for(int j=0;j<fileFrags.size();j++) {
+        FileFragment fragment = fileFrags[j];
+        fp = fopen(file__.c_str(), "ab");
+        fseek(fp, fragment.offset, SEEK_SET);
+            if (fp == nullptr)
+                cout << "Error while opening file" << endl;
+            else {
+                fwrite(fragment.data, sizeof(char), fragment.size, fp);
+            }
+            fclose(fp);
+    }
+    //TODO:to co ponizej przeniesc do RemoteNode
+    // -> wtedy kazdy watek remoteNode'a bedzie zapisywal do pliku
+    // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
+    // -> lub lepiej dzialac na mutexach
+
 }
 
 NetworkManager::~NetworkManager() {
