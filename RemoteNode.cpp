@@ -80,7 +80,6 @@ Sender *RemoteNode::getSender() const {
 }
 
 int getId(){
-    srand(time(NULL));
     return rand();
 }
 
@@ -106,17 +105,14 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
 }
 
 
-FileFragment RemoteNode::getFileFragment(File file, int offset) {
+void RemoteNode::getFileFragment(promise<FileFragment>* filePromise,File file, int offset) {
     int taskId=getId();
     auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
-    promise<FileFragment> filePromise;
-    future<FileFragment> fileFuture=filePromise.get_future();
-    auto receiveTask=new ReceiveFile(taskId,file,offset,&filePromise);
+    //promise<FileFragment> filePromise;
+    //future<FileFragment> fileFuture=filePromise.get_future();
+    auto receiveTask=new ReceiveFile(taskId,file,offset,filePromise);
     addReceiverTask(receiveTask);
-    FileFragment fragment=fileFuture.get();
-
-
-
-    return fragment;
+    //FileFragment fragment=fileFuture.get();
+    //return fragment;
 }

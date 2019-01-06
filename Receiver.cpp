@@ -61,7 +61,8 @@ void Receiver::processRequest(int taskId){
     if (it != receiverTasks->end())
         (*it)->handle(socketDescriptor);
     else
-        cout<<"Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+        cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+
 }
 
 void Receiver::run()
@@ -83,6 +84,6 @@ void Receiver::run()
                 //Wyrejestrowanie noda
             }
         }
-        sleep(1);
+        //sleep(1);
     }
 }

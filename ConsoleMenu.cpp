@@ -8,6 +8,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <fstream>
+#include <string>
+#include <sstream>
 ConsoleMenu::ConsoleMenu(Controller * controller): controller(controller) {}
 
 void ConsoleMenu::run() {
