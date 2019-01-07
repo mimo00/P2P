@@ -30,4 +30,4 @@ add_executable(P2P main.cpp NetworkManager.cpp NetworkManager.h
         Serializers/FileSerializer.cpp Serializers/FileSerializer.h
         Serializers/FileDeserializer.cpp Serializers/FileDeserializer.h
         Tasks/SenderTasks/FileRequest.cpp Tasks/SenderTasks/FileRequest.h
-        Tasks/ReceiverTasks/ReceiveFile.cpp Tasks/ReceiverTasks/ReceiveFile.h Tasks/ReceiverTasks/ReceiveFileReqResponse.cpp Tasks/ReceiverTasks/ReceiveFileReqResponse.h Tasks/SenderTasks/SendResponse.cpp Tasks/SenderTasks/SendResponse.h FileManager.cpp FileManager.h)
+        Tasks/ReceiverTasks/ReceiveFile.cpp Tasks/ReceiverTasks/ReceiveFile.h Tasks/ReceiverTasks/ReceiveFileReqResponse.cpp Tasks/ReceiverTasks/ReceiveFileReqResponse.h Tasks/SenderTasks/SendResponse.cpp Tasks/SenderTasks/SendResponse.h FileManager.cpp FileManager.h FileDownloadManager.cpp FileDownloadManager.h)

@@ -90,12 +90,8 @@ void RemoteNode::getFileFragment(promise<FileFragment>* filePromise,File file, i
     int taskId=getId();
     auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
-    //promise<FileFragment> filePromise;
-    //future<FileFragment> fileFuture=filePromise.get_future();
     auto receiveTask=new ReceiveFile(taskId,file,offset,filePromise);
     addReceiverTask(receiveTask);
-    //FileFragment fragment=fileFuture.get();
-    //return fragment;
 }
 
 NetworkManager *RemoteNode::getNetworkManager() const {

@@ -19,7 +19,7 @@ int main(int argc,  char** argv) {
         perror("Give your address or your address and known address\n");
         exit(1);
     }
-    srand(time(NULL));
+    srand(time(nullptr));
     NodeAddr myAddr;
     string ip(argv[1]);
     uint16_t port = atoi(argv[2]);
