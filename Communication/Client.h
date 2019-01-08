@@ -15,8 +15,6 @@ public:
     Client(int);
     static int connectWithHost(NodeAddr addr);
     void sendInteger(int operationCode);
-    void sendFilesNames(vector<File> files);
-    void sendNodeAddr(vector<NodeAddr> nodeAddr);
     void sendFileFragment(char* buff,int nread);
 private:
     int socketDescriptor;

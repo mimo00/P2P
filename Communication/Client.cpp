@@ -18,21 +18,6 @@ void Client::sendInteger(int operationCode){
 //    cout<< "Ile bitow zapisano" <<  ile_bitow << endl;
 }
 
-void Client::sendFilesNames(vector<File> files){
-//    std::cout<<operationCode<<std::endl;
-    for(int i=0;i<files.size();i++){
-        ssize_t ile_bitow = write(socketDescriptor, &files[i], sizeof(File));
-    }
-    cout<< "Wyslano liste plikow !!!" << endl;
-}
-
-void Client::sendNodeAddr(vector<NodeAddr> nodeAddr) {
-    for(int i=0;i<nodeAddr.size();i++){
-        ssize_t ile_bitow=write(socketDescriptor,&nodeAddr[i], sizeof(NodeAddr));
-    }
-    cout<<"Wyslano liste node'ów!"<<endl;
-}
-
 int Client::connectWithHost(NodeAddr addr) {
     struct sockaddr_in host_addr;
     host_addr.sin_family = AF_INET;

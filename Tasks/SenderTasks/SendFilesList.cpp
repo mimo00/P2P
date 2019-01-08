@@ -4,8 +4,9 @@
 
 #include "SendFilesList.h"
 #include "../../Serializers/CommuniqueSerializer.h"
-#include "../../Serializers/FilesListSerializer.h"
 #include "../../FileManager.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 #include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -16,7 +17,8 @@
 
 
 void SendFilesList::send(int socket) {
-    FilesListSerializer filesListSerializer(socket, operatinoCode, id, FileManager::getFilesNames());
-    filesListSerializer.send();
+    SocketPusher socketPusher(socket);
+    Serializer serializer(&socketPusher);
+    serializer.sendFileList(id, FileManager::getFilesNames());
 }
 

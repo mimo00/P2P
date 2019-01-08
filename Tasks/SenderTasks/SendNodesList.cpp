@@ -4,7 +4,8 @@
 
 #include "SendNodesList.h"
 #include "../../Serializers/CommuniqueSerializer.h"
-#include "../../Serializers/NodesListSerializer.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 #include <iostream>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -15,6 +16,7 @@ vector<NodeAddr> SendNodesList::getNodeAddresses() {
 }
 
 void SendNodesList::send(int socket) {
-    NodesListSerializer nodesListSerializer(socket,operationCode,id,getNodeAddresses());
-    nodesListSerializer.send();
+    SocketPusher socketPusher(socket);
+    Serializer serializer(&socketPusher);
+    serializer.sendNodesList(id, getNodeAddresses());
 }
