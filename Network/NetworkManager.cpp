@@ -24,7 +24,6 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
-    removeNodeAddress(remoteNode->getNodeAddr());
     delete remoteNode;
     remoteNodes.erase(foundRemoteNode);
 }
@@ -51,18 +50,11 @@ int NetworkManager::connect(NodeAddr addr, NodeAddr me){
 }
 
 
-void NetworkManager::addNodeAddress(NodeAddr nodeAddr) {
-    if (nodeAddr != me)
-        nodeAddress.push_back(nodeAddr);
-}
-
-
-void NetworkManager::removeNodeAddress(NodeAddr nodeAddr) {
-    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), nodeAddr), nodeAddress.end());
-}
-
-
-const vector<NodeAddr> &NetworkManager::getNodeAddress() const {
+vector<NodeAddr> NetworkManager::getNodeAddress() {
+    vector<NodeAddr> nodeAddress;
+    for (int i=0;i<remoteNodes.size();i++){
+        nodeAddress.push_back(remoteNodes[i]->getNodeAddr());
+    }
     return nodeAddress;
 }
 
@@ -71,7 +63,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     int sockDescriptor;
     sockDescriptor = initConnect(addr, me);
     if(sockDescriptor>=0){
-        addNodeAddress(addr);
         auto remoteNode = new RemoteNode(sockDescriptor, addr, this);
         remoteNode->start();
         registerRemoteNode(remoteNode);
@@ -82,7 +73,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
                 auto remoteNode = new RemoteNode(sockDescriptor, addresses[i], this);
                 registerRemoteNode(remoteNode);
                 remoteNode->start();
-                addNodeAddress(addresses[i]);
             }
         }
         return 0;
