@@ -3,9 +3,10 @@
 //
 
 #include "SendFile.h"
-#include "../../Serializers/CommuniqueSerializer.h"
 #include "../../Serializers/FileSerializer.h"
 #include "../../FileManager.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 #include <iostream>
 #include <string.h>
 #include <vector>
@@ -38,7 +39,8 @@ void SendFile::send(int socket) {
         fileSerializer.send();
         fclose(file);
     }else {
-        CommuniqueSerializer communiqueSerializer(socket, OperationCode::DONT_HAVE_FILE, id);
-        communiqueSerializer.send();
+        SocketPusher socketPusher(socket);
+        Serializer serializer(&socketPusher);
+        serializer.sendDontHaveFile(id);
     }
 }

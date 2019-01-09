@@ -3,12 +3,10 @@
 //
 
 #include "Receiver.h"
-#include "Serializers/CommuniqueSerializer.h"
 #include "OperationCode.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/SenderTasks/SendNodesList.h"
 #include "Tasks/SenderTasks/SendFile.h"
-#include "Tasks/SenderTasks/SendResponse.h"
 #include <unistd.h>
 #include <algorithm>
 #include "RemoteNode.h"

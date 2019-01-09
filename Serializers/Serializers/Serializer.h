@@ -15,8 +15,10 @@ public:
     Serializer(Pusher* pusher);
     void requestForNodeList(int taskId) override;
     void requestForFileList(int taskId) override;
+    void requestForFileFragment(int taskId, int offset, int hash) override;
     void sendNodesList(int taskId, vector<NodeAddr> addresses) override;
     void sendFileList(int taskId, vector<File> files) override;
+    void sendDontHaveFile(int taskId) override;
 };
 
 

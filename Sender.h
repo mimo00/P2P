@@ -8,7 +8,6 @@
 
 #include "Stoppable.h"
 #include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/CommuniqueSerializer.h"
 #include <vector>
 
 using namespace std;

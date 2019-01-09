@@ -4,7 +4,6 @@
 
 #include "Sender.h"
 #include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/CommuniqueSerializer.h"
 #include "RemoteNode.h"
 
 using namespace std;

@@ -3,7 +3,6 @@
 //
 
 #include "SendFilesList.h"
-#include "../../Serializers/CommuniqueSerializer.h"
 #include "../../FileManager.h"
 #include "../../Communication/Pushers/SocketPusher.h"
 #include "../../Serializers/Serializers/Serializer.h"

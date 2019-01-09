@@ -3,9 +3,11 @@
 //
 
 #include "FileRequest.h"
-#include "../../Serializers/CommuniqueSerializer.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 
 void FileRequest::send(int socket) {
-    CommuniqueSerializer communiqueSerializer(socket, operationCode, id, offset, hash);
-    communiqueSerializer.sendFileReq();
+    SocketPusher socketPusher(socket);
+    Serializer serializer(&socketPusher);
+    serializer.requestForFileFragment(id, offset, hash);
 }

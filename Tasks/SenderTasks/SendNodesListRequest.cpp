@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "SendNodesListRequest.h"
-#include "../../Serializers/CommuniqueSerializer.h"
 #include "../../Communication/Pushers/SocketPusher.h"
 #include "../../Serializers/Serializers/Serializer.h"
 
