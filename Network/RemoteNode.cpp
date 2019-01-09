@@ -8,13 +8,13 @@
 #include <future>
 #include <unistd.h>
 #include <cstdlib>
-#include "Tasks/SenderTasks/SendFilesListRequest.h"
-#include "OperationCode.h"
-#include "Tasks/ReceiverTasks/ReceiveFileList.h"
-#include "Tasks/SenderTasks/SendNodesListRequest.h"
-#include "Tasks/ReceiverTasks/ReceiveNodesList.h"
-#include "Tasks/ReceiverTasks/ReceiveFile.h"
-#include "Tasks/SenderTasks/FileRequest.h"
+#include "../Tasks/SenderTasks/SendFilesListRequest.h"
+#include "../OperationCode.h"
+#include "../Tasks/ReceiverTasks/ReceiveFileList.h"
+#include "../Tasks/SenderTasks/SendNodesListRequest.h"
+#include "../Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "../Tasks/ReceiverTasks/ReceiveFile.h"
+#include "../Tasks/SenderTasks/FileRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager)

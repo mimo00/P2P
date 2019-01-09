@@ -3,7 +3,7 @@
 //
 
 #include "Sender.h"
-#include "Tasks/SenderTasks/SenderTask.h"
+#include "../Tasks/SenderTasks/SenderTask.h"
 #include "RemoteNode.h"
 
 using namespace std;

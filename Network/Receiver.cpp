@@ -3,16 +3,16 @@
 //
 
 #include "Receiver.h"
-#include "OperationCode.h"
-#include "Tasks/SenderTasks/SendFilesList.h"
-#include "Tasks/SenderTasks/SendNodesList.h"
-#include "Tasks/SenderTasks/SendFile.h"
+#include "../OperationCode.h"
+#include "../Tasks/SenderTasks/SendFilesList.h"
+#include "../Tasks/SenderTasks/SendNodesList.h"
+#include "../Tasks/SenderTasks/SendFile.h"
 #include <unistd.h>
 #include <algorithm>
 #include "RemoteNode.h"
 #include "NetworkManager.h"
-#include "Serializers/Deserializers/Deserializer.h"
-#include "Communication/Pullers/SocketPuller.h"
+#include "../Serializers/Deserializers/Deserializer.h"
+#include "../Communication/Pullers/SocketPuller.h"
 
 using namespace std;
 

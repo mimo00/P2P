@@ -3,8 +3,8 @@
 //
 #include "NetworkManager.h"
 #include "RemoteNode.h"
-#include "Communication/Client.h"
-#include "FileDownloadManager.h"
+#include "../Communication/Client.h"
+#include "../FileDownloadManager.h"
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "RemoteNode.h"
-#include "NetworkManager.h"
+#include "Network/RemoteNode.h"
+#include "Network/NetworkManager.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "Controller.h"

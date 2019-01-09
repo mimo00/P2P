@@ -4,9 +4,9 @@ project(P2P)
 set(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS -pthread)
 
-add_executable(P2P main.cpp NetworkManager.cpp NetworkManager.h
-        RemoteNode.cpp RemoteNode.h  Stoppable.cpp Stoppable.h
-        Receiver.cpp Receiver.h Sender.cpp Sender.h
+add_executable(P2P main.cpp Network/NetworkManager.cpp Network/NetworkManager.h
+        Network/RemoteNode.cpp Network/RemoteNode.h Network/Stoppable.cpp Network/Stoppable.h
+        Network/Receiver.cpp Network/Receiver.h Network/Sender.cpp Network/Sender.h
         Tasks/SenderTasks/SendFilesListRequest.cpp Tasks/SenderTasks/SendFilesListRequest.h
         Tasks/SenderTasks/SenderTask.cpp Tasks/SenderTasks/SenderTask.h
         Communication/Client.cpp Communication/Client.h
@@ -17,7 +17,7 @@ add_executable(P2P main.cpp NetworkManager.cpp NetworkManager.h
         Tasks/ReceiverTasks/ReceiveFileList.cpp Tasks/ReceiverTasks/ReceiveFileList.h
         Tasks/SenderTasks/SendNodesListRequest.cpp Tasks/SenderTasks/SendNodesListRequest.h
         Tasks/SenderTasks/SendNodesList.cpp Tasks/SenderTasks/SendNodesList.h
-        Controller.cpp Controller.h Listener.cpp Listener.h
+        Controller.cpp Controller.h Network/Listener.cpp Network/Listener.h
         Tasks/ReceiverTasks/ReceiveNodesList.cpp Tasks/ReceiverTasks/ReceiveNodesList.h
         ConsoleMenu.cpp ConsoleMenu.h
         Tasks/SenderTasks/SendFile.cpp Tasks/SenderTasks/SendFile.h

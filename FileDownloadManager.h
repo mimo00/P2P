@@ -6,7 +6,7 @@
 #define P2P_FILEDOWNLOADMANAGER_H
 
 #include "OperationCode.h"
-#include "RemoteNode.h"
+#include "Network/RemoteNode.h"
 
 class FileDownloadManager {
 public:

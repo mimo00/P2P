@@ -7,8 +7,8 @@
 
 #include <vector>
 #include "Stoppable.h"
-#include "Tasks/SenderTasks/SenderTask.h"
-#include "Tasks/ReceiverTasks/ReceiverTask.h"
+#include "../Tasks/SenderTasks/SenderTask.h"
+#include "../Tasks/ReceiverTasks/ReceiverTask.h"
 
 using namespace std;
 
