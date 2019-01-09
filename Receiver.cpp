@@ -13,6 +13,8 @@
 #include <algorithm>
 #include "RemoteNode.h"
 #include "NetworkManager.h"
+#include "Serializers/Deserializers/Deserializer.h"
+#include "Communication/Pullers/SocketPuller.h"
 
 using namespace std;
 
@@ -20,21 +22,7 @@ using namespace std;
 Receiver::Receiver(RemoteNode* remoteNode): remoteNode(remoteNode) {};
 
 
-bool Receiver::canRead(){
-    fd_set rfds;
-    FD_ZERO(&rfds);
-    FD_SET(remoteNode->getSockfd(), &rfds);
-    struct timeval tv;
-    tv.tv_sec = 1;
-    tv.tv_usec = 0;
-    int retval = select(remoteNode->getSockfd()+1, &rfds, NULL, NULL, &tv);
-    if (retval == -1)
-        perror("select()");
-    return retval != 0;
-}
-
 void Receiver::createResponse(int operationCode, int taskId){
-    /*Funkcja powinna stworzyć odpowiedni Task dla sendera */
     cout<<"Tworze odpowiedz" << endl;
     SenderTask* senderTask;
     switch (operationCode) {
@@ -45,10 +33,11 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendNodesList(taskId, remoteNode->getNetworkManager()->getNodeAddress());
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:
-            ReceiverDeserializer receiverDeserializer(remoteNode->getSockfd());
-            auto data=receiverDeserializer.readData();
-            int offset=get<0>(data);
-            int hash=get<1>(data);
+            SocketPuller puller(remoteNode->getSockfd());
+            Deserializer deserializer(&puller);
+            auto offsetHash = deserializer.getOffsetAndHash();
+            int offset=get<0>(offsetHash);
+            int hash=get<1>(offsetHash);
             senderTask = new SendFile(taskId,hash,offset);
             break;
     }
@@ -56,7 +45,6 @@ void Receiver::createResponse(int operationCode, int taskId){
 }
 
 void Receiver::processRequest(int taskId){
-    /*Funkcja znajduje Taks o podanym id i odpala go*/
     cout<<"Przetwarzam request" << endl;
     auto receiverTasks = remoteNode->getReceiverTasks();
     auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getId() == taskId;});
@@ -69,12 +57,13 @@ void Receiver::processRequest(int taskId){
 
 void Receiver::run()
 {
-    ReceiverDeserializer receiverDeserializer(remoteNode->getSockfd());
+    SocketPuller puller(remoteNode->getSockfd());
+    Deserializer deserializer(&puller);
     while (!stopRequested())
     {
-        if (canRead()) {
+        if (deserializer.canRead()) {
             try{
-                auto data = receiverDeserializer.readData();
+                auto data = deserializer.getOperationCodeAndTaskId();
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
@@ -82,11 +71,10 @@ void Receiver::run()
                     createResponse(operationCode, taskId);
                 else
                     processRequest(taskId);
-            }catch (ReceiverDeserializerException& e){
+            }catch (BrokenConnectionException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
             }
         }
-        //sleep(1);
     }
 }

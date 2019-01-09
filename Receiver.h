@@ -8,7 +8,6 @@
 #include <vector>
 #include "Stoppable.h"
 #include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/ReceiverDeserializer.h"
 #include "Tasks/ReceiverTasks/ReceiverTask.h"
 
 using namespace std;
@@ -22,7 +21,6 @@ public:
     void run();
 private:
     RemoteNode* remoteNode;
-    bool canRead();
     void createResponse(int operationCode, int taskId);
     void processRequest(int taskId);
 };
