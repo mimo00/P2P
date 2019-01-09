@@ -19,6 +19,7 @@ public:
     virtual void sendNodesList(int taskId, vector<NodeAddr> addresses)=0;
     virtual void sendFileList(int taskId, vector<File> files)=0;
     virtual void sendDontHaveFile(int taskId)=0;
+    virtual void sendFileFragment(int taskId, FileFragment fileFragment)=0;
 
 protected:
     Pusher* pusher;

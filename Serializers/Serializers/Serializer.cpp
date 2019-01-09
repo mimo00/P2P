@@ -54,3 +54,11 @@ void Serializer::sendDontHaveFile(int taskId) {
     pusher->pushBytes(static_cast<void*>(&operatinoCode), sizeof(operatinoCode));
     pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
 }
+
+void Serializer::sendFileFragment(int taskId, FileFragment fileFragment) {
+    int operatinoCode = OperationCode::FILE_FRAGMENT;
+    pusher->pushBytes(static_cast<void*>(&operatinoCode), sizeof(operatinoCode));
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
+    pusher->pushBytes(static_cast<void*>(&fileFragment.size), sizeof(&fileFragment.size));
+    pusher->pushBytes(static_cast<void*>(&fileFragment.data), fileFragment.size);
+}
