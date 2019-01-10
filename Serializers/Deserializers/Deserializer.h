@@ -17,6 +17,7 @@ public:
     tuple<int, int> getOffsetAndHash() override;
     vector<NodeAddr> receiveNodeList() override;
     vector<File> receiveFileList() override;
+    FileFragment receiveFileFragment() override;
 };
 
 

@@ -22,6 +22,7 @@ public:
     virtual tuple<int, int> getOffsetAndHash()=0;
     virtual vector<File> receiveFileList()=0;
     virtual vector<NodeAddr> receiveNodeList()=0;
+    virtual FileFragment receiveFileFragment()=0;
 protected:
     Puller* puller;
 };

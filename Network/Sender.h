@@ -8,6 +8,7 @@
 
 #include "Stoppable.h"
 #include "../Tasks/SenderTasks/SenderTask.h"
+#include "../Serializers/Deserializers/Input.h"
 #include <vector>
 
 using namespace std;
@@ -20,6 +21,7 @@ public:
     void run();
 private:
     RemoteNode* remoteNode;
+    Input* input;
 };
 
 

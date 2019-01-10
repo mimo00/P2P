@@ -55,3 +55,10 @@ tuple<int, int> Deserializer::getOffsetAndHash() {
     }
 }
 
+FileFragment Deserializer::receiveFileFragment() {
+    FileFragment fileFragment;
+    int fileFragmentSize = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
+//    fileFragment.data = puller->pullBytes(fileFragmentSize)
+    return fileFragment;
+}
+

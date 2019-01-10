@@ -5,7 +5,6 @@
 #include <zconf.h>
 #include "Client.h"
 #include <iostream>
-#include "../Tasks/SenderTasks/SendFilesList.h"
 
 
 Client::Client(int socketDescriptor): socketDescriptor(socketDescriptor) {}
