@@ -9,6 +9,7 @@
 #include <list>
 #include <set>
 #include "RemoteNode.h"
+#include "FileDownloadManager.h"
 
 using  namespace std;
 
@@ -19,6 +20,7 @@ private:
     vector<NodeAddr> nodeAddress;
     int initConnect(NodeAddr addr, NodeAddr me);
     int connect(NodeAddr addr, NodeAddr me);
+    FileDownloadManager *downloadManager = nullptr;
 public:
     NetworkManager(NodeAddr me);
     virtual ~NetworkManager();

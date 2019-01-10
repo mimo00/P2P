@@ -12,7 +12,7 @@
 class FileDeserializer {
 public:
     FileDeserializer(int socketDescriptor);
-    int receiveFileSize();
+    size_t receiveFileSize();
     void receive(unsigned char* buff, int nread);
 private:
     int socketDescriptor;

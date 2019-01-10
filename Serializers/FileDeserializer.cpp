@@ -16,8 +16,8 @@ void FileDeserializer::receive(unsigned char* buff, int nread) {
     server.receiveFileFragment(buff, nread);
 }
 
-int FileDeserializer::receiveFileSize() {
+size_t FileDeserializer::receiveFileSize() {
     Server server(socketDescriptor);
-    int nread = server.readInteger();
+    auto nread = (size_t)server.readInteger();
     return nread;
 }

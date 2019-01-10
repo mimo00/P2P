@@ -17,8 +17,8 @@
 
 void ReceiveFile::handle(int socket) {
     FileDeserializer fileDeserializer(socket);
-    int fileSize = fileDeserializer.receiveFileSize();
     unsigned char buff[OperationCode::PORTION];
+    size_t fileSize = fileDeserializer.receiveFileSize();
     fileDeserializer.receive(buff, fileSize);
     FileFragment fileFragment_;
     fileFragment_.file=file;

@@ -23,9 +23,9 @@ public:
     const static int DONT_HAVE_FILE=402;
     const static int FILE_FRAGMENT=403;
 
-    const static int PORTION=2004096;
+    //const static int PORTION=1500;
     //const static int PORTION=1048576;
-   // const static int PORTION=8192;
+    const static int PORTION=4096;
     static bool isRequest(int operationCode){
         const list<int> requestOperationCodes = list<int>({
             FILES_LIST_REQUEST,
@@ -41,14 +41,14 @@ public:
 struct File {
     char name[64];
     int hash;
-    int size;
+    size_t size;
 };
 
 struct FileFragment {
     File file;
     unsigned char data[OperationCode::PORTION];
     int offset;
-    int size;
+    size_t size;
 };
 
 struct NodeAddr{

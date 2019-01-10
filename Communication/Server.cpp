@@ -47,7 +47,7 @@ vector<NodeAddr> Server::receiveNodeAddr(int numberOfFiles){
 }
 void Server::receiveFileFragment(unsigned char* buff, int nread) {
     ssize_t readSize;
-    unsigned char bufff[OperationCode::PORTION];
+    //unsigned char bufff[OperationCode::PORTION];
     readSize=read(socketDescriptor, buff, nread);
     if (readSize == 0)
         throw BrokenConnectionException();

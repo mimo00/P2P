@@ -30,7 +30,7 @@ int hashFunction(char name[],int nameSize,int size){
 vector<File> FileManager:: getFilesNames(){
     vector<File> files;
     DIR *dp;
-    string dir="./Files";
+    string dir="./my";
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
@@ -41,8 +41,8 @@ vector<File> FileManager:: getFilesNames(){
                 File file;
                 string path=dir+"/"+dirp->d_name;
                 strcpy(file.name,dirp->d_name);
-                file.size=(int)fsize(path.c_str());
-                file.hash=hashFunction(file.name,strlen(file.name),file.size);//rand()%1024;  //zmienic na funcke hashującą
+                file.size=(size_t)fsize(path.c_str());
+                file.hash=hashFunction(file.name,strlen(file.name),(int)file.size);//rand()%1024;  //zmienic na funcke hashującą
                 files.push_back(file);
             }
         }
@@ -52,6 +52,6 @@ vector<File> FileManager:: getFilesNames(){
 }
 
 string FileManager:: getFilePath(File file) {
-    string dir = "./Files";
+    string dir = "./my";
     return dir + "/" + file.name;
 }

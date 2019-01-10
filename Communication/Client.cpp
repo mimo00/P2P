@@ -47,9 +47,18 @@ int Client::connectWithHost(NodeAddr addr) {
 }
 
 
-void Client::sendFileFragment(char* buff,int nread) {
+void Client::sendFileFragment(char* buff,size_t nread) {
     if(nread>0) {
+//        fd_set active_fd_set,read_fd_set;
+//        FD_ZERO(&active_fd_set);
+//        FD_SET(socketDescriptor,&active_fd_set);
+//        select(FD_SETSIZE,&read_fd_set,NULL,NULL,NULL);
         ssize_t ile_bitow = write(socketDescriptor, buff, nread);
-        cout << "Wyslanow fragment pliku:" << (int) ile_bitow << " bajtow" << endl;
+        if(ile_bitow<=0)
+            if(errno==EWOULDBLOCK){
+                cout<<"cos tu nie bangla"<<endl;
+            }
+        cout << "Wyslanow fragment pliku:" << (int) ile_bitow << " bajtow z " <<nread<<
+        " odczytanych z pliku"<< endl;
     }
 }

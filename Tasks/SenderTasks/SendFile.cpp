@@ -16,13 +16,11 @@
 FILE* SendFile::getFile(int hash){
     vector <File> files=FileManager::getFilesNames();
     for(int i=0; i<files.size();i++) {
-        cout<<"Sprawdzanie hash'a " << hash << endl;
+        //cout<<"Sprawdzanie hash'a " << hash << endl;
         if (files.at(i).hash == hash) {
-            cout<<"TAKI SAM !!! " << hash << endl;
+            //cout<<"TAKI SAM !!! " << hash << endl;
             FILE *file;
-            file = fopen(FileManager::getFilePath(files.at(i)).c_str(), "rb");
-            //file->_offset=10;
-            //docelowo offset
+            file = fopen(FileManager::getFilePath(files.at(i)).c_str(), "rb+");
             fseek(file,offset,SEEK_SET);
             return file;
         }
@@ -36,7 +34,7 @@ void SendFile::send(int socket) {
     if(file != nullptr) {
         FileSerializer fileSerializer(socket, OperationCode::FILE_FRAGMENT, id, file);
         fileSerializer.send();
-        fclose(file);
+        //fclose(file);
     }else {
         CommuniqueSerializer communiqueSerializer(socket, OperationCode::DONT_HAVE_FILE, id);
         communiqueSerializer.send();

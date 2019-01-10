@@ -87,6 +87,6 @@ void Receiver::run()
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
             }
         }
-        //sleep(1);
+        //this_thread::sleep_for(chrono::milliseconds(2000));
     }
 }

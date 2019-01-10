@@ -23,6 +23,6 @@ void Sender::run() {
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;
         }
-        ///this_thread::sleep_for(chrono::milliseconds(500));
+        //this_thread::sleep_for(chrono::milliseconds(2000));
     }
 }
