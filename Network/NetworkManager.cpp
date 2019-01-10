@@ -3,7 +3,8 @@
 //
 #include "NetworkManager.h"
 #include "RemoteNode.h"
-#include "Communication/Client.h"
+#include "../Communication/Client.h"
+#include "../FileDownloadManager.h"
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
@@ -23,7 +24,6 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
-    removeNodeAddress(remoteNode->getNodeAddr());
     delete remoteNode;
     remoteNodes.erase(foundRemoteNode);
 }
@@ -50,18 +50,11 @@ int NetworkManager::connect(NodeAddr addr, NodeAddr me){
 }
 
 
-void NetworkManager::addNodeAddress(NodeAddr nodeAddr) {
-    if (nodeAddr != me)
-        nodeAddress.push_back(nodeAddr);
-}
-
-
-void NetworkManager::removeNodeAddress(NodeAddr nodeAddr) {
-    nodeAddress.erase(std::remove(nodeAddress.begin(), nodeAddress.end(), nodeAddr), nodeAddress.end());
-}
-
-
-const vector<NodeAddr> &NetworkManager::getNodeAddress() const {
+vector<NodeAddr> NetworkManager::getNodeAddress() {
+    vector<NodeAddr> nodeAddress;
+    for (int i=0;i<remoteNodes.size();i++){
+        nodeAddress.push_back(remoteNodes[i]->getNodeAddr());
+    }
     return nodeAddress;
 }
 
@@ -70,7 +63,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
     int sockDescriptor;
     sockDescriptor = initConnect(addr, me);
     if(sockDescriptor>=0){
-        addNodeAddress(addr);
         auto remoteNode = new RemoteNode(sockDescriptor, addr, this);
         remoteNode->start();
         registerRemoteNode(remoteNode);
@@ -81,7 +73,6 @@ int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
                 auto remoteNode = new RemoteNode(sockDescriptor, addresses[i], this);
                 registerRemoteNode(remoteNode);
                 remoteNode->start();
-                addNodeAddress(addresses[i]);
             }
         }
         return 0;
@@ -111,6 +102,12 @@ return files;
 
 void NetworkManager::fileDownloadManage(File filee) {
     cout << "Pobieram plik " << filee.name << endl;
+    FileDownloadManager manager(filee,remoteNodes);
+    if(manager.Download())
+        cout << "Pobrano plik!" << endl;
+    else
+        cout<<"Ten plik już został pobrany"<<endl;
+    /*
     int portionSize = OperationCode::PORTION;
     int chunks;
     if(filee.size%portionSize==0)
@@ -121,7 +118,7 @@ void NetworkManager::fileDownloadManage(File filee) {
 
     string confDir = "./Files/config/config";
     fstream config;
-    config.open(confDir,fstream::in | fstream::app);
+    config.open(confDir,fstream::in | fstream::out| fstream::app);
     int noHash=0;
 
     if (!config)
@@ -157,6 +154,7 @@ void NetworkManager::fileDownloadManage(File filee) {
                 if (parts[d] == 0) {
                     part = d * portionSize;
                     parts[d] = 1;
+
                     break;
                 }
             }
@@ -165,13 +163,12 @@ void NetworkManager::fileDownloadManage(File filee) {
             i++;
         }
     }
-    int downloaded=0;
+
     for (int j=0;j<promises.size(); j++){
         future<FileFragment> fileFuture = promises[j]->get_future();
         FileFragment tempfrag=fileFuture.get();
-        downloaded+=tempfrag.size;
-        //cout<<"Pobrano "<<downloaded<<endl;
         fileFrags.push_back(tempfrag);
+        //fileFrags.emplace(fileFrags.begin(),tempfrag);
     }
 
     config.open(confDir, fstream::out | fstream::app);
@@ -191,7 +188,8 @@ void NetworkManager::fileDownloadManage(File filee) {
     string dir = "./Files/dwnld";
     string file__ = dir + "/" + filee.name;
     for(int j=0;j<fileFrags.size();j++) {
-        FileFragment fragment = fileFrags[j];
+        FileFragment fragment = fileFrags.back();
+        fileFrags.pop_back();
         fp = fopen(file__.c_str(), "ab");
         fseek(fp, fragment.offset, SEEK_SET);
             if (fp == nullptr)
@@ -201,8 +199,8 @@ void NetworkManager::fileDownloadManage(File filee) {
             }
             fclose(fp);
     }
+     */
     //TODO:to co ponizej przeniesc do RemoteNode
-    // -> wtedy kazdy watek remoteNode'a bedzie zapisywal do pliku
     // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
     // -> lub lepiej dzialac na mutexach
 

@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "Communication/Server.h"
+#include "../Communication/Server.h"
 
 using namespace std;
 
@@ -50,7 +50,6 @@ void Listener::run() {
                 NodeAddr clientAddr;
                 clientAddr.port = port;
                 clientAddr.addr = client_addr.sin_addr;
-                networkManager->addNodeAddress(clientAddr);
                 auto remoteNode = new RemoteNode(clientFd, clientAddr, networkManager);
                 remoteNode->start();
                 networkManager->registerRemoteNode(remoteNode);

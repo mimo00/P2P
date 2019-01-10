@@ -20,31 +20,7 @@ int Server::readInteger() {
         return value;
 };
 
-vector<File> Server::receiveFilesNames(int numberOfFiles){
-    ssize_t readSize;
-    vector<File> filesNames;
-    for(int i=0;i<numberOfFiles;i++){
-        File fileName;
-        readSize = read(socketDescriptor, &fileName, sizeof(File));
-        if (readSize == 0)
-            throw BrokenConnectionException();
-        filesNames.push_back(fileName);
-    }
-    return filesNames;
-}
 
-vector<NodeAddr> Server::receiveNodeAddr(int numberOfFiles){
-    ssize_t readSize;
-    vector<NodeAddr> nodeAddr;
-    for(int i=0;i<numberOfFiles;i++){
-        NodeAddr addr;
-        readSize = read(socketDescriptor, &addr, sizeof(NodeAddr));
-        if (readSize == 0)
-            throw BrokenConnectionException();
-        nodeAddr.push_back(addr);
-    }
-    return nodeAddr;
-}
 void Server::receiveFileFragment(unsigned char* buff, int nread) {
     ssize_t readSize;
     unsigned char bufff[OperationCode::PORTION];

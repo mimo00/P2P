@@ -4,11 +4,13 @@
 
 #include <iostream>
 #include "ReceiveFileList.h"
-#include "../../Serializers/FileListDeserializer.h"
+#include "../../Serializers/Deserializers/Deserializer.h"
+#include "../../Communication/Pullers/SocketPuller.h"
 
 
 void ReceiveFileList::handle(int socket) {
-    FileListDeserializer fileListDeserializer(socket);
-    vector<File> fileNames_ = fileListDeserializer.receive();
+    SocketPuller puller(socket);
+    Deserializer deserializer(&puller);
+    vector<File> fileNames_ = deserializer.receiveFileList();
     fileNames->set_value(fileNames_);
 }

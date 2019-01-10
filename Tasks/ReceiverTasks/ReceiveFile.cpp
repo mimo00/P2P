@@ -3,7 +3,6 @@
 //
 
 #include "ReceiveFile.h"
-#include "../../Serializers/FileDeserializer.h"
 #include "../../OperationCode.h"
 #include <iostream>
 #include <sys/socket.h>
@@ -16,14 +15,14 @@
 
 
 void ReceiveFile::handle(int socket) {
-    FileDeserializer fileDeserializer(socket);
-    int fileSize = fileDeserializer.receiveFileSize();
-    unsigned char buff[OperationCode::PORTION];
-    fileDeserializer.receive(buff, fileSize);
-    FileFragment fileFragment_;
-    fileFragment_.file=file;
-    memcpy(fileFragment_.data, buff, fileSize);
-    fileFragment_.size = fileSize;
-    fileFragment_.offset = offset;
-    fileFragment->set_value(fileFragment_);
+//    FileDeserializer fileDeserializer(socket);
+//    int fileSize = fileDeserializer.receiveFileSize();
+//    unsigned char buff[OperationCode::PORTION];
+//    fileDeserializer.receive(buff, fileSize);
+//    FileFragment fileFragment_;
+//    fileFragment_.file=file;
+//    memcpy(fileFragment_.data, buff, fileSize);
+//    fileFragment_.size = fileSize;
+//    fileFragment_.offset = offset;
+//    fileFragment->set_value(fileFragment_);
 }

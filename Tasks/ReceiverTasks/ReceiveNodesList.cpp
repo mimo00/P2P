@@ -3,11 +3,13 @@
 //
 
 #include "ReceiveNodesList.h"
-#include "../../Serializers/NodeListDeserializer.h"
+#include "../../Communication/Pullers/SocketPuller.h"
+#include "../../Serializers/Deserializers/Deserializer.h"
 #include <iostream>
 
 void ReceiveNodesList::handle(int socket) {
-    NodeListDeserializer nodeListDeserializer(socket);
-    vector<NodeAddr> nodeAddr_ = nodeListDeserializer.receive();
-    nodeAddr->set_value(nodeAddr_);
+    SocketPuller puller(socket);
+    Deserializer deserializer(&puller);
+    vector<NodeAddr> nodes = deserializer.receiveNodeList();
+    nodeAddr->set_value(nodes);
 }

@@ -3,13 +3,12 @@
 //
 
 #include "Sender.h"
-#include "Tasks/SenderTasks/SenderTask.h"
-#include "Serializers/CommuniqueSerializer.h"
+#include "../Tasks/SenderTasks/SenderTask.h"
 #include "RemoteNode.h"
 
 using namespace std;
 
-Sender::Sender(RemoteNode* remoteNode) : remoteNode(remoteNode) {};
+Sender::Sender(RemoteNode* remoteNode) : remoteNode(remoteNode), input(input) {};
 
 void Sender::run() {
     while(!stopRequested())
@@ -23,6 +22,5 @@ void Sender::run() {
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;
         }
-        this_thread::sleep_for(chrono::milliseconds(500));
     }
 }

@@ -7,8 +7,8 @@
 
 
 #include "OperationCode.h"
-#include "Listener.h"
-#include "NetworkManager.h"
+#include "Network/Listener.h"
+#include "Network/NetworkManager.h"
 
 using namespace std;
 

@@ -3,9 +3,9 @@
 //
 
 #include "SendFile.h"
-#include "../../Serializers/CommuniqueSerializer.h"
-#include "../../Serializers/FileSerializer.h"
 #include "../../FileManager.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 #include <iostream>
 #include <string.h>
 #include <vector>
@@ -34,11 +34,14 @@ void SendFile::send(int socket) {
     cout<<"Probuje wyslac plik " << endl;
     auto file = getFile(hash);
     if(file != nullptr) {
-        FileSerializer fileSerializer(socket, OperationCode::FILE_FRAGMENT, id, file);
-        fileSerializer.send();
+        FileFragment fileFragment; //To jest tymczasowe
+        SocketPusher socketPusher(socket);
+        Serializer serializer(&socketPusher);
+        serializer.sendFileFragment(id, fileFragment);
         fclose(file);
     }else {
-        CommuniqueSerializer communiqueSerializer(socket, OperationCode::DONT_HAVE_FILE, id);
-        communiqueSerializer.send();
+        SocketPusher socketPusher(socket);
+        Serializer serializer(&socketPusher);
+        serializer.sendDontHaveFile(id);
     }
 }

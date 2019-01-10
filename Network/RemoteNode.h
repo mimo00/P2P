@@ -10,9 +10,9 @@
 #include <iostream>
 #include "Receiver.h"
 #include "Sender.h"
-#include "Tasks/SenderTasks/SenderTask.h"
-#include "Tasks/ReceiverTasks/ReceiverTask.h"
-#include "OperationCode.h"
+#include "../Tasks/SenderTasks/SenderTask.h"
+#include "../Tasks/ReceiverTasks/ReceiverTask.h"
+#include "../OperationCode.h"
 #include <thread>
 #include <future>
 #include <unistd.h>

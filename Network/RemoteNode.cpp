@@ -8,13 +8,13 @@
 #include <future>
 #include <unistd.h>
 #include <cstdlib>
-#include "Tasks/SenderTasks/SendFilesListRequest.h"
-#include "OperationCode.h"
-#include "Tasks/ReceiverTasks/ReceiveFileList.h"
-#include "Tasks/SenderTasks/SendNodesListRequest.h"
-#include "Tasks/ReceiverTasks/ReceiveNodesList.h"
-#include "Tasks/ReceiverTasks/ReceiveFile.h"
-#include "Tasks/SenderTasks/FileRequest.h"
+#include "../Tasks/SenderTasks/SendFilesListRequest.h"
+#include "../OperationCode.h"
+#include "../Tasks/ReceiverTasks/ReceiveFileList.h"
+#include "../Tasks/SenderTasks/SendNodesListRequest.h"
+#include "../Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "../Tasks/ReceiverTasks/ReceiveFile.h"
+#include "../Tasks/SenderTasks/FileRequest.h"
 
 
 RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager)
@@ -90,12 +90,8 @@ void RemoteNode::getFileFragment(promise<FileFragment>* filePromise,File file, i
     int taskId=getId();
     auto senderTask = new FileRequest(taskId,file.hash,offset);
     addSenderTask(senderTask);
-    //promise<FileFragment> filePromise;
-    //future<FileFragment> fileFuture=filePromise.get_future();
     auto receiveTask=new ReceiveFile(taskId,file,offset,filePromise);
     addReceiverTask(receiveTask);
-    //FileFragment fragment=fileFuture.get();
-    //return fragment;
 }
 
 NetworkManager *RemoteNode::getNetworkManager() const {

@@ -16,20 +16,17 @@ class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
     NodeAddr me;
-    vector<NodeAddr> nodeAddress;
     int initConnect(NodeAddr addr, NodeAddr me);
     int connect(NodeAddr addr, NodeAddr me);
 public:
     NetworkManager(NodeAddr me);
     virtual ~NetworkManager();
-    const vector<NodeAddr> &getNodeAddress() const;
+    vector<NodeAddr> getNodeAddress();
 
 public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
     int connectToNetwork(NodeAddr addr, NodeAddr me);
-    void addNodeAddress(NodeAddr nodeAddr);
-    void removeNodeAddress(NodeAddr nodeAddr);
     vector<File> getFiles();
     void fileDownloadManage(File file);
 };

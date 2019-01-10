@@ -3,10 +3,12 @@
 //
 
 #include "SendFilesListRequest.h"
-#include "../../Serializers/CommuniqueSerializer.h"
+#include "../../Communication/Pushers/SocketPusher.h"
+#include "../../Serializers/Serializers/Serializer.h"
 
 
 void SendFilesListRequest::send(int socket) {
-    CommuniqueSerializer communiqueSerializer(socket, operatinoCode, id);
-    communiqueSerializer.send();
+    SocketPusher socketPusher(socket);
+    Serializer serializer(&socketPusher);
+    serializer.requestForFileList(id);
 }
