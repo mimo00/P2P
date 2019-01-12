@@ -3,8 +3,8 @@
 #include "Network/NetworkManager.h"
 #include "Tasks/SenderTasks/SendFilesList.h"
 #include "Tasks/ReceiverTasks/ReceiveFileList.h"
-#include "Controller.h"
-#include "ConsoleMenu.h"
+#include "Controllers/Controller.h"
+#include "View/ConsoleMenu.h"
 
 #include <set>
 #include <cstdlib>

@@ -6,7 +6,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "../Communication/Server.h"
 #include "../Serializers/Deserializers/Deserializer.h"
 #include "../Communication/Pullers/SocketPuller.h"
 

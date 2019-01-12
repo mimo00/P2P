@@ -3,7 +3,7 @@
 //
 
 #include "SendFile.h"
-#include "../../FileManager.h"
+#include "../../Resources/FileManager.h"
 #include "../../Communication/Pushers/SocketPusher.h"
 #include "../../Serializers/Serializers/Serializer.h"
 #include <iostream>

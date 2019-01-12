@@ -6,9 +6,9 @@
 #define P2P_CONTROLLER_H
 
 
-#include "OperationCode.h"
-#include "Network/Listener.h"
-#include "Network/NetworkManager.h"
+#include "../OperationCode.h"
+#include "../Network/Listener.h"
+#include "../Network/NetworkManager.h"
 
 using namespace std;
 
