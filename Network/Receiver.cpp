@@ -66,9 +66,10 @@ void Receiver::run()
                     createResponse(operationCode, taskId);
                 else
                     processRequest(taskId);
-            }catch (BrokenConnectionException2& e){
+            }catch (EndOfDataException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
+                return;
             }
         }
     }

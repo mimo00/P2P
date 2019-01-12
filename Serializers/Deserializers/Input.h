@@ -12,8 +12,7 @@
 
 using namespace std;
 
-class NoDataException : public exception
-{};
+class EndOfDataException : public exception {};
 
 class Input {
 public:
