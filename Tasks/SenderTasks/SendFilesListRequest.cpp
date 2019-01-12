@@ -7,8 +7,9 @@
 #include "../../Serializers/Serializers/Serializer.h"
 
 
-void SendFilesListRequest::send(int socket) {
-    SocketPusher socketPusher(socket);
-    Serializer serializer(&socketPusher);
-    serializer.requestForFileList(id);
+SendFilesListRequest::SendFilesListRequest(int taskId) : SenderTask(taskId) {}
+
+
+void SendFilesListRequest::send(Output* output) {
+    output->requestForFileList(taskId);
 }

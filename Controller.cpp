@@ -5,14 +5,16 @@
 #include "Controller.h"
 #include "Communication/Client.h"
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "Factories/NetworkManagerFactory.h"
 
 Controller::Controller(NodeAddr me): me(me) {
-    networkManager = new NetworkManager(me);
+    NetworkManagerFactory socketNetworkManagerFactory;
+    networkManager = socketNetworkManagerFactory.createRemoteNode(me);
 }
 
 void Controller::startListener() {
     try {
-        listener = new Listener(me.port, networkManager);
+        listener = new Listener(networkManager);
         thread listenerThread([&](){listener->run();});
         listenerThread.detach();
     } catch (ListenerException& e){
@@ -24,15 +26,9 @@ void Controller::startNewNetwork() {
     startListener();
 }
 
-int Controller::connectToNetwork(NodeAddr addr) {
-    if (networkManager->connectToNetwork(addr, me) > 0) {
-        cout << "Nie udalo sie poloczyc do sieci !" << endl;
-        return 1;
-    } else{
-        startListener();
-        return 0;
-    }
-
+void Controller::connectToNetwork(NodeAddr addr) {
+    networkManager->connectToNetwork(addr);
+    startListener();
 }
 
 vector<NodeAddr> Controller::getNodesAddresses() {

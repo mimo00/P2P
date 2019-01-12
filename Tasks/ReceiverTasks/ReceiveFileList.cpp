@@ -8,9 +8,11 @@
 #include "../../Communication/Pullers/SocketPuller.h"
 
 
-void ReceiveFileList::handle(int socket) {
-    SocketPuller puller(socket);
-    Deserializer deserializer(&puller);
-    vector<File> fileNames_ = deserializer.receiveFileList();
+ReceiveFileList::ReceiveFileList(int id, promise<vector<File>> *fileNames)
+        : ReceiverTask(id), fileNames(fileNames){}
+
+
+void ReceiveFileList::handle(Input* input) {
+    vector<File> fileNames_ = input->receiveFileList();
     fileNames->set_value(fileNames_);
 }

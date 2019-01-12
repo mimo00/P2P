@@ -14,7 +14,11 @@
 #include <string.h>
 
 
-void ReceiveFile::handle(int socket) {
+ReceiveFile::ReceiveFile(int id, File file, int offset, promise<FileFragment> *fileFragment)
+        :ReceiverTask(id),file(file),offset(offset),fileFragment(fileFragment){}
+
+
+void ReceiveFile::handle(Input* input) {
 //    FileDeserializer fileDeserializer(socket);
 //    int fileSize = fileDeserializer.receiveFileSize();
 //    unsigned char buff[OperationCode::PORTION];

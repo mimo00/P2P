@@ -13,9 +13,8 @@ using namespace std;
 
 class ReceiveFile: public ReceiverTask {
 public:
-    ReceiveFile(int id,File file, int offset, promise<FileFragment>* fileFragment)
-    :ReceiverTask(id),file(file),offset(offset),fileFragment(fileFragment){};
-    void handle(int socket) override;
+    ReceiveFile(int id,File file, int offset, promise<FileFragment>* fileFragment);
+    void handle(Input* input) override;
 private:
     promise<FileFragment>* fileFragment;
     File file;

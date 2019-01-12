@@ -6,14 +6,17 @@
 #define P2P_RECEIVERTASK_H
 
 
+#include "../../Serializers/Deserializers/Input.h"
+
 class ReceiverTask {
 public:
-    ReceiverTask(int id): id(id){};
-    virtual void handle(int socket) = 0;
-    int getId() const;
+    ReceiverTask(int taskId);
+    virtual void handle(Input* input) = 0;
+    int getTaskId() const;
 
 protected:
-    int id;
+    int taskId;
+    Input* input;
 };
 
 #endif //P2P_RECEIVERTASK_H

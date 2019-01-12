@@ -5,6 +5,8 @@
 #include "ReceiverTask.h"
 
 
-int ReceiverTask::getId() const {
-    return id;
+ReceiverTask::ReceiverTask(int taskId): taskId(taskId){};
+
+int ReceiverTask::getTaskId() const {
+    return taskId;
 }

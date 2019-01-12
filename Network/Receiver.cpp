@@ -17,7 +17,8 @@
 using namespace std;
 
 
-Receiver::Receiver(RemoteNode* remoteNode): remoteNode(remoteNode) {};
+Receiver::Receiver(RemoteNode* remoteNode, Input* input)
+: remoteNode(remoteNode), input(input) {};
 
 
 void Receiver::createResponse(int operationCode, int taskId){
@@ -31,9 +32,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendNodesList(taskId, remoteNode->getNetworkManager()->getNodeAddress());
             break;
         case OperationCode::FILE_FRAGMENT_REQUEST:
-            SocketPuller puller(remoteNode->getSockfd());
-            Deserializer deserializer(&puller);
-            auto offsetHash = deserializer.getOffsetAndHash();
+            auto offsetHash = input->getOffsetAndHash();
             int offset=get<0>(offsetHash);
             int hash=get<1>(offsetHash);
             senderTask = new SendFile(taskId,hash,offset);
@@ -45,9 +44,9 @@ void Receiver::createResponse(int operationCode, int taskId){
 void Receiver::processRequest(int taskId){
     cout<<"Przetwarzam request" << endl;
     auto receiverTasks = remoteNode->getReceiverTasks();
-    auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getId() == taskId;});
+    auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
     if (it != receiverTasks->end())
-        (*it)->handle(remoteNode->getSockfd());
+        (*it)->handle(input);
     else
         cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
 
@@ -55,13 +54,11 @@ void Receiver::processRequest(int taskId){
 
 void Receiver::run()
 {
-    SocketPuller puller(remoteNode->getSockfd());
-    Deserializer deserializer(&puller);
     while (!stopRequested())
     {
-        if (deserializer.canRead()) {
+        if (input->canRead()) {
             try{
-                auto data = deserializer.getOperationCodeAndTaskId();
+                auto data = input->getOperationCodeAndTaskId();
                 int operationCode = get<0>(data);
                 int taskId = get<1>(data);
                 cout<<"Odebralem request: " << operationCode << " " << taskId << endl;
@@ -69,7 +66,7 @@ void Receiver::run()
                     createResponse(operationCode, taskId);
                 else
                     processRequest(taskId);
-            }catch (BrokenConnectionException& e){
+            }catch (BrokenConnectionException2& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
             }

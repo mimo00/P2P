@@ -6,8 +6,11 @@
 #include "../../Communication/Pushers/SocketPusher.h"
 #include "../../Serializers/Serializers/Serializer.h"
 
-void FileRequest::send(int socket) {
-    SocketPusher socketPusher(socket);
-    Serializer serializer(&socketPusher);
-    serializer.requestForFileFragment(id, offset, hash);
+
+FileRequest::FileRequest(int taskId, int hash, int offset)
+        : SenderTask(taskId), offset(offset),hash(hash){};
+
+
+void FileRequest::send(Output* output) {
+    output->requestForFileFragment(taskId, offset, hash);
 }

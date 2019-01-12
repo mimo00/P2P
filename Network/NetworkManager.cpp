@@ -14,9 +14,11 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(NodeAddr me) {}
+NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory)
+: connector(connector), remoteNodeFactory(remoteNodeFactory) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
+    cout<<"Rejestruje !!!"<<endl;
     remoteNodes.push_back(remoteNode);
 }
 
@@ -29,27 +31,6 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
 }
 
 
-int NetworkManager::initConnect(NodeAddr addr, NodeAddr me){
-    int sockDescriptor;
-    if((sockDescriptor = Client::connectWithHost(addr))>=0){
-        Client client(sockDescriptor);
-        client.sendInteger(me.port);
-        return sockDescriptor;
-    }
-    return -1;
-}
-
-int NetworkManager::connect(NodeAddr addr, NodeAddr me){
-    int sockDescriptor;
-    if((sockDescriptor = Client::connectWithHost(addr))>=0){
-        Client client(sockDescriptor);
-        client.sendInteger(me.port);
-        return sockDescriptor;
-    }
-    return -1;
-}
-
-
 vector<NodeAddr> NetworkManager::getNodeAddress() {
     vector<NodeAddr> nodeAddress;
     for (int i=0;i<remoteNodes.size();i++){
@@ -59,26 +40,17 @@ vector<NodeAddr> NetworkManager::getNodeAddress() {
 }
 
 
-int NetworkManager::connectToNetwork(NodeAddr addr, NodeAddr me) {
-    int sockDescriptor;
-    sockDescriptor = initConnect(addr, me);
-    if(sockDescriptor>=0){
-        auto remoteNode = new RemoteNode(sockDescriptor, addr, this);
-        remoteNode->start();
-        registerRemoteNode(remoteNode);
-        vector<NodeAddr> addresses = remoteNode->getNodeAddress();
-        for(int i=0;i<addresses.size();i++){
-            sockDescriptor = connect(addresses[i], me);
-            if(sockDescriptor>=0){
-                auto remoteNode = new RemoteNode(sockDescriptor, addresses[i], this);
-                registerRemoteNode(remoteNode);
-                remoteNode->start();
-            }
+void NetworkManager::connectToNetwork(NodeAddr addr) {
+    int connectionDescription = connector->initConnectionWithNode(addr);
+    auto remoteNode = remoteNodeFactory->createRemoteNode(connectionDescription, addr, this);
+    registerRemoteNode(remoteNode);
+    vector<NodeAddr> addresses = remoteNode->getNodeAddress();
+    for(int i=0;i<addresses.size();i++){
+        if (addresses[i] != connector->getMe()){
+            connectionDescription = connector->initConnectionWithNode(addresses[i]);
+            remoteNode = remoteNodeFactory->createRemoteNode(connectionDescription, addresses[i], this);
+            registerRemoteNode(remoteNode);
         }
-        return 0;
-    } else {
-        cout<<"Nie mozna polaczyc z siecia " << endl;
-        return -1;
     }
 }
 
@@ -209,4 +181,12 @@ void NetworkManager::fileDownloadManage(File filee) {
 NetworkManager::~NetworkManager() {
     for(int i=0;i<remoteNodes.size();i++)
         delete remoteNodes[i];
+}
+
+RemoteNodeFactory *NetworkManager::getRemoteNodeFactory() const {
+    return remoteNodeFactory;
+}
+
+Connector *NetworkManager::getConnector() const {
+    return connector;
 }

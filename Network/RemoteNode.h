@@ -23,24 +23,21 @@ class NetworkManager;
 
 class RemoteNode {
 private:
-    int sockfd;
     NodeAddr nodeAddr;
     NetworkManager* networkManager;
-    Receiver receiver;
-    Sender sender;
+    Receiver* receiver;
+    Sender* sender;
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
 public:
-    RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager);
+    RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
-    bool operator==(const RemoteNode &other);
     vector<ReceiverTask*>* getReceiverTasks();
     vector<SenderTask*>* getSenderTasks();
     NetworkManager *getNetworkManager() const;
     const NodeAddr &getNodeAddr() const;
-    int getSockfd() const;
+    void setSenderAndReceiver(Receiver*, Sender*);
 public:
-    void start();
     void addReceiverTask(ReceiverTask*);
     void addSenderTask(SenderTask*);
     void getFilesList(promise<vector<File>>*);

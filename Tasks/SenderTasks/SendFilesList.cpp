@@ -15,9 +15,10 @@
 #include <string.h>
 
 
-void SendFilesList::send(int socket) {
-    SocketPusher socketPusher(socket);
-    Serializer serializer(&socketPusher);
-    serializer.sendFileList(id, FileManager::getFilesNames());
+SendFilesList::SendFilesList(int taskId) : SenderTask(taskId){}
+
+
+void SendFilesList::send(Output* output) {
+    output->sendFileList(taskId, FileManager::getFilesNames());
 }
 

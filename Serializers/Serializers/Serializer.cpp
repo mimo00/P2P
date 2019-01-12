@@ -62,3 +62,7 @@ void Serializer::sendFileFragment(int taskId, FileFragment fileFragment) {
     pusher->pushBytes(static_cast<void*>(&fileFragment.size), sizeof(&fileFragment.size));
     pusher->pushBytes(static_cast<void*>(&fileFragment.data), fileFragment.size);
 }
+
+void Serializer::sendListiningAddress(NodeAddr myAddr) {
+    pusher->pushBytes(static_cast<void*>(&myAddr), sizeof(myAddr));
+}

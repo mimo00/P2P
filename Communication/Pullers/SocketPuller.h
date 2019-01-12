@@ -14,7 +14,7 @@ using namespace std;
 class NoDataExceptionInSocket : public exception
 {};
 
-class BrokenConnectionException : public exception
+class BrokenConnectionException2 : public exception
 {};
 
 class SocketPuller: public Puller {

@@ -17,11 +17,11 @@ class RemoteNode;
 
 class Sender: public Stoppable {
 public:
-    Sender(RemoteNode* remoteNode);
+    Sender(RemoteNode* remoteNode, Output* output);
     void run();
 private:
     RemoteNode* remoteNode;
-    Input* input;
+    Output* output;
 };
 
 

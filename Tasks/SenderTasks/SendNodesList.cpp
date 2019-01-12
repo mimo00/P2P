@@ -14,8 +14,10 @@ vector<NodeAddr> SendNodesList::getNodeAddresses() {
     return nodeAddress;
 }
 
-void SendNodesList::send(int socket) {
-    SocketPusher socketPusher(socket);
-    Serializer serializer(&socketPusher);
-    serializer.sendNodesList(id, getNodeAddresses());
+SendNodesList::SendNodesList(int id, vector<NodeAddr> nodeAddress)
+: SenderTask(id), nodeAddress(nodeAddress){}
+
+
+void SendNodesList::send(Output* output) {
+    output->sendNodesList(taskId, getNodeAddresses());
 }

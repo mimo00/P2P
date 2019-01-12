@@ -9,24 +9,27 @@
 #include <list>
 #include <set>
 #include "RemoteNode.h"
+#include "../Serializers/Connectors/Connector.h"
+#include "../Factories/RemoteNodeFactory.h"
 
 using  namespace std;
 
 class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
-    NodeAddr me;
-    int initConnect(NodeAddr addr, NodeAddr me);
-    int connect(NodeAddr addr, NodeAddr me);
+    Connector* connector;
+    RemoteNodeFactory* remoteNodeFactory;
+
 public:
-    NetworkManager(NodeAddr me);
+    NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory);
     virtual ~NetworkManager();
     vector<NodeAddr> getNodeAddress();
-
+    RemoteNodeFactory *getRemoteNodeFactory() const;
+    Connector *getConnector() const;
 public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);
-    int connectToNetwork(NodeAddr addr, NodeAddr me);
+    void connectToNetwork(NodeAddr addr);
     vector<File> getFiles();
     void fileDownloadManage(File file);
 };
