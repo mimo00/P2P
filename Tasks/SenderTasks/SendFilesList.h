@@ -13,9 +13,8 @@ using namespace std;
 
 class SendFilesList: public SenderTask {
 public:
-    const int operatinoCode = OperationCode::FILES_LIST;
-    SendFilesList(int id): SenderTask(id){};
-    void send(int) override;
+    SendFilesList(int taskId);
+    void send(Output* output) override;
     private:
     vector<File> getFilesNames();
 };

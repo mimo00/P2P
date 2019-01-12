@@ -17,10 +17,11 @@ class RemoteNode;
 class Receiver: public Stoppable
 {
 public:
-    Receiver(RemoteNode* remoteNode);
-    void run();
+    Receiver(RemoteNode* remoteNode, Input* input);
+    void run() override;
 private:
     RemoteNode* remoteNode;
+    Input* input;
     void createResponse(int operationCode, int taskId);
     void processRequest(int taskId);
 };

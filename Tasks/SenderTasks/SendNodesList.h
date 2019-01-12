@@ -12,9 +12,8 @@
 using namespace std;
 class SendNodesList: public SenderTask{
 public:
-    const int operationCode = OperationCode::NODES_LIST;
-    SendNodesList(int id, vector<NodeAddr> nodeAddress): SenderTask(id), nodeAddress(nodeAddress){};
-    void send(int) override;
+    SendNodesList(int id, vector<NodeAddr> nodeAddress);
+    void send(Output* output) override;
 private:
     vector<NodeAddr> getNodeAddresses();
     vector<NodeAddr> nodeAddress;

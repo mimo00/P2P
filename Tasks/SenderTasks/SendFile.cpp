@@ -13,6 +13,10 @@
 #include <sys/types.h>
 
 
+SendFile::SendFile(int taskId, int hash, int offset)
+        : SenderTask(taskId),hash(hash),offset(offset){}
+
+
 FILE* SendFile::getFile(int hash){
     vector <File> files=FileManager::getFilesNames();
     for(int i=0; i<files.size();i++) {
@@ -30,18 +34,14 @@ FILE* SendFile::getFile(int hash){
     return nullptr;
 }
 
-void SendFile::send(int socket) {
+void SendFile::send(Output* output) {
     cout<<"Probuje wyslac plik " << endl;
     auto file = getFile(hash);
     if(file != nullptr) {
         FileFragment fileFragment; //To jest tymczasowe
-        SocketPusher socketPusher(socket);
-        Serializer serializer(&socketPusher);
-        serializer.sendFileFragment(id, fileFragment);
+        output->sendFileFragment(taskId, fileFragment);
         fclose(file);
     }else {
-        SocketPusher socketPusher(socket);
-        Serializer serializer(&socketPusher);
-        serializer.sendDontHaveFile(id);
+        output->sendDontHaveFile(taskId);
     }
 }

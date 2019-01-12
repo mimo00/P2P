@@ -17,24 +17,15 @@
 #include "../Tasks/SenderTasks/FileRequest.h"
 
 
-RemoteNode::RemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager)
-: sockfd(sockfd), nodeAddr(nodeAddr), networkManager(networkManager), receiver(this), sender(this) {
-}
+RemoteNode::RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager)
+: nodeAddr(nodeAddr), networkManager(networkManager){}
 
 
 RemoteNode::~RemoteNode(){
-    receiver.stop();
-    sender.stop();
-    close(sockfd);
+//    receiver.stop();
+//    sender.stop();
+//    close(sockfd);
 };
-
-
-void RemoteNode::start(){
-    std::thread receiverThread([&](){receiver.run();});
-    receiverThread.detach();
-    std::thread senderThread([&](){sender.run();});
-    senderThread.detach();
-}
 
 
 void RemoteNode::addReceiverTask(ReceiverTask* task){
@@ -45,10 +36,10 @@ void RemoteNode::addSenderTask(SenderTask* task){
     senderTasks.emplace_back(task);
 }
 
-
-bool RemoteNode::operator==(const RemoteNode &other){
-    return this->getSockfd() == other.getSockfd();
-}
+//
+//bool RemoteNode::operator==(const RemoteNode &other){
+//    return this->getNodeAddr() == other.getNodeAddr();
+//}
 
 vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
     return &receiverTasks;
@@ -57,9 +48,6 @@ vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
 vector<SenderTask*>* RemoteNode::getSenderTasks(){
     return &senderTasks;
 }
-
-
-
 
 int getId(){
     return rand();
@@ -102,7 +90,11 @@ const NodeAddr &RemoteNode::getNodeAddr() const {
     return nodeAddr;
 }
 
-int RemoteNode::getSockfd() const {
-    return sockfd;
+void RemoteNode::setSenderAndReceiver(Receiver* receiver_, Sender *sender_) {
+    receiver=receiver_;
+    sender=sender_;
+    thread receiverThread([&](){receiver->run();});
+    receiverThread.detach();
+    std::thread senderThread([&](){sender->run();});
+    senderThread.detach();
 }
-

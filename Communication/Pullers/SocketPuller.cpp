@@ -30,7 +30,7 @@ void *SocketPuller::pullBytes(size_t length) {
     void* buffer = new char[length];
     ssize_t readBytes = read(socketDescriptor, buffer, length);
     if (readBytes == 0)
-        throw BrokenConnectionException();
+        throw BrokenConnectionException2();
     else
         return buffer;
 

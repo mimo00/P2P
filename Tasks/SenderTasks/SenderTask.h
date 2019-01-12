@@ -6,13 +6,14 @@
 #define P2P_SENDERTASK_H
 
 
+#include "../../Serializers/Serializers/Output.h"
 
 class SenderTask {
 public:
-    SenderTask(int id): id(id){};
-    virtual void send(int) = 0;
+    SenderTask(int taskId): taskId(taskId){};
+    virtual void send(Output* output) = 0;
 protected:
-    int id;
+    int taskId;
 };
 
 

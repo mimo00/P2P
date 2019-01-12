@@ -10,9 +10,8 @@
 
 class SendNodesListRequest: public SenderTask {
 public:
-    const int operationCode = OperationCode::NODES_LIST_REQUEST;
-    SendNodesListRequest(int id): SenderTask(id){};
-    void send(int) override;
+    SendNodesListRequest(int taskId);
+    void send(Output* output) override;
 
 };
 

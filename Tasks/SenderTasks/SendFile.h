@@ -15,9 +15,8 @@
 
 class SendFile: public SenderTask {
 public:
-    const int operationCode = OperationCode::FILE_FRAGMENT;
-    SendFile(int id,int hash,int offset): SenderTask(id),hash(hash),offset(offset){};
-    void send(int) override;
+    SendFile(int taskId, int hash, int offset);
+    void send(Output* output) override;
 private:
     FILE * getFile(int hash);
     int hash;

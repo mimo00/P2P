@@ -20,6 +20,7 @@ public:
     void sendFileList(int taskId, vector<File> files) override;
     void sendDontHaveFile(int taskId) override;
     void sendFileFragment(int taskId, FileFragment fileFragment) override;
+    void sendListiningAddress(NodeAddr myAddr);
 };
 
 

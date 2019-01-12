@@ -8,7 +8,9 @@
 
 using namespace std;
 
-Sender::Sender(RemoteNode* remoteNode) : remoteNode(remoteNode), input(input) {};
+Sender::Sender(RemoteNode* remoteNode, Output* output)
+: remoteNode(remoteNode), output(output) {};
+
 
 void Sender::run() {
     while(!stopRequested())
@@ -17,7 +19,7 @@ void Sender::run() {
         if (!senderTasks->empty()){
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
-            senderTask->send(remoteNode->getSockfd());
+            senderTask->send(output);
             delete senderTask;
         } else {
 //            cout << "Pusty wektor nie biorę nic" << endl;

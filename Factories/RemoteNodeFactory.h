@@ -6,10 +6,11 @@
 #define P2P_REMOTENODEFACTORY_H
 
 
-#include "RemoteNode.h"
+#include "../Network/RemoteNode.h"
 
 class RemoteNodeFactory {
-    static RemoteNode* createRemoteNode(int sockfd, NodeAddr nodeAddr, NetworkManager* networkManager);
+public:
+    virtual RemoteNode* createRemoteNode(int connectionDescriptor, NodeAddr nodeAddr, NetworkManager* networkManager)=0;
 };
 
 

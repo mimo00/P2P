@@ -14,8 +14,8 @@
 using namespace std;
 class ReceiveNodesList:public ReceiverTask {
 public:
-    ReceiveNodesList(int id, promise<vector<NodeAddr>>* nodeAddr): ReceiverTask(id), nodeAddr(nodeAddr){};
-    void handle(int socket) override;
+    ReceiveNodesList(int taskId, promise<vector<NodeAddr>>* nodeAddr);
+    void handle(Input* input) override;
 private:
     promise<vector<NodeAddr>>* nodeAddr;
 };

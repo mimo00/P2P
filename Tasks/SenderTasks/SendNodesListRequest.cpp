@@ -7,9 +7,11 @@
 #include "../../Communication/Pushers/SocketPusher.h"
 #include "../../Serializers/Serializers/Serializer.h"
 
-void SendNodesListRequest::send(int socket) {
-    SocketPusher socketPusher(socket);
-    Serializer serializer(&socketPusher);
-    serializer.requestForNodeList(id);
+
+SendNodesListRequest::SendNodesListRequest(int taskId) : SenderTask(taskId) {}
+
+
+void SendNodesListRequest::send(Output* output) {
+    output->requestForNodeList(taskId);
     std::cout<<"Wysłałem Liste nodow !!!" << endl;
 }

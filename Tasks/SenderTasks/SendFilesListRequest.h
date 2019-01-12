@@ -11,9 +11,8 @@
 
 class SendFilesListRequest: public SenderTask {
 public:
-    const int operatinoCode = OperationCode::FILES_LIST_REQUEST;
-    SendFilesListRequest(int id): SenderTask(id){};
-    void send(int) override;
+    SendFilesListRequest(int taskId);
+    void send(Output* output) override;
 };
 
 

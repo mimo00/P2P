@@ -7,9 +7,11 @@
 #include "../../Serializers/Deserializers/Deserializer.h"
 #include <iostream>
 
-void ReceiveNodesList::handle(int socket) {
-    SocketPuller puller(socket);
-    Deserializer deserializer(&puller);
-    vector<NodeAddr> nodes = deserializer.receiveNodeList();
+ReceiveNodesList::ReceiveNodesList(int taskId, promise<vector<NodeAddr>> *nodeAddr)
+: ReceiverTask(taskId), nodeAddr(nodeAddr){}
+
+
+void ReceiveNodesList::handle(Input* input) {
+    vector<NodeAddr> nodes = input->receiveNodeList();
     nodeAddr->set_value(nodes);
 }

@@ -62,3 +62,9 @@ FileFragment Deserializer::receiveFileFragment() {
     return fileFragment;
 }
 
+NodeAddr Deserializer::receiveListiningAddress() {
+    NodeAddr addr;
+    addr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
+    return addr;
+}
+

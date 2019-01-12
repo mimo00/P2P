@@ -28,7 +28,7 @@ public:
     Controller(NodeAddr me);
     virtual ~Controller();
     void startNewNetwork();
-    int connectToNetwork(NodeAddr addr);
+    void connectToNetwork(NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
     void downloadFile(File file);
