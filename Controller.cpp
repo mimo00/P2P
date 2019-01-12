@@ -9,7 +9,7 @@
 
 Controller::Controller(NodeAddr me, string path): me(me), path(path) {
     NetworkManagerFactory socketNetworkManagerFactory;
-    networkManager = socketNetworkManagerFactory.createRemoteNode(me);
+    networkManager = socketNetworkManagerFactory.createRemoteNode(me, path);
 }
 
 void Controller::startListener() {

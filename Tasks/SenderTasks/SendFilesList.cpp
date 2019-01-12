@@ -15,10 +15,11 @@
 #include <string.h>
 
 
-SendFilesList::SendFilesList(int taskId, string path) : SenderTask(taskId), path(path){}
+SendFilesList::SendFilesList(int taskId, FileManager* fileManager)
+: SenderTask(taskId), fileManager(fileManager){}
 
 
 void SendFilesList::send(Output* output) {
-    output->sendFileList(taskId, FileManager::getFilesNames(path));
+    output->sendFileList(taskId, fileManager->getFilesNames());
 }
 

@@ -7,6 +7,7 @@
 
 #include "SenderTask.h"
 #include "../../OperationCode.h"
+#include "../../FileManager.h"
 #include <iostream>
 #include <string.h>
 #include <vector>
@@ -15,12 +16,12 @@
 
 class SendFile: public SenderTask {
 public:
-    SendFile(int taskId, int hash, int offset, string path);
+    SendFile(int taskId, int hash, int offset, FileManager* fileManager);
     void send(Output* output) override;
 private:
+    FileManager* fileManager;
     int hash;
     int offset;
-    string path;
 };
 
 

@@ -11,7 +11,7 @@
 #include "RemoteNode.h"
 #include "../Serializers/Connectors/Connector.h"
 #include "../Factories/RemoteNodeFactory.h"
-#include "../Controller.h"
+#include "../FileManager.h"
 
 using  namespace std;
 
@@ -20,12 +20,11 @@ private:
     vector<RemoteNode*> remoteNodes;
     Connector* connector;
     RemoteNodeFactory* remoteNodeFactory;
-    Controller* controller;
+    FileManager* fileManager;
 public:
-    Controller *getController() const;
+    FileManager *getFileManager() const;
 
-public:
-    NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, Controller* controller);
+    NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, FileManager* fileManager);
     virtual ~NetworkManager();
     vector<NodeAddr> getNodeAddress();
     RemoteNodeFactory *getRemoteNodeFactory() const;

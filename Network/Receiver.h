@@ -9,6 +9,7 @@
 #include "Stoppable.h"
 #include "../Tasks/SenderTasks/SenderTask.h"
 #include "../Tasks/ReceiverTasks/ReceiverTask.h"
+#include "../FileManager.h"
 
 using namespace std;
 
@@ -17,11 +18,12 @@ class RemoteNode;
 class Receiver: public Stoppable
 {
 public:
-    Receiver(RemoteNode* remoteNode, Input* input);
+    Receiver(RemoteNode* remoteNode, Input* input, FileManager* fileManager);
     void run() override;
 private:
     RemoteNode* remoteNode;
     Input* input;
+    FileManager* fileManager;
     void createResponse(int operationCode, int taskId);
     void processRequest(int operationCode, int taskId);
 };
