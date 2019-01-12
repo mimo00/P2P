@@ -22,19 +22,8 @@ public:
     const static int FILE_FRAGMENT_REQUEST=400;
     const static int DONT_HAVE_FILE=402;
     const static int FILE_FRAGMENT=403;
-
     const static int PORTION=1000000 ;
-    //const static int PORTION=1048576;
-   // const static int PORTION=8192;
-    static bool isRequest(int operationCode){
-        const list<int> requestOperationCodes = list<int>({
-            FILES_LIST_REQUEST,
-            NODES_LIST_REQUEST,
-            FILE_FRAGMENT_REQUEST
-        });
-        return find(requestOperationCodes.begin(), requestOperationCodes.end(), operationCode) != requestOperationCodes.end();
-    }
-
+    static bool isRequest(int operationCode);
 };
 
 

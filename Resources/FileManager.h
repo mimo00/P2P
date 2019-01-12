@@ -5,7 +5,7 @@
 #ifndef P2P_FILEMANAGER_H
 #define P2P_FILEMANAGER_H
 
-#include "OperationCode.h"
+#include "../OperationCode.h"
 #include <vector>
 #include <string>
 

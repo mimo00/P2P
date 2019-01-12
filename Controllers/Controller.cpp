@@ -3,8 +3,8 @@
 //
 
 #include "Controller.h"
-#include "Tasks/ReceiverTasks/ReceiveNodesList.h"
-#include "Factories/NetworkManagerFactory.h"
+#include "../Tasks/ReceiverTasks/ReceiveNodesList.h"
+#include "../Factories/NetworkManagerFactory.h"
 
 Controller::Controller(NodeAddr me, string path): me(me), path(path) {
     NetworkManagerFactory socketNetworkManagerFactory;

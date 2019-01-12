@@ -9,7 +9,7 @@
 #include "Stoppable.h"
 #include "../Tasks/SenderTasks/SenderTask.h"
 #include "../Tasks/ReceiverTasks/ReceiverTask.h"
-#include "../FileManager.h"
+#include "../Resources/FileManager.h"
 
 using namespace std;
 

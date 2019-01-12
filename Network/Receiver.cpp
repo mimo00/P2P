@@ -13,7 +13,7 @@
 #include "NetworkManager.h"
 #include "../Serializers/Deserializers/Deserializer.h"
 #include "../Communication/Pullers/SocketPuller.h"
-#include "../Controller.h"
+#include "../Controllers/Controller.h"
 
 using namespace std;
 
