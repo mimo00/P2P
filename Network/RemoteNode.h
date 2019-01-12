@@ -16,6 +16,7 @@
 #include <thread>
 #include <future>
 #include <unistd.h>
+#include <mutex>
 
 using  namespace std;
 
@@ -29,6 +30,9 @@ private:
     Sender* sender;
     vector<ReceiverTask*> receiverTasks;
     vector<SenderTask*> senderTasks;
+    mutex mutexSender;
+    mutex mutexReceiver;
+
 public:
     RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();

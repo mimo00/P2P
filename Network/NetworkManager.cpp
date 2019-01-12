@@ -18,11 +18,13 @@ NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNo
 : connector(connector), remoteNodeFactory(remoteNodeFactory) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
+    lock_guard<mutex> lock(mutexReg);
     cout<<"Rejestruje !!!"<<endl;
     remoteNodes.push_back(remoteNode);
 }
 
 void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
+    lock_guard<mutex> lock(mutexReg);
     auto foundRemoteNode = find(remoteNodes.begin(), remoteNodes.end(), remoteNode);
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
@@ -32,6 +34,7 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
 
 
 vector<NodeAddr> NetworkManager::getNodeAddress() {
+    lock_guard<mutex> lock(mutexReg);
     vector<NodeAddr> nodeAddress;
     for (int i=0;i<remoteNodes.size();i++){
         nodeAddress.push_back(remoteNodes[i]->getNodeAddr());

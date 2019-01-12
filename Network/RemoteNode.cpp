@@ -29,10 +29,13 @@ RemoteNode::~RemoteNode(){
 
 
 void RemoteNode::addReceiverTask(ReceiverTask* task){
+    mutexReceiver.lock();
     receiverTasks.emplace_back(task);
+    mutexReceiver.unlock();
 }
 
 void RemoteNode::addSenderTask(SenderTask* task){
+    lock_guard<mutex> lock(mutexSender);
     senderTasks.emplace_back(task);
 }
 
@@ -42,10 +45,12 @@ void RemoteNode::addSenderTask(SenderTask* task){
 //}
 
 vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
+    lock_guard<mutex> lock(mutexReceiver);
     return &receiverTasks;
 }
 
 vector<SenderTask*>* RemoteNode::getSenderTasks(){
+    lock_guard<mutex> lock(mutexSender);
     return &senderTasks;
 }
 
