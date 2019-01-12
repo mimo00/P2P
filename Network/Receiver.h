@@ -23,7 +23,7 @@ private:
     RemoteNode* remoteNode;
     Input* input;
     void createResponse(int operationCode, int taskId);
-    void processRequest(int taskId);
+    void processRequest(int operationCode, int taskId);
 };
 
 #endif //P2P_REVEIVER_H

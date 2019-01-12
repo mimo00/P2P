@@ -14,7 +14,7 @@ using namespace std;
 class ReceiveFile: public ReceiverTask {
 public:
     ReceiveFile(int id, promise<FileFragment>* fileFragment);
-    void handle(Input* input) override;
+    void handle(int operationCode, Input* input) override;
 private:
     promise<FileFragment>* fileFragment;
 };

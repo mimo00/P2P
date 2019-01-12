@@ -6,6 +6,7 @@
 #define P2P_SENDFILESLIST_H
 
 #include <vector>
+#include <string>
 #include "SenderTask.h"
 #include "../../OperationCode.h"
 
@@ -13,9 +14,10 @@ using namespace std;
 
 class SendFilesList: public SenderTask {
 public:
-    SendFilesList(int taskId);
+    SendFilesList(int taskId, string path);
     void send(Output* output) override;
     private:
+    string path;
     vector<File> getFilesNames();
 };
 

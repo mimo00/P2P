@@ -17,7 +17,7 @@ using namespace std;
 class ReceiveFileList : public ReceiverTask{
 public:
     ReceiveFileList(int id, promise<vector<File>>* fileNames);
-    void handle(Input* input) override;
+    void handle(int operationCode, Input* input) override;
 private:
     promise<vector<File>>* fileNames;
 };
