@@ -19,17 +19,15 @@ private:
     vector<RemoteNode*> remoteNodes;
     Connector* connector;
     RemoteNodeFactory* remoteNodeFactory;
-    mutex mutexReg;
-
     FileManager* fileManager;
+    mutex mutexReg;
 public:
-    FileManager *getFileManager() const;
-
     NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, FileManager* fileManager);
     virtual ~NetworkManager();
     vector<NodeAddr> getNodeAddress();
     RemoteNodeFactory *getRemoteNodeFactory() const;
     Connector *getConnector() const;
+    FileManager *getFileManager() const;
 public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);

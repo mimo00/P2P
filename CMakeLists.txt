@@ -9,10 +9,8 @@ add_executable(P2P main.cpp Network/NetworkManager.cpp Network/NetworkManager.h
         Network/Receiver.cpp Network/Receiver.h Network/Sender.cpp Network/Sender.h
         Tasks/SenderTasks/SendFilesListRequest.cpp Tasks/SenderTasks/SendFilesListRequest.h
         Tasks/SenderTasks/SenderTask.cpp Tasks/SenderTasks/SenderTask.h
-        Communication/Client.cpp Communication/Client.h
         OperationCode.cpp OperationCode.h
         Tasks/SenderTasks/SendFilesList.cpp Tasks/SenderTasks/SendFilesList.h
-        Communication/Server.cpp Communication/Server.h
         Tasks/ReceiverTasks/ReceiverTask.cpp Tasks/ReceiverTasks/ReceiverTask.h
         Tasks/ReceiverTasks/ReceiveFileList.cpp Tasks/ReceiverTasks/ReceiveFileList.h
         Tasks/SenderTasks/SendNodesListRequest.cpp Tasks/SenderTasks/SendNodesListRequest.h
