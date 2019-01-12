@@ -11,7 +11,7 @@
 #include "RemoteNode.h"
 #include "../Serializers/Connectors/Connector.h"
 #include "../Factories/RemoteNodeFactory.h"
-#include "../FileManager.h"
+#include "../Controller.h"
 
 using  namespace std;
 
@@ -20,6 +20,8 @@ private:
     vector<RemoteNode*> remoteNodes;
     Connector* connector;
     RemoteNodeFactory* remoteNodeFactory;
+    mutex mutexReg;
+
     FileManager* fileManager;
 public:
     FileManager *getFileManager() const;

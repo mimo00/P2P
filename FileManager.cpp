@@ -55,6 +55,7 @@ vector<File> FileManager:: getFilesNames(){
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
+        closedir(dp);
         return files;
     } else {
         while ((dirp = readdir(dp)) != NULL) {
