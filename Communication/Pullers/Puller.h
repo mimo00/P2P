@@ -6,6 +6,11 @@
 #define P2P_PULLER_H
 
 #include <unistd.h>
+#include <exception>
+
+using namespace std;
+
+class EndOfBytesException : public exception {};
 
 class Puller {
 public:

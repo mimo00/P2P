@@ -15,8 +15,8 @@ tuple<int, int> Deserializer::getOperationCodeAndTaskId() {
         int operationCode = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
         int taskId = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
         return make_tuple(operationCode, taskId);
-    } catch (NoDataExceptionInSocket& e) {
-        throw NoDataException();
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
     }
 }
 
@@ -50,8 +50,8 @@ tuple<int, int> Deserializer::getOffsetAndHash() {
         int operationCode = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
         int taskId = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
         return make_tuple(operationCode, taskId);
-    } catch (NoDataExceptionInSocket& e) {
-        throw NoDataException();
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
     }
 }
 
