@@ -79,11 +79,11 @@ vector<NodeAddr> RemoteNode::getNodeAddress() {
 }
 
 
-void RemoteNode::getFileFragment(promise<FileFragment>* filePromise,File file, int offset) {
+void RemoteNode::getFileFragment(promise<FileFragment>* filePromise, File file, int offset) {
     int taskId=getId();
-    auto senderTask = new FileRequest(taskId,file.hash,offset);
+    auto senderTask = new FileRequest(taskId,file.hash, offset);
     addSenderTask(senderTask);
-    auto receiveTask=new ReceiveFile(taskId,file,offset,filePromise);
+    auto receiveTask=new ReceiveFile(taskId, filePromise);
     addReceiverTask(receiveTask);
 }
 

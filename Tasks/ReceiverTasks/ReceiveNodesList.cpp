@@ -11,7 +11,7 @@ ReceiveNodesList::ReceiveNodesList(int taskId, promise<vector<NodeAddr>> *nodeAd
 : ReceiverTask(taskId), nodeAddr(nodeAddr){}
 
 
-void ReceiveNodesList::handle(Input* input) {
+void ReceiveNodesList::handle(int , Input* input) {
     vector<NodeAddr> nodes = input->receiveNodeList();
     nodeAddr->set_value(nodes);
 }

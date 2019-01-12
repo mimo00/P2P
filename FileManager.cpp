@@ -10,6 +10,26 @@
 #include <errno.h>
 #include <string.h>
 
+
+FileFragment FileManager::getFile(string path, int hash, int offset) {
+    FileFragment fileFragment;
+    fileFragment.size = -1;
+    vector<File> files=FileManager::getFilesNames(path);
+    for(int i=0; i<files.size();i++) {
+        if (files.at(i).hash == hash) {
+            FILE *file;
+            string filePath = path + "/" + files.at(i).name;
+            file = fopen(filePath.c_str(), "rb");
+            fseek(file,offset,SEEK_SET);
+            ssize_t nread = fread(fileFragment.data, sizeof(char), OperationCode::PORTION, file);
+            fileFragment.size = (int)nread;
+            fclose(file);
+        }
+    }
+    return fileFragment;
+}
+
+
 off_t fsize(const char *filename){
     struct stat st;
     if(lstat(filename,&st)!=0)
@@ -27,10 +47,10 @@ int hashFunction(char name[],int nameSize,int size){
 }
 
 
-vector<File> FileManager:: getFilesNames(){
+vector<File> FileManager:: getFilesNames(string path){
     vector<File> files;
     DIR *dp;
-    string dir="./Files";
+    string dir=path;
     struct dirent *dirp;
     if((dp = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;

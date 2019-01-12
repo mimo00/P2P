@@ -26,7 +26,7 @@ void Receiver::createResponse(int operationCode, int taskId){
     SenderTask* senderTask;
     switch (operationCode) {
         case OperationCode::FILES_LIST_REQUEST:
-            senderTask = new SendFilesList(taskId);
+            senderTask = new SendFilesList(taskId, remoteNode->getNetworkManager()->getController()->getPath());
             break;
         case OperationCode::NODES_LIST_REQUEST:
             senderTask = new SendNodesList(taskId, remoteNode->getNetworkManager()->getNodeAddress());
@@ -35,21 +35,20 @@ void Receiver::createResponse(int operationCode, int taskId){
             auto offsetHash = input->getOffsetAndHash();
             int offset=get<0>(offsetHash);
             int hash=get<1>(offsetHash);
-            senderTask = new SendFile(taskId,hash,offset);
+            senderTask = new SendFile(taskId,hash,offset, remoteNode->getNetworkManager()->getController()->getPath());
             break;
     }
     remoteNode->getSenderTasks()->emplace_back(senderTask);
 }
 
-void Receiver::processRequest(int taskId){
+void Receiver::processRequest(int operationCode, int taskId){
     cout<<"Przetwarzam request" << endl;
     auto receiverTasks = remoteNode->getReceiverTasks();
     auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
     if (it != receiverTasks->end())
-        (*it)->handle(input);
+        (*it)->handle(operationCode,input);
     else
         cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
-
 }
 
 void Receiver::run()
@@ -65,7 +64,7 @@ void Receiver::run()
                 if (OperationCode::isRequest(operationCode))
                     createResponse(operationCode, taskId);
                 else
-                    processRequest(taskId);
+                    processRequest(operationCode, taskId);
             }catch (EndOfDataException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);

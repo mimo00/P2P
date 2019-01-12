@@ -40,7 +40,7 @@ void Serializer::sendNodesList(int taskId, vector<NodeAddr> addresses) {
 }
 
 void Serializer::sendFileList(int taskId, vector<File> files) {
-    int operatinoCode = OperationCode::NODES_LIST;
+    int operatinoCode = OperationCode::FILES_LIST;
     int numberOfFiles = files.size();
     pusher->pushBytes(static_cast<void*>(&operatinoCode), sizeof(operatinoCode));
     pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));

@@ -4,7 +4,7 @@
 #include "NetworkManager.h"
 #include "RemoteNode.h"
 #include "../Communication/Client.h"
-#include "../FileDownloadManager.h"
+#include "FileDownloadManager.h"
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
@@ -14,8 +14,8 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory)
-: connector(connector), remoteNodeFactory(remoteNodeFactory) {}
+NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory,  Controller* controller)
+: connector(connector), remoteNodeFactory(remoteNodeFactory), controller(controller) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     lock_guard<mutex> lock(mutexReg);
@@ -77,108 +77,9 @@ return files;
 
 void NetworkManager::fileDownloadManage(File filee) {
     cout << "Pobieram plik " << filee.name << endl;
-    FileDownloadManager manager(filee,remoteNodes);
-    if(manager.Download())
-        cout << "Pobrano plik!" << endl;
-    else
-        cout<<"Ten plik już został pobrany"<<endl;
-    /*
-    int portionSize = OperationCode::PORTION;
-    int chunks;
-    if(filee.size%portionSize==0)
-        chunks =filee.size/portionSize;
-    else
-        chunks =filee.size/portionSize+1;
-    int *parts= new int[chunks]();
-
-    string confDir = "./Files/config/config";
-    fstream config;
-    config.open(confDir,fstream::in | fstream::out| fstream::app);
-    int noHash=0;
-
-    if (!config)
-        cout << "Error while opening file" << endl;
-    else {
-        string line;
-        while(getline(config, line)) {
-            istringstream row(line);
-            int isHash;
-            row >> isHash;
-            if (isHash == filee.hash) {    //jest hash wiec pobieram do tablicy
-                for (int i = 0; i < chunks; i++)
-                    row >> parts[i];
-                noHash=filee.hash;
-            }
-        }
-        config.close();
-    }
-
-    int zeros=0;
-    int part=0;
-    for(int j=0;j<chunks;j++)
-        if(parts[j]==0){
-            zeros+=1;
-        }
-    vector<promise<FileFragment>*> promises(zeros);
-    vector<FileFragment> fileFrags;
-    int i=0;
-    while (zeros>0) {
-        for (int j = 0; j < remoteNodes.size() && part < filee.size; j++) {
-            promises[i] = new promise<FileFragment>;
-            for (int d = 0; d < chunks&&zeros>0; d++) {
-                if (parts[d] == 0) {
-                    part = d * portionSize;
-                    parts[d] = 1;
-
-                    break;
-                }
-            }
-            zeros--;
-            remoteNodes[j]->getFileFragment(promises[i], filee, part);
-            i++;
-        }
-    }
-
-    for (int j=0;j<promises.size(); j++){
-        future<FileFragment> fileFuture = promises[j]->get_future();
-        FileFragment tempfrag=fileFuture.get();
-        fileFrags.push_back(tempfrag);
-        //fileFrags.emplace(fileFrags.begin(),tempfrag);
-    }
-
-    config.open(confDir, fstream::out | fstream::app);
-    if (!config)
-        cout << "Error while opening file" << endl;
-    else {
-        if (noHash == 0 && zeros > 0) {         //nie znaleziono hasha, uzupelniam plik config
-            config << filee.hash;
-            for (int j = 0; j < chunks; j++)
-                config << " " <<parts[j];
-        }
-        config.close();
-    }
-
-
-    FILE *fp;
-    string dir = "./Files/dwnld";
-    string file__ = dir + "/" + filee.name;
-    for(int j=0;j<fileFrags.size();j++) {
-        FileFragment fragment = fileFrags.back();
-        fileFrags.pop_back();
-        fp = fopen(file__.c_str(), "ab");
-        fseek(fp, fragment.offset, SEEK_SET);
-            if (fp == nullptr)
-                cout << "Error while opening file" << endl;
-            else {
-                fwrite(fragment.data, sizeof(char), fragment.size, fp);
-            }
-            fclose(fp);
-    }
-     */
-    //TODO:to co ponizej przeniesc do RemoteNode
-    // -> dodac zabezpieczenie sprawdzajace czy plik nie otwarty przez inny node
-    // -> lub lepiej dzialac na mutexach
-
+    auto downloadManager = new FileDownloadManager(filee, remoteNodes[0], controller->getPath());
+    thread downloadThread([&](){downloadManager->Download();});
+    downloadThread.detach();
 }
 
 NetworkManager::~NetworkManager() {
@@ -192,4 +93,8 @@ RemoteNodeFactory *NetworkManager::getRemoteNodeFactory() const {
 
 Connector *NetworkManager::getConnector() const {
     return connector;
+}
+
+Controller *NetworkManager::getController() const {
+    return controller;
 }

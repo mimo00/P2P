@@ -12,7 +12,7 @@ ReceiveFileList::ReceiveFileList(int id, promise<vector<File>> *fileNames)
         : ReceiverTask(id), fileNames(fileNames){}
 
 
-void ReceiveFileList::handle(Input* input) {
+void ReceiveFileList::handle(int ,Input* input) {
     vector<File> fileNames_ = input->receiveFileList();
     fileNames->set_value(fileNames_);
 }

@@ -22,20 +22,23 @@ public:
     }
 };
 
+using namespace std;
 
 class Controller {
 public:
-    Controller(NodeAddr me);
+    Controller(NodeAddr me, string path);
     virtual ~Controller();
     void startNewNetwork();
     void connectToNetwork(NodeAddr addr);
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
     void downloadFile(File file);
+    const string &getPath() const;
 private:
     NodeAddr me;
     NetworkManager* networkManager = nullptr;
     Listener* listener = nullptr;
+    string path;
     void startListener();
 };
 

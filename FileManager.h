@@ -12,7 +12,8 @@
 
 class FileManager {
 public:
-    static vector<File> getFilesNames();
+    static FileFragment getFile(string path, int hash, int offset);
+    static vector<File> getFilesNames(string path);
     static string getFilePath(File file);
 };
 

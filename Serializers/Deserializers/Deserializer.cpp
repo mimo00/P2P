@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include "Deserializer.h"
 #include "../../Communication/Pullers/SocketPuller.h"
 
@@ -58,7 +59,7 @@ tuple<int, int> Deserializer::getOffsetAndHash() {
 FileFragment Deserializer::receiveFileFragment() {
     FileFragment fileFragment;
     int fileFragmentSize = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
-//    fileFragment.data = puller->pullBytes(fileFragmentSize)
+    memcpy(&fileFragment, reinterpret_cast<unsigned char*>(puller->pullBytes(fileFragmentSize)), fileFragmentSize);
     return fileFragment;
 }
 

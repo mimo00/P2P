@@ -12,6 +12,7 @@
 #include "RemoteNode.h"
 #include "../Serializers/Connectors/Connector.h"
 #include "../Factories/RemoteNodeFactory.h"
+#include "../Controller.h"
 
 using  namespace std;
 
@@ -22,8 +23,9 @@ private:
     RemoteNodeFactory* remoteNodeFactory;
     mutex mutexReg;
 
+
 public:
-    NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory);
+    NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, Controller* controller);
     virtual ~NetworkManager();
     vector<NodeAddr> getNodeAddress();
     RemoteNodeFactory *getRemoteNodeFactory() const;

@@ -7,7 +7,7 @@
 #include "Tasks/ReceiverTasks/ReceiveNodesList.h"
 #include "Factories/NetworkManagerFactory.h"
 
-Controller::Controller(NodeAddr me): me(me) {
+Controller::Controller(NodeAddr me, string path): me(me), path(path) {
     NetworkManagerFactory socketNetworkManagerFactory;
     networkManager = socketNetworkManagerFactory.createRemoteNode(me);
 }
@@ -46,6 +46,10 @@ void Controller::downloadFile(File file){
 Controller::~Controller() {
     delete listener;
     delete networkManager;
+}
+
+const string &Controller::getPath() const {
+    return path;
 }
 
 
