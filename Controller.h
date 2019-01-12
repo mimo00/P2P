@@ -33,7 +33,6 @@ public:
     vector<NodeAddr> getNodesAddresses();
     vector<File> getFiles();
     void downloadFile(File file);
-    const string &getPath() const;
 private:
     NodeAddr me;
     NetworkManager* networkManager = nullptr;
