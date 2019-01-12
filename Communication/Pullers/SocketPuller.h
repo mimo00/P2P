@@ -7,15 +7,9 @@
 
 
 #include "Puller.h"
-#include <exception>
 
 using namespace std;
 
-class NoDataExceptionInSocket : public exception
-{};
-
-class BrokenConnectionException2 : public exception
-{};
 
 class SocketPuller: public Puller {
 public:
