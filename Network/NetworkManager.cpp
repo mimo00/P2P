@@ -14,8 +14,8 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory)
-: connector(connector), remoteNodeFactory(remoteNodeFactory) {}
+NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory,  Controller* controller)
+: connector(connector), remoteNodeFactory(remoteNodeFactory), controller(controller) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     cout<<"Rejestruje !!!"<<endl;
@@ -189,4 +189,8 @@ RemoteNodeFactory *NetworkManager::getRemoteNodeFactory() const {
 
 Connector *NetworkManager::getConnector() const {
     return connector;
+}
+
+Controller *NetworkManager::getController() const {
+    return controller;
 }

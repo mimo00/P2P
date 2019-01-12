@@ -13,12 +13,10 @@ using namespace std;
 
 class ReceiveFile: public ReceiverTask {
 public:
-    ReceiveFile(int id,File file, int offset, promise<FileFragment>* fileFragment);
+    ReceiveFile(int id, promise<FileFragment>* fileFragment);
     void handle(Input* input) override;
 private:
     promise<FileFragment>* fileFragment;
-    File file;
-    int offset;
 };
 
 

@@ -15,7 +15,7 @@
 #include <arpa/inet.h>
 
 int main(int argc,  char** argv) {
-    if (argc != 3 and argc != 5) {
+    if (argc != 4 and argc != 6) {
         perror("Give your address or your address and known address\n");
         exit(1);
     }
@@ -25,8 +25,9 @@ int main(int argc,  char** argv) {
     uint16_t port = atoi(argv[2]);
     myAddr.addr.s_addr = inet_addr(ip.c_str());
     myAddr.port = htons(port);
-    Controller controller(myAddr);
-    if (argc == 3) {
+    string path(argv[3]);
+    Controller controller(myAddr, path);
+    if (argc == 4) {
         try{
             controller.startNewNetwork();
             ConsoleMenu consoleMenu(&controller);
@@ -35,9 +36,9 @@ int main(int argc,  char** argv) {
             cout<<"Cannot start network "<< e.what() << endl;
         }
     }
-    else if(argc == 5){
-        string knownIp(argv[3]);
-        uint16_t knownPort = atoi(argv[4]);
+    else if(argc == 6){
+        string knownIp(argv[4]);
+        uint16_t knownPort = atoi(argv[5]);
         NodeAddr knownAddr;
         knownAddr.addr.s_addr = inet_addr(ip.c_str());
         knownAddr.port = htons(knownPort);

@@ -35,7 +35,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             auto offsetHash = input->getOffsetAndHash();
             int offset=get<0>(offsetHash);
             int hash=get<1>(offsetHash);
-            senderTask = new SendFile(taskId,hash,offset);
+            senderTask = new SendFile(taskId,hash,offset, remoteNode->getNetworkManager()->getController()->getPath());
             break;
     }
     remoteNode->getSenderTasks()->emplace_back(senderTask);
@@ -49,7 +49,6 @@ void Receiver::processRequest(int taskId){
         (*it)->handle(input);
     else
         cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
-
 }
 
 void Receiver::run()

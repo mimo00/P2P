@@ -15,12 +15,12 @@
 
 class SendFile: public SenderTask {
 public:
-    SendFile(int taskId, int hash, int offset);
+    SendFile(int taskId, int hash, int offset, string path);
     void send(Output* output) override;
 private:
-    FILE * getFile(int hash);
     int hash;
     int offset;
+    string path;
 };
 
 

@@ -45,9 +45,7 @@ struct File {
 };
 
 struct FileFragment {
-    File file;
     unsigned char data[OperationCode::PORTION];
-    int offset;
     int size;
 };
 

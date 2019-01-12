@@ -14,19 +14,11 @@
 #include <string.h>
 
 
-ReceiveFile::ReceiveFile(int id, File file, int offset, promise<FileFragment> *fileFragment)
-        :ReceiverTask(id),file(file),offset(offset),fileFragment(fileFragment){}
+ReceiveFile::ReceiveFile(int id, promise<FileFragment> *fileFragment)
+        :ReceiverTask(id),fileFragment(fileFragment){}
 
 
 void ReceiveFile::handle(Input* input) {
-//    FileDeserializer fileDeserializer(socket);
-//    int fileSize = fileDeserializer.receiveFileSize();
-//    unsigned char buff[OperationCode::PORTION];
-//    fileDeserializer.receive(buff, fileSize);
-//    FileFragment fileFragment_;
-//    fileFragment_.file=file;
-//    memcpy(fileFragment_.data, buff, fileSize);
-//    fileFragment_.size = fileSize;
-//    fileFragment_.offset = offset;
-//    fileFragment->set_value(fileFragment_);
+    FileFragment fileFragment_ = input->receiveFileFragment();
+    fileFragment->set_value(fileFragment_);
 }
