@@ -48,8 +48,3 @@ Controller::~Controller() {
     delete networkManager;
 }
 
-const string &Controller::getPath() const {
-    return path;
-}
-
-
