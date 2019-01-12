@@ -8,6 +8,7 @@
 
 #include <list>
 #include <set>
+#include <mutex>
 #include "RemoteNode.h"
 #include "../Serializers/Connectors/Connector.h"
 #include "../Factories/RemoteNodeFactory.h"
@@ -20,9 +21,8 @@ private:
     vector<RemoteNode*> remoteNodes;
     Connector* connector;
     RemoteNodeFactory* remoteNodeFactory;
-    Controller* controller;
-public:
-    Controller *getController() const;
+    mutex mutexReg;
+
 
 public:
     NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, Controller* controller);
