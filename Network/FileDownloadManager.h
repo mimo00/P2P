@@ -10,7 +10,7 @@
 
 class FileDownloadManager {
 public:
-    FileDownloadManager(File file, RemoteNode* remoteNode, string path);
+    FileDownloadManager(File file, RemoteNode* remoteNode, FileManager* fileManager);
     ~FileDownloadManager();
     bool Download();
 private:
@@ -19,11 +19,11 @@ private:
     int chunks;
     int *parts;
     string path;
+    FileManager* fileManager;
     bool downoladFinished();
     void saveToFile(FileFragment fragment, int offset);
     int getFirstAvaiblePart();
-        void readFileStatus(int chunks, int* parts);
-    void fileStatus(int chunks,int *parts);
+    void fileAlloc(File file);
     RemoteNode* remoteNode;
 };
 

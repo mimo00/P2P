@@ -9,16 +9,16 @@
 #include <string>
 #include "SenderTask.h"
 #include "../../OperationCode.h"
+#include "../../FileManager.h"
 
 using namespace std;
 
 class SendFilesList: public SenderTask {
 public:
-    SendFilesList(int taskId, string path);
+    SendFilesList(int taskId, FileManager* fileManager);
     void send(Output* output) override;
-    private:
-    string path;
-    vector<File> getFilesNames();
+private:
+    FileManager* fileManager;
 };
 
 

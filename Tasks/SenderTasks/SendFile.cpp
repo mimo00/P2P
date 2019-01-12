@@ -13,12 +13,12 @@
 #include <sys/types.h>
 
 
-SendFile::SendFile(int taskId, int hash, int offset, string path)
-        : SenderTask(taskId),hash(hash),offset(offset), path(path){}
+SendFile::SendFile(int taskId, int hash, int offset, FileManager* fileManager)
+        : SenderTask(taskId),hash(hash),offset(offset), fileManager(fileManager){}
 
 
 void SendFile::send(Output* output) {
-    FileFragment fileFragment = FileManager::getFile(path, hash, offset);
+    FileFragment fileFragment = fileManager->getFile(hash, offset);
     if(fileFragment.size != -1) {
         output->sendFileFragment(taskId, fileFragment);
     }else {

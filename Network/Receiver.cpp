@@ -13,12 +13,13 @@
 #include "NetworkManager.h"
 #include "../Serializers/Deserializers/Deserializer.h"
 #include "../Communication/Pullers/SocketPuller.h"
+#include "../Controller.h"
 
 using namespace std;
 
 
-Receiver::Receiver(RemoteNode* remoteNode, Input* input)
-: remoteNode(remoteNode), input(input) {};
+Receiver::Receiver(RemoteNode* remoteNode, Input* input, FileManager* fileManager)
+: remoteNode(remoteNode), input(input), fileManager(fileManager) {};
 
 
 void Receiver::createResponse(int operationCode, int taskId){
@@ -26,7 +27,7 @@ void Receiver::createResponse(int operationCode, int taskId){
     SenderTask* senderTask;
     switch (operationCode) {
         case OperationCode::FILES_LIST_REQUEST:
-            senderTask = new SendFilesList(taskId, remoteNode->getNetworkManager()->getController()->getPath());
+            senderTask = new SendFilesList(taskId, fileManager);
             break;
         case OperationCode::NODES_LIST_REQUEST:
             senderTask = new SendNodesList(taskId, remoteNode->getNetworkManager()->getNodeAddress());
@@ -35,7 +36,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             auto offsetHash = input->getOffsetAndHash();
             int offset=get<0>(offsetHash);
             int hash=get<1>(offsetHash);
-            senderTask = new SendFile(taskId,hash,offset, remoteNode->getNetworkManager()->getController()->getPath());
+            senderTask = new SendFile(taskId,hash,offset, fileManager);
             break;
     }
     remoteNode->getSenderTasks()->emplace_back(senderTask);

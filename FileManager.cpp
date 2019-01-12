@@ -10,11 +10,12 @@
 #include <errno.h>
 #include <string.h>
 
+FileManager::FileManager(string path) : path(path) {}
 
-FileFragment FileManager::getFile(string path, int hash, int offset) {
+FileFragment FileManager::getFile(int hash, int offset) {
     FileFragment fileFragment;
     fileFragment.size = -1;
-    vector<File> files=FileManager::getFilesNames(path);
+    vector<File> files=FileManager::getFilesNames();
     for(int i=0; i<files.size();i++) {
         if (files.at(i).hash == hash) {
             FILE *file;
@@ -47,7 +48,7 @@ int hashFunction(char name[],int nameSize,int size){
 }
 
 
-vector<File> FileManager:: getFilesNames(string path){
+vector<File> FileManager:: getFilesNames(){
     vector<File> files;
     DIR *dp;
     string dir=path;
@@ -63,7 +64,7 @@ vector<File> FileManager:: getFilesNames(string path){
                 string path=dir+"/"+dirp->d_name;
                 strcpy(file.name,dirp->d_name);
                 file.size=(int)fsize(path.c_str());
-                file.hash=hashFunction(file.name,strlen(file.name),file.size);//rand()%1024;  //zmienic na funcke hashującą
+                file.hash=hashFunction(file.name, strlen(file.name),file.size);//rand()%1024;  //zmienic na funcke hashującą
                 files.push_back(file);
             }
         }
@@ -72,7 +73,6 @@ vector<File> FileManager:: getFilesNames(string path){
     }
 }
 
-string FileManager:: getFilePath(File file) {
-    string dir = "./Files";
-    return dir + "/" + file.name;
+const string &FileManager::getPath() const {
+    return path;
 }

@@ -23,7 +23,7 @@ public:
     const static int DONT_HAVE_FILE=402;
     const static int FILE_FRAGMENT=403;
 
-    const static int PORTION=2004096;
+    const static int PORTION=1000000 ;
     //const static int PORTION=1048576;
    // const static int PORTION=8192;
     static bool isRequest(int operationCode){

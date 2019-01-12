@@ -10,7 +10,7 @@
 
 class NetworkManagerFactory {
 public:
-    NetworkManager *createRemoteNode(NodeAddr me);
+    NetworkManager *createRemoteNode(NodeAddr me, string path);
 };
 
 

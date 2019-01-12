@@ -60,6 +60,7 @@ FileFragment Deserializer::receiveFileFragment() {
     FileFragment fileFragment;
     int fileFragmentSize = *reinterpret_cast<int*>(puller->pullBytes(sizeof(int)));
     memcpy(&fileFragment, reinterpret_cast<unsigned char*>(puller->pullBytes(fileFragmentSize)), fileFragmentSize);
+    fileFragment.size = fileFragmentSize;
     return fileFragment;
 }
 

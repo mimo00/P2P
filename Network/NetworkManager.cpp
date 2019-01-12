@@ -14,8 +14,8 @@
 using namespace std;
 
 
-NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory,  Controller* controller)
-: connector(connector), remoteNodeFactory(remoteNodeFactory), controller(controller) {}
+NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, FileManager* fileManager)
+: connector(connector), remoteNodeFactory(remoteNodeFactory), fileManager(fileManager) {}
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     lock_guard<mutex> lock(mutexReg);
@@ -77,7 +77,7 @@ return files;
 
 void NetworkManager::fileDownloadManage(File filee) {
     cout << "Pobieram plik " << filee.name << endl;
-    auto downloadManager = new FileDownloadManager(filee, remoteNodes[0], controller->getPath());
+    auto downloadManager = new FileDownloadManager(filee, remoteNodes[0], fileManager);
     thread downloadThread([&](){downloadManager->Download();});
     downloadThread.detach();
 }
@@ -95,6 +95,6 @@ Connector *NetworkManager::getConnector() const {
     return connector;
 }
 
-Controller *NetworkManager::getController() const {
-    return controller;
+FileManager *NetworkManager::getFileManager() const {
+    return fileManager;
 }

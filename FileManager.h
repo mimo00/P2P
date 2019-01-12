@@ -11,10 +11,15 @@
 
 
 class FileManager {
+private:
+    string path;
 public:
-    static FileFragment getFile(string path, int hash, int offset);
-    static vector<File> getFilesNames(string path);
-    static string getFilePath(File file);
+    const string &getPath() const;
+
+public:
+    FileManager(string path);
+    FileFragment getFile(int hash, int offset);
+    vector<File> getFilesNames();
 };
 
 
