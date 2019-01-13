@@ -42,6 +42,11 @@ void Controller::downloadFile(File file){
     networkManager->downloadFile(file);
 }
 
+vector<File> Controller::myFiles(){
+    FileManager fileManager(path);
+    return fileManager.getFilesNames();
+}
+
 Controller::~Controller() {
     delete listener;
     delete networkManager;

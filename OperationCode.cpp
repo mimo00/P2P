@@ -21,7 +21,7 @@ bool File::operator!=(File const &a) {
 }
 
 bool operator < (const File& l, const File& r) {
-    return (l.name<r.name);
+    return (l.hash<r.hash);
 }
 
 bool OperationCode::isRequest(int operationCode) {

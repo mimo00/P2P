@@ -27,6 +27,8 @@ void Serializer::requestForFileList(int taskId) {
 void Serializer::requestForFileFragment(int taskId, int offset, int hash) {
     int operationCode = htons(OperationCode::FILE_FRAGMENT_REQUEST);
     taskId=htonl(taskId);
+    offset=htonl(offset);
+    hash=htonl(hash);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
     pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
     pusher->pushBytes(static_cast<void*>(&offset), sizeof(offset));
