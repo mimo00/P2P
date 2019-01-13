@@ -71,19 +71,13 @@ vector<File> NetworkManager::getFiles() {
         vector<File> node_files = fileNamesFuture.get();
         files.insert(files.end(), node_files.begin(), node_files.end());
     }
-return files;
+    return files;
 }
 
-void NetworkManager::fileDownloadManage(File filee) {
-    cout << "Pobieram plik " << filee.name << endl;
-    auto downloadManager = new FileDownloadManager(filee, remoteNodes[0], fileManager);
+void NetworkManager::fileDownloadManage(File file) {
+    auto downloadManager = new FileDownloadManager(file, remoteNodes[0], fileManager);
     thread downloadThread([&](){downloadManager->Download();});
     downloadThread.detach();
-}
-
-NetworkManager::~NetworkManager() {
-    for(int i=0;i<remoteNodes.size();i++)
-        delete remoteNodes[i];
 }
 
 RemoteNodeFactory *NetworkManager::getRemoteNodeFactory() const {
@@ -96,4 +90,9 @@ Connector *NetworkManager::getConnector() const {
 
 FileManager *NetworkManager::getFileManager() const {
     return fileManager;
+}
+
+NetworkManager::~NetworkManager() {
+    for(int i=0;i<remoteNodes.size();i++)
+        delete remoteNodes[i];
 }
