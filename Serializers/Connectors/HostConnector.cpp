@@ -22,14 +22,19 @@ int HostConnector::startListining() {
 int HostConnector::initConnectionWithNode(NodeAddr addr) {
     SocketInitializer socketInitializer;
     int connectionDescriptor = socketInitializer.connectWithNode(addr);
-    SocketPusher socketPusher(connectionDescriptor);
-    Serializer serializer(&socketPusher);
+    Serializer serializer(new SocketPusher(connectionDescriptor));
     serializer.sendListiningAddress(me);
     return connectionDescriptor;
 }
 
-int HostConnector::acceptNode() {
+tuple<NodeAddr, int> HostConnector::acceptNode() {
     SocketInitializer socketInitializer;
     int connectionDescriptor = socketInitializer.acceptNode(lisiningDescriptor);
-    return connectionDescriptor;
+    Deserializer deserializer(new SocketPuller(connectionDescriptor));
+    NodeAddr nodeAddr = deserializer.receiveListiningAddress();
+    return make_tuple(nodeAddr, connectionDescriptor);
+}
+
+HostConnector::~HostConnector() {
+    close(lisiningDescriptor);
 }

@@ -14,6 +14,7 @@ using namespace std;
 class SocketPuller: public Puller {
 public:
     SocketPuller(int socketDescriptor);
+    ~SocketPuller();
     void *pullBytes(size_t length) override;
     bool canRead() override;
 private:

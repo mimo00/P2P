@@ -16,7 +16,8 @@ class EndOfDataException : public exception {};
 
 class Input {
 public:
-    Input(Puller* puller): puller(puller) {}
+    Input(Puller* puller);
+    virtual ~Input();
     virtual bool canRead()=0;
     virtual tuple<int, int> getOperationCodeAndTaskId()=0;
     virtual tuple<int, int> getOffsetAndHash()=0;

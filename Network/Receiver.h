@@ -17,19 +17,16 @@ class RemoteNode;
 
 class Receiver: public Stoppable
 {
-public:
-    Receiver(RemoteNode* remoteNode, Input* input, FileManager* fileManager);
-    void run() override;
 private:
     RemoteNode* remoteNode;
     Input* input;
-public:
-    virtual ~Receiver();
-
-private:
     FileManager* fileManager;
     void createResponse(int operationCode, int taskId);
     void processRequest(int operationCode, int taskId);
+public:
+    Receiver(RemoteNode* remoteNode, Input* input, FileManager* fileManager);
+    virtual ~Receiver();
+    void run() override;
 };
 
 #endif //P2P_REVEIVER_H

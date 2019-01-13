@@ -16,16 +16,12 @@ Listener::Listener(NetworkManager* networkManager) : networkManager(networkManag
     networkManager->getConnector()->startListining();
 }
 
-Listener::~Listener() {
-}
-
 
 void Listener::run() {
     while (!stopRequested()) {
-        int connectionDescriptor = networkManager->getConnector()->acceptNode();
-        SocketPuller socketPuller(connectionDescriptor);
-        Deserializer deserializer(&socketPuller);
-        NodeAddr nodeAddr = deserializer.receiveListiningAddress();
+        auto data = networkManager->getConnector()->acceptNode();
+        NodeAddr nodeAddr = get<0>(data);
+        int connectionDescriptor = get<1>(data);
         RemoteNode* remoteNode = networkManager->getRemoteNodeFactory()->createRemoteNode(connectionDescriptor, nodeAddr, networkManager);
         networkManager->registerRemoteNode(remoteNode);
     }

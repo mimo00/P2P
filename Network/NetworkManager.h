@@ -17,9 +17,9 @@ using  namespace std;
 class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
-    Connector* connector;
-    RemoteNodeFactory* remoteNodeFactory;
-    FileManager* fileManager;
+    Connector* connector = nullptr;
+    RemoteNodeFactory* remoteNodeFactory = nullptr;
+    FileManager* fileManager = nullptr;
     mutex mutexReg;
 public:
     NetworkManager(Connector* connector, RemoteNodeFactory* remoteNodeFactory, FileManager* fileManager);

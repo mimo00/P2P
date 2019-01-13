@@ -36,4 +36,8 @@ void *SocketPuller::pullBytes(size_t length) {
 
 }
 
+SocketPuller::~SocketPuller() {
+    close(socketDescriptor);
+}
+
 
