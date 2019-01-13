@@ -13,7 +13,7 @@
 #include "../Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "../Tasks/SenderTasks/SendNodesListRequest.h"
 #include "../Tasks/ReceiverTasks/ReceiveNodesList.h"
-#include "../Tasks/ReceiverTasks/ReceiveFile.h"
+#include "../Tasks/ReceiverTasks/ReceiveFileFragment.h"
 #include "../Tasks/SenderTasks/FileRequest.h"
 
 
@@ -22,9 +22,10 @@ RemoteNode::RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager)
 
 
 RemoteNode::~RemoteNode(){
-//    receiver.stop();
-//    sender.stop();
-//    close(sockfd);
+    receiver->stop();
+    sender->stop();
+    delete receiver;
+    delete sender;
 };
 
 
@@ -39,10 +40,6 @@ void RemoteNode::addSenderTask(SenderTask* task){
     senderTasks.emplace_back(task);
 }
 
-//
-//bool RemoteNode::operator==(const RemoteNode &other){
-//    return this->getNodeAddr() == other.getNodeAddr();
-//}
 
 vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
     lock_guard<mutex> lock(mutexReceiver);
@@ -83,7 +80,7 @@ void RemoteNode::getFileFragment(promise<FileFragment>* filePromise, File file, 
     int taskId=getId();
     auto senderTask = new FileRequest(taskId,file.hash, offset);
     addSenderTask(senderTask);
-    auto receiveTask=new ReceiveFile(taskId, filePromise);
+    auto receiveTask=new ReceiveFileFragment(taskId, filePromise);
     addReceiverTask(receiveTask);
 }
 

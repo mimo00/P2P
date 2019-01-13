@@ -22,10 +22,7 @@ void ConsoleMenu::run() {
         cout << "exit - wyjscie." << endl;
         string line;
         getline(cin, line);
-       // switch(line):
-        //system("clear");
         if (line == "1"){
-       // case 1:
             cout<<"Liczba dostepnych wezlow: " << controller->getNodesAddresses().size() << endl;
             for(int i=0;i<controller->getNodesAddresses().size(); i++){
                 NodeAddr node = controller->getNodesAddresses().at(i);
@@ -51,24 +48,14 @@ void ConsoleMenu::run() {
                 cout << i << " - " << file.name << "    " << file.size << endl;
             }
             cout << 0 << " - powrót"<<endl;
-
             cin >> choice;
-            File choosenFile;
-            if (choice != 0){
-                for (int i = 1; i <= files.size(); i++) {
-                    if (choice == i)
-                        File choosenFile = files.at(i-1);
-                }
+            if(choice <= files.size() and choice >= 1){
+                File choosenFile = files.at(choice-1);
                 controller->downloadFile(choosenFile);
-                }
+            }
         }
-
         else if(line == "exit"){
             return;
         }
-        /*else {
-           cout<<"Wybierz ponownie poprawną opcję"<<endl;
-        }*/
-
     }
 }

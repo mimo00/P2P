@@ -7,24 +7,24 @@
 
 #include "../OperationCode.h"
 #include "RemoteNode.h"
+#include "NetworkManager.h"
 
 class FileDownloadManager {
 public:
-    FileDownloadManager(File file, RemoteNode* remoteNode, FileManager* fileManager);
+    FileDownloadManager(File file, NetworkManager* networkManager, FileManager* fileManager);
     ~FileDownloadManager();
-    bool Download();
+    void Download();
 private:
     File file;
     int portionSize;
     int chunks;
     int *parts;
-    string path;
     FileManager* fileManager;
-    bool downoladFinished();
+    NetworkManager* networkManager;
+    bool downloadFinished();
     void saveToFile(FileFragment fragment, int offset);
-    int getFirstAvaiblePart();
-    void fileAlloc(File file);
-    RemoteNode* remoteNode;
+    int getFirstAvailablePart();
+    void fileAlloc();
 };
 
 

@@ -11,10 +11,12 @@
 
 using namespace std;
 
-class ReceiveFile: public ReceiverTask {
+class ReceiveFileFragment: public ReceiverTask {
 public:
-    ReceiveFile(int id, promise<FileFragment>* fileFragment);
+    ReceiveFileFragment(int id, promise<FileFragment>* fileFragment);
     void handle(int operationCode, Input* input) override;
+    void close() override;
+
 private:
     promise<FileFragment>* fileFragment;
 };

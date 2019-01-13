@@ -12,6 +12,7 @@ class ReceiverTask {
 public:
     ReceiverTask(int taskId);
     virtual void handle(int operationCode, Input* input) = 0;
+    virtual void close() = 0;
     int getTaskId() const;
 
 protected:

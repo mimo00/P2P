@@ -16,6 +16,8 @@ class ReceiveNodesList:public ReceiverTask {
 public:
     ReceiveNodesList(int taskId, promise<vector<NodeAddr>>* nodeAddr);
     void handle(int operationCode, Input* input) override;
+    void close() override;
+
 private:
     promise<vector<NodeAddr>>* nodeAddr;
 };
