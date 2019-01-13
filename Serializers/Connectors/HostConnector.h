@@ -12,9 +12,10 @@
 class HostConnector: public Connector {
 public:
     HostConnector(NodeAddr me);
+    ~HostConnector();
     int startListining() override;
     int initConnectionWithNode(NodeAddr addr) override;
-    int acceptNode() override;
+    tuple<NodeAddr, int> acceptNode() override;
 };
 
 

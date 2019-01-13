@@ -69,4 +69,3 @@ NodeAddr Deserializer::receiveListiningAddress() {
     addr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
     return addr;
 }
-

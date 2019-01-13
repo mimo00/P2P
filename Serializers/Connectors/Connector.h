@@ -17,7 +17,7 @@ public:
     const NodeAddr &getMe() const;
     virtual int startListining()=0;
     virtual int initConnectionWithNode(NodeAddr addr)=0;
-    virtual int acceptNode()=0;
+    virtual tuple<NodeAddr, int> acceptNode()=0;
 };
 
 

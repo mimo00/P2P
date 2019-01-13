@@ -38,8 +38,8 @@ void FileDownloadManager::Download(){
             cout<<"Nie udalo sie pobrać pliku " << file.name << endl;
             return;
         }
-
     }
+    cout<<"Pobrano plik " << file.name << endl;
 }
 
 

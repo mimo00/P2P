@@ -18,7 +18,9 @@ class RemoteNode;
 class Sender: public Stoppable {
 public:
     Sender(RemoteNode* remoteNode, Output* output);
+    virtual ~Sender();
     void run();
+
 private:
     RemoteNode* remoteNode;
     Output* output;

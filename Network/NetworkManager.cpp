@@ -27,7 +27,6 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
     delete remoteNode;
-    cout<<"Blad"<<endl;
     remoteNodes.erase(foundRemoteNode);
 }
 
@@ -94,6 +93,9 @@ FileManager *NetworkManager::getFileManager() const {
 }
 
 NetworkManager::~NetworkManager() {
+    delete connector;
+    delete remoteNodeFactory;
+    delete fileManager;
     for(int i=0;i<remoteNodes.size();i++)
         delete remoteNodes[i];
 }
