@@ -11,20 +11,22 @@
 Serializer::Serializer(Pusher *pusher) : Output(pusher) {}
 
 void Serializer::requestForNodeList(int taskId) {
-    u_int16_t operationCode = htons(OperationCode::NODES_LIST_REQUEST);
-    u_int16_t taskID=htons(taskId);
+    int operationCode = htons(OperationCode::NODES_LIST_REQUEST);
+    taskId=htonl(taskId);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
-    pusher->pushBytes(static_cast<void*>(&taskID), sizeof(taskID));
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
 }
 
 void Serializer::requestForFileList(int taskId) {
-    u_int16_t operationCode = htons(OperationCode::FILES_LIST_REQUEST);
+    int operationCode = htons(OperationCode::FILES_LIST_REQUEST);
+    taskId=htonl(taskId);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
     pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
 }
 
 void Serializer::requestForFileFragment(int taskId, int offset, int hash) {
-    u_int16_t operationCode = htons(OperationCode::FILE_FRAGMENT_REQUEST);
+    int operationCode = htons(OperationCode::FILE_FRAGMENT_REQUEST);
+    taskId=htonl(taskId);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
     pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
     pusher->pushBytes(static_cast<void*>(&offset), sizeof(offset));
@@ -32,12 +34,12 @@ void Serializer::requestForFileFragment(int taskId, int offset, int hash) {
 }
 
 void Serializer::sendNodesList(int taskId, vector<NodeAddr> addresses) {
-    u_int16_t operationCode=htons(OperationCode::NODES_LIST);
-    u_int16_t taskID=htons(taskId);
-    u_int16_t numberOfNodes= htons(addresses.size());
+    int operationCode=htons(OperationCode::NODES_LIST);
+    taskId=htonl(taskId);
+    int numberOfNodes= htonl(addresses.size());
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
-    pusher->pushBytes(static_cast<void*>(&taskID), sizeof(taskID));
-    pusher->pushBytes(static_cast<void*>(&numberOfNodes), sizeof(taskID));
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
+    pusher->pushBytes(static_cast<void*>(&numberOfNodes), sizeof(taskId));
     for(int i=0;i<addresses.size();i++) {
         addresses[i].addr.s_addr=htonl(addresses[i].addr.s_addr);
         addresses[i].port=htons(addresses[i].port);
@@ -46,31 +48,31 @@ void Serializer::sendNodesList(int taskId, vector<NodeAddr> addresses) {
 }
 
 void Serializer::sendFileList(int taskId, vector<File> files) {
-    u_int16_t operationCode=htons(OperationCode::FILES_LIST);
-    u_int16_t taskID=htons(taskId);
-    u_int16_t numberOfFiles= htons(files.size());
+    int operationCode=htons(OperationCode::FILES_LIST);
+    taskId=htonl(taskId);
+    int numberOfFiles= htonl(files.size());
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
-    pusher->pushBytes(static_cast<void*>(&taskID), sizeof(taskID));
-    pusher->pushBytes(static_cast<void*>(&numberOfFiles), sizeof(taskID));
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
+    pusher->pushBytes(static_cast<void*>(&numberOfFiles), sizeof(numberOfFiles));
     for(int i=0;i<files.size();i++)
         pusher->pushBytes(static_cast<void*>(&files[i]), sizeof(File));
 }
 
 void Serializer::sendDontHaveFile(int taskId) {
-    u_int16_t operationCode=htons(OperationCode::DONT_HAVE_FILE);
-    u_int16_t taskID=htons(taskId);
+    int operationCode=htons(OperationCode::DONT_HAVE_FILE);
+    taskId=htonl(taskId);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
-    pusher->pushBytes(static_cast<void*>(&taskID), sizeof(taskID));
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
 }
 
 void Serializer::sendFileFragment(int taskId, FileFragment fileFragment) {
-    u_int16_t operationCode=htons(OperationCode::FILE_FRAGMENT);
-    u_int16_t taskID=htons(taskId);
+    int operationCode=htons(OperationCode::FILE_FRAGMENT);
+    taskId=htonl(taskId);
     pusher->pushBytes(static_cast<void*>(&operationCode), sizeof(operationCode));
-    pusher->pushBytes(static_cast<void*>(&taskID), sizeof(taskID));
-    u_int16_t size=htonl(fileFragment.size);
-    pusher->pushBytes(static_cast<void*>(&size), sizeof(fileFragment.size));
-    pusher->pushBytes(static_cast<void*>(&fileFragment.data), fileFragment.size);
+    pusher->pushBytes(static_cast<void*>(&taskId), sizeof(taskId));
+    int sizeFile=htonl(fileFragment.size);
+    pusher->pushBytes(static_cast<void*>(&sizeFile), sizeof(sizeFile));
+    pusher->pushBytes(static_cast<void*>(&fileFragment.data), size_t(fileFragment.size));
 }
 
 void Serializer::sendListiningAddress(NodeAddr myAddr) {

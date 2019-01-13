@@ -66,11 +66,19 @@ vector<File> NetworkManager::getFiles() {
         i++;
     }
     vector<File> files;
+    set<File> filesSet;
     for (int i=0;i<promises.size(); i++){
         future<vector<File>> fileNamesFuture = promises[i]->get_future();
         vector<File> node_files = fileNamesFuture.get();
-        files.insert(files.end(), node_files.begin(), node_files.end());
+        for(int j=0; j<node_files.size();j++){
+            filesSet.insert(node_files[j]);
+        }
+        //files.insert(files.end(), node_files.begin(), node_files.end());
     }
+    for(auto a=filesSet.begin();a!=filesSet.end();a++){
+        files.emplace_back(*a);
+    }
+
     return files;
 }
 

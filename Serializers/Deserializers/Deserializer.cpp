@@ -13,8 +13,8 @@ Deserializer::Deserializer(Puller* puller): Input(puller) {
 
 tuple<int, int> Deserializer::getOperationCodeAndTaskId() {
     try{
-        int operationCode = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
-        int taskId = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
+        int operationCode = ntohs(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
+        int taskId = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
         return make_tuple(operationCode, taskId);
     } catch (EndOfBytesException& e) {
         throw EndOfDataException();
@@ -27,7 +27,7 @@ bool Deserializer::canRead() {
 
 vector<File> Deserializer::receiveFileList() {
     vector<File> filesNames;
-    int numberOfFiles = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
+    int numberOfFiles = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
     for(int i=0;i<numberOfFiles;i++){
         File fileName = *reinterpret_cast<File*>(puller->pullBytes(sizeof(File)));;
         filesNames.push_back(fileName);
@@ -37,7 +37,7 @@ vector<File> Deserializer::receiveFileList() {
 
 vector<NodeAddr> Deserializer::receiveNodeList() {
     vector<NodeAddr> nodes;
-    int numberOfNodes = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
+    int numberOfNodes = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
     for(int i=0;i<numberOfNodes;i++){
         NodeAddr nodeAddr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
         nodeAddr.addr.s_addr=ntohl(nodeAddr.addr.s_addr);
@@ -47,11 +47,10 @@ vector<NodeAddr> Deserializer::receiveNodeList() {
     return nodes;
 }
 
-
 tuple<int, int> Deserializer::getOffsetAndHash() {
     try{
-        int offset = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
-        int hash = ntohs(*reinterpret_cast<u_int16_t*>(puller->pullBytes(sizeof(u_int16_t))));
+        int offset = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
+        int hash = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
         return make_tuple(offset, hash);
     } catch (EndOfBytesException& e) {
         throw EndOfDataException();
@@ -60,7 +59,7 @@ tuple<int, int> Deserializer::getOffsetAndHash() {
 
 FileFragment Deserializer::receiveFileFragment() {
     FileFragment fileFragment;
-    int fileFragmentSize = ntohl(*reinterpret_cast<u_int32_t*>(puller->pullBytes(sizeof(u_int32_t))));
+    int fileFragmentSize = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
     memcpy(&fileFragment, reinterpret_cast<unsigned char*>(puller->pullBytes(fileFragmentSize)), fileFragmentSize);
     fileFragment.size = fileFragmentSize;
     return fileFragment;
