@@ -29,3 +29,9 @@ void ReceiveFileFragment::handle(int operationCode, Input* input) {
     }
 
 }
+
+void ReceiveFileFragment::close() {
+    FileFragment fileFragment_;
+    fileFragment_.size = 0;
+    fileFragment->set_value(fileFragment_);
+}

@@ -16,3 +16,8 @@ void ReceiveFileList::handle(int ,Input* input) {
     vector<File> fileNames_ = input->receiveFileList();
     fileNames->set_value(fileNames_);
 }
+
+void ReceiveFileList::close() {
+    vector<File> fileNames_ = vector<File>(0);
+    fileNames->set_value(fileNames_);
+}

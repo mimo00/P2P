@@ -23,6 +23,10 @@ public:
 private:
     RemoteNode* remoteNode;
     Input* input;
+public:
+    virtual ~Receiver();
+
+private:
     FileManager* fileManager;
     void createResponse(int operationCode, int taskId);
     void processRequest(int operationCode, int taskId);

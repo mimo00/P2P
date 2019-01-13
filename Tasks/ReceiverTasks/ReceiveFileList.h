@@ -18,6 +18,8 @@ class ReceiveFileList : public ReceiverTask{
 public:
     ReceiveFileList(int id, promise<vector<File>>* fileNames);
     void handle(int operationCode, Input* input) override;
+    void close() override;
+
 private:
     promise<vector<File>>* fileNames;
 };

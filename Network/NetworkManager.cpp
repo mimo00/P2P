@@ -27,6 +27,7 @@ void NetworkManager::unregisterRemoteNode(RemoteNode* remoteNode){
     if(foundRemoteNode == remoteNodes.end())
         throw invalid_argument("Non existing remote node.");
     delete remoteNode;
+    cout<<"Blad"<<endl;
     remoteNodes.erase(foundRemoteNode);
 }
 

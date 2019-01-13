@@ -15,3 +15,8 @@ void ReceiveNodesList::handle(int , Input* input) {
     vector<NodeAddr> nodes = input->receiveNodeList();
     nodeAddr->set_value(nodes);
 }
+
+void ReceiveNodesList::close() {
+    vector<NodeAddr> nodes = vector<NodeAddr>(0);
+    nodeAddr->set_value(nodes);
+}

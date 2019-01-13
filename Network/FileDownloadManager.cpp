@@ -23,14 +23,22 @@ FileDownloadManager::FileDownloadManager(File file, NetworkManager* networkManag
 
 
 void FileDownloadManager::Download(){
+    int partIndex;
+    int offset;
     fileAlloc();
     while(!downloadFinished()){
-        int partIndex = getFirstAvailablePart();
-        int offset = partIndex*portionSize;
-        cout<<"Pobieram paczke "<< partIndex <<endl;
-        FileFragment fileFragment = networkManager->getFileFragmentFromRemoteNode(file, offset);
-        saveToFile(fileFragment, offset);
-        parts[partIndex] = 1;
+        try{
+            partIndex = getFirstAvailablePart();
+            offset = partIndex*portionSize;
+            cout<<"Pobieram paczke "<< partIndex <<endl;
+            FileFragment fileFragment = networkManager->getFileFragmentFromRemoteNode(file, offset);
+            saveToFile(fileFragment, offset);
+            parts[partIndex] = 1;
+        } catch (FileNotAvailableOnNetwork& e){
+            cout<<"Nie udalo sie pobrać pliku " << file.name << endl;
+            return;
+        }
+
     }
 }
 

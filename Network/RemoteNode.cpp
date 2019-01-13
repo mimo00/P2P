@@ -22,9 +22,10 @@ RemoteNode::RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager)
 
 
 RemoteNode::~RemoteNode(){
-//    receiver.stop();
-//    sender.stop();
-//    close(sockfd);
+    receiver->stop();
+    sender->stop();
+    delete receiver;
+    delete sender;
 };
 
 
@@ -39,10 +40,6 @@ void RemoteNode::addSenderTask(SenderTask* task){
     senderTasks.emplace_back(task);
 }
 
-//
-//bool RemoteNode::operator==(const RemoteNode &other){
-//    return this->getNodeAddr() == other.getNodeAddr();
-//}
 
 vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
     lock_guard<mutex> lock(mutexReceiver);
