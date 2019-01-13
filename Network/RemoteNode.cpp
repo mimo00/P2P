@@ -13,7 +13,7 @@
 #include "../Tasks/ReceiverTasks/ReceiveFileList.h"
 #include "../Tasks/SenderTasks/SendNodesListRequest.h"
 #include "../Tasks/ReceiverTasks/ReceiveNodesList.h"
-#include "../Tasks/ReceiverTasks/ReceiveFile.h"
+#include "../Tasks/ReceiverTasks/ReceiveFileFragment.h"
 #include "../Tasks/SenderTasks/FileRequest.h"
 
 
@@ -83,7 +83,7 @@ void RemoteNode::getFileFragment(promise<FileFragment>* filePromise, File file, 
     int taskId=getId();
     auto senderTask = new FileRequest(taskId,file.hash, offset);
     addSenderTask(senderTask);
-    auto receiveTask=new ReceiveFile(taskId, filePromise);
+    auto receiveTask=new ReceiveFileFragment(taskId, filePromise);
     addReceiverTask(receiveTask);
 }
 
