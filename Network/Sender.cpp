@@ -21,8 +21,10 @@ void Sender::run() {
             senderTasks->pop_back();
             senderTask->send(output);
             delete senderTask;
-        } else {
-//            cout << "Pusty wektor nie biorę nic" << endl;
         }
     }
+}
+
+Sender::~Sender() {
+    delete output;
 }

@@ -9,7 +9,6 @@
 
 class Pusher {
 public:
-    virtual ~Pusher() {}
     virtual void pushBytes(void* bytes, size_t length)=0;
 };
 

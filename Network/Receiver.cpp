@@ -82,5 +82,5 @@ void Receiver::run()
 }
 
 Receiver::~Receiver() {
-
+    delete input;
 }

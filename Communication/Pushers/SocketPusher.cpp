@@ -10,3 +10,7 @@ SocketPusher::SocketPusher(int socketDescriptor): socketDescriptor(socketDescrip
 void SocketPusher::pushBytes(void *bytes, size_t length) {
     ssize_t written_bytes = write(socketDescriptor, bytes, length);
 }
+
+SocketPusher::~SocketPusher() {
+    close(socketDescriptor);
+}

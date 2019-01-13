@@ -73,4 +73,3 @@ NodeAddr Deserializer::receiveListiningAddress() {
     addr.port=ntohs(addr.port);
     return addr;
 }
-

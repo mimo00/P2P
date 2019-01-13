@@ -12,7 +12,8 @@
 
 class Output {
 public:
-    Output(Pusher* pusher): pusher(pusher) {}
+    Output(Pusher* pusher);
+    virtual ~Output();
     virtual void requestForNodeList(int taskId)=0;
     virtual void requestForFileList(int taskId)=0;
     virtual void requestForFileFragment(int taskId, int offset, int hash)=0;

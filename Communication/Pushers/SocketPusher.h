@@ -12,7 +12,7 @@
 class SocketPusher: public Pusher {
 public:
     SocketPusher(int socketDescriptor);
-
+    ~SocketPusher();
 private:
     int socketDescriptor;
     void pushBytes(void* bytes, size_t length);
