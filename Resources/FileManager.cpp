@@ -76,3 +76,9 @@ vector<File> FileManager:: getFilesNames(){
 const string &FileManager::getPath() const {
     return path;
 }
+
+string FileManager::getDownloadPath(File file) {
+    string downloadPath = path + "/dwnld";
+    string filePath = downloadPath + "/" + file.name;
+    return filePath;
+}

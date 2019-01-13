@@ -39,7 +39,7 @@ vector<File> Controller::getFiles() {
 }
 
 void Controller::downloadFile(File file){
-    networkManager->fileDownloadManage(file);
+    networkManager->downloadFile(file);
 }
 
 Controller::~Controller() {

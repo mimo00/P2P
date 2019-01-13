@@ -33,8 +33,11 @@ public:
     void unregisterRemoteNode(RemoteNode* remoteNode);
     void connectToNetwork(NodeAddr addr);
     vector<File> getFiles();
-    void fileDownloadManage(File file);
+    void downloadFile(File file);
+    FileFragment getFileFragmentFromRemoteNode(File file, int offset);
 };
+
+class FileNotAvailableOnNetwork : public exception {};
 
 
 #endif //P2P_NETWORKMANAGER_H

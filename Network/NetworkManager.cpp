@@ -18,7 +18,6 @@ NetworkManager::NetworkManager(Connector* connector, RemoteNodeFactory* remoteNo
 
 void NetworkManager::registerRemoteNode(RemoteNode* remoteNode){
     lock_guard<mutex> lock(mutexReg);
-    cout<<"Rejestruje !!!"<<endl;
     remoteNodes.push_back(remoteNode);
 }
 
@@ -58,6 +57,7 @@ void NetworkManager::connectToNetwork(NodeAddr addr) {
 
 
 vector<File> NetworkManager::getFiles() {
+    lock_guard<mutex> lock(mutexReg);
     vector<promise<vector<File>>*> promises(this->remoteNodes.size());
     int i = 0;
     for(int j=0;j<remoteNodes.size();j++) {
@@ -74,8 +74,8 @@ vector<File> NetworkManager::getFiles() {
     return files;
 }
 
-void NetworkManager::fileDownloadManage(File file) {
-    auto downloadManager = new FileDownloadManager(file, remoteNodes[0], fileManager);
+void NetworkManager::downloadFile(File file) {
+    auto downloadManager = new FileDownloadManager(file, this, fileManager);
     thread downloadThread([&](){downloadManager->Download();});
     downloadThread.detach();
 }
@@ -95,4 +95,16 @@ FileManager *NetworkManager::getFileManager() const {
 NetworkManager::~NetworkManager() {
     for(int i=0;i<remoteNodes.size();i++)
         delete remoteNodes[i];
+}
+
+FileFragment NetworkManager::getFileFragmentFromRemoteNode(File file, int offset) {
+    lock_guard<mutex> lock(mutexReg);
+    for(int i=0;i<remoteNodes.size();i++) {
+        auto fileFragmentPromise = new promise<FileFragment>;
+        remoteNodes[i]->getFileFragment(fileFragmentPromise, file, offset);
+        FileFragment fileFragment = fileFragmentPromise->get_future().get();
+        if(fileFragment.size != 0)
+            return fileFragment;
+    }
+    throw FileNotAvailableOnNetwork();
 }
