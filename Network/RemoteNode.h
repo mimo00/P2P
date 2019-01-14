@@ -37,7 +37,6 @@ public:
     RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
     vector<ReceiverTask*>* getReceiverTasks();
-    vector<SenderTask*>* getSenderTasks();
     NetworkManager *getNetworkManager() const;
     const NodeAddr &getNodeAddr() const;
     void setSenderAndReceiver(Receiver*, Sender*);

@@ -53,6 +53,7 @@ ReceiverTask* RemoteNode::popReceiverTask(int taskId) {
 
 
 SenderTask* RemoteNode::popSenderTask() {
+    lock_guard<mutex> lock(mutexSender);
     if (!senderTasks.empty()) {
         auto senderTask = senderTasks.back();
         senderTasks.pop_back();
@@ -67,10 +68,6 @@ vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
     return &receiverTasks;
 }
 
-vector<SenderTask*>* RemoteNode::getSenderTasks(){
-    lock_guard<mutex> lock(mutexSender);
-    return &senderTasks;
-}
 
 int getId(){
     return rand();

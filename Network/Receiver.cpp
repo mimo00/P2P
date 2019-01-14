@@ -38,7 +38,7 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendFile(taskId,hash,offset, fileManager);
             break;
     }
-    remoteNode->getSenderTasks()->emplace_back(senderTask);
+    remoteNode->addSenderTask(senderTask);
 }
 
 void Receiver::processRequest(int operationCode, int taskId){
