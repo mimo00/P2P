@@ -34,7 +34,6 @@ public:
     vector<File> getFiles();
     void downloadFile(File file);
     vector<File> myFiles();
-    void resumer();
 private:
     NodeAddr me;
     NetworkManager* networkManager = nullptr;

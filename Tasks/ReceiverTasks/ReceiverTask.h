@@ -14,7 +14,6 @@ public:
     virtual void handle(int operationCode, Input* input) = 0;
     virtual void close() = 0;
     int getTaskId() const;
-    //virtual ~ReceiverTask(){}
 protected:
     int taskId;
     Input* input;

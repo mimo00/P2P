@@ -88,41 +88,6 @@ void NetworkManager::downloadFile(File file) {
     downloadThread.detach();
 }
 
-void NetworkManager::resumeDownload(string path) {
-    FileManager fileManager(path + "/status");
-    vector<File> files = fileManager.getFilesNames();
-    for(int i=0; i<files.size(); i++) {
-        File file =files.at(i);
-        if(doResume(file))
-            downloadFile(file);
-    }
-}
-
-bool NetworkManager::doResume(File file){
-        string confDir = to_string(file.hash) +"("+file.name+")";;
-        fstream config;
-        config.open(confDir, fstream::in | fstream::out | fstream::app);
-        if (!config)
-            cout << "Error while opening status file: " << file.name << endl;
-        else {
-            string line;
-            getline(config, line);
-            istringstream row(line);
-            int g;
-            while(row){
-                int g;
-                row>>g;
-                if(g==0){
-                    cout<<"Trzeba wznowic pobieranie"<<endl;
-                    config.close();
-                    return true;
-                }
-            }
-            config.close();
-        }
-    return false;
-}
-
 RemoteNodeFactory *NetworkManager::getRemoteNodeFactory() const {
     return remoteNodeFactory;
 }

@@ -48,10 +48,6 @@ vector<File> Controller::myFiles(){
     return fileManager.getFilesNames();
 }
 
-void Controller::resumer(){
-    networkManager->resumeDownload(path);
-}
-
 Controller::~Controller() {
     delete listener;
     delete networkManager;
