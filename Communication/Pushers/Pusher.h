@@ -6,6 +6,11 @@
 #define P2P_PUSHER_H
 
 #include <unistd.h>
+#include <exception>
+
+using namespace std;
+
+class CantPushBytesException : public exception {};
 
 class Pusher {
 public:

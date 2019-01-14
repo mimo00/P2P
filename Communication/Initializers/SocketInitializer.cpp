@@ -35,9 +35,9 @@ int SocketInitializer::connectWithNode(NodeAddr addr) {
     host_addr.sin_addr = addr.addr;
     int sock;
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-        return -1;
+        throw InitializerException("socket fail while connection with node");
     if (connect(sock, (struct sockaddr *) &host_addr, sizeof(host_addr)) < 0)
-        return -1;
+        throw InitializerException("Cannot connect");
     return sock;
 }
 
@@ -45,5 +45,7 @@ int SocketInitializer::acceptNode(int lisiningDescriptor) {
     struct sockaddr_in client_addr;
     int addrlen = sizeof(client_addr);
     int nodeSocket = accept(lisiningDescriptor, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen);
+    if(nodeSocket < 0)
+        throw InitializerException("Cannot accept socket");
     return nodeSocket;
 }

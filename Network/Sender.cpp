@@ -5,6 +5,7 @@
 #include "Sender.h"
 #include "../Tasks/SenderTasks/SenderTask.h"
 #include "RemoteNode.h"
+#include "NetworkManager.h"
 
 using namespace std;
 
@@ -19,8 +20,13 @@ void Sender::run() {
         if (!senderTasks->empty()){
             SenderTask* senderTask = senderTasks->back();
             senderTasks->pop_back();
-            senderTask->send(output);
-            delete senderTask;
+            try{
+                senderTask->send(output);
+                delete senderTask;
+            }catch (EndOfDataException& e) {
+                remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
+                return;
+            }
         }
     }
 }

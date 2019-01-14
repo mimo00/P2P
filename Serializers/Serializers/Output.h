@@ -10,6 +10,8 @@
 #include "../../Communication/Pushers/Pusher.h"
 #include "../../OperationCode.h"
 
+class CantOutputException : public exception {};
+
 class Output {
 public:
     Output(Pusher* pusher);
