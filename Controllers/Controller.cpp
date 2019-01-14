@@ -28,6 +28,7 @@ void Controller::startNewNetwork() {
 void Controller::connectToNetwork(NodeAddr addr) {
     networkManager->connectToNetwork(addr);
     startListener();
+    //resumer();    do poprawy
 }
 
 vector<NodeAddr> Controller::getNodesAddresses() {
@@ -45,6 +46,10 @@ void Controller::downloadFile(File file){
 vector<File> Controller::myFiles(){
     FileManager fileManager(path);
     return fileManager.getFilesNames();
+}
+
+void Controller::resumer(){
+    networkManager->resumeDownload(path);
 }
 
 Controller::~Controller() {

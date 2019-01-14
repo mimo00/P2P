@@ -25,7 +25,8 @@ FileDownloadManager::FileDownloadManager(File file, NetworkManager* networkManag
 void FileDownloadManager::Download(){
     int partIndex;
     int offset;
-    fileAlloc();
+    if(!getFileStatus())
+        fileAlloc();
     while(!downloadFinished()){
         try{
             partIndex = getFirstAvailablePart();
@@ -34,6 +35,7 @@ void FileDownloadManager::Download(){
             FileFragment fileFragment = networkManager->getFileFragmentFromRemoteNode(file, offset);
             saveToFile(fileFragment, offset);
             parts[partIndex] = 1;
+            updateFileStatus();
         } catch (FileNotAvailableOnNetwork& e){
             cout<<"Nie udalo sie pobrać pliku " << file.name << endl;
             return;
@@ -42,6 +44,44 @@ void FileDownloadManager::Download(){
     cout<<"Pobrano plik " << file.name << endl;
 }
 
+void FileDownloadManager::updateFileStatus(){
+    string conf = fileManager->getStatusPath(file);
+    remove(conf.c_str());
+    fstream config;
+    config.open(conf,fstream::in | fstream::out | fstream::app);
+    if (!config)
+        cout << "Error while opening status file: " << file.name << endl;
+    else {
+            for (int i = 0; i < chunks; i++){
+                config << parts[i]<<" ";
+            }
+        config.close();
+    }
+
+}
+
+bool FileDownloadManager::getFileStatus(){
+    string confDir = fileManager->getStatusPath(file);
+    fstream config;
+    config.open(confDir,fstream::in | fstream::out | fstream::app);
+    if (!config)
+        cout << "Error while opening status file: " << file.name << endl;
+    else {
+        string line;
+        getline(config, line);
+        istringstream row(line);
+        for (int i = 0; i < chunks; i++){
+            row >> parts[i];
+        }
+        config.close();
+    }
+    for (int i = 0; i < chunks; i++){
+        if(parts[i]==1)
+            return true;
+    }
+    return false;
+
+}
 
 void FileDownloadManager::saveToFile(FileFragment fragment, int offset){
     FILE *fp = fopen(fileManager->getDownloadPath(file).c_str(), "rb+");
@@ -55,7 +95,7 @@ void FileDownloadManager::saveToFile(FileFragment fragment, int offset){
 
 void FileDownloadManager::fileAlloc(){
     FILE *fpointer = fopen(fileManager->getDownloadPath(file).c_str(), "a+b");
-    char *buff=new char[file.size]();
+    auto *buff=new char[file.size]();
     if (fpointer != nullptr){
         fwrite(buff, sizeof(char), file.size, fpointer);
         fclose(fpointer);
@@ -79,5 +119,6 @@ int FileDownloadManager::getFirstAvailablePart(){
 
 
 FileDownloadManager::~FileDownloadManager() {
-
+    updateFileStatus();
+    delete parts;
 }

@@ -17,6 +17,7 @@ using  namespace std;
 class NetworkManager {
 private:
     vector<RemoteNode*> remoteNodes;
+    bool doResume(File file);
     Connector* connector = nullptr;
     RemoteNodeFactory* remoteNodeFactory = nullptr;
     FileManager* fileManager = nullptr;
@@ -28,6 +29,7 @@ public:
     RemoteNodeFactory *getRemoteNodeFactory() const;
     Connector *getConnector() const;
     FileManager *getFileManager() const;
+    void resumeDownload(string path);
 public:
     void registerRemoteNode(RemoteNode* remoteNode);
     void unregisterRemoteNode(RemoteNode* remoteNode);

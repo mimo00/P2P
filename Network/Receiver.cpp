@@ -51,6 +51,7 @@ void Receiver::processRequest(int operationCode, int taskId){
     }
     else
         cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+    //delete *it;
 }
 
 void Receiver::run()
