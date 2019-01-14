@@ -27,11 +27,17 @@ public:
 };
 
 
+
 struct File {
     char name[64];
     int hash;
     int size;
+    bool operator == (File const& a);
+    bool operator != (File const& a);
 };
+
+bool operator < (const File& l, const File& r);
+
 
 struct FileFragment {
     unsigned char data[OperationCode::PORTION];
