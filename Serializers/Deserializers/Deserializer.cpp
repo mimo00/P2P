@@ -27,22 +27,30 @@ bool Deserializer::canRead() {
 
 vector<File> Deserializer::receiveFileList() {
     vector<File> filesNames;
-    int numberOfFiles = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
-    for(int i=0;i<numberOfFiles;i++){
-        File fileName = *reinterpret_cast<File*>(puller->pullBytes(sizeof(File)));;
-        filesNames.push_back(fileName);
+    try{
+        int numberOfFiles = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
+        for(int i=0;i<numberOfFiles;i++){
+            File fileName = *reinterpret_cast<File*>(puller->pullBytes(sizeof(File)));;
+            filesNames.push_back(fileName);
+        }
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
     }
     return filesNames;
 }
 
 vector<NodeAddr> Deserializer::receiveNodeList() {
     vector<NodeAddr> nodes;
-    int numberOfNodes = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
-    for(int i=0;i<numberOfNodes;i++){
-        NodeAddr nodeAddr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
-        nodeAddr.addr.s_addr=ntohl(nodeAddr.addr.s_addr);
-        nodeAddr.port=ntohs(nodeAddr.port);
-        nodes.push_back(nodeAddr);
+    try{
+        int numberOfNodes = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
+        for(int i=0;i<numberOfNodes;i++){
+            NodeAddr nodeAddr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
+            nodeAddr.addr.s_addr=ntohl(nodeAddr.addr.s_addr);
+            nodeAddr.port=ntohs(nodeAddr.port);
+            nodes.push_back(nodeAddr);
+        }
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
     }
     return nodes;
 }
@@ -58,17 +66,25 @@ tuple<int, int> Deserializer::getOffsetAndHash() {
 }
 
 FileFragment Deserializer::receiveFileFragment() {
-    FileFragment fileFragment;
-    int fileFragmentSize = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
-    memcpy(&fileFragment, reinterpret_cast<unsigned char*>(puller->pullBytes(fileFragmentSize)), fileFragmentSize);
-    fileFragment.size = fileFragmentSize;
-    return fileFragment;
+    try{
+        FileFragment fileFragment;
+        int fileFragmentSize = ntohl(*reinterpret_cast<int*>(puller->pullBytes(sizeof(int))));
+        memcpy(&fileFragment, reinterpret_cast<unsigned char*>(puller->pullBytes(fileFragmentSize)), fileFragmentSize);
+        fileFragment.size = fileFragmentSize;
+        return fileFragment;
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
+    }
 }
 
 NodeAddr Deserializer::receiveListiningAddress() {
     NodeAddr addr;
-    addr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
-    addr.addr.s_addr=ntohl(addr.addr.s_addr);
-    addr.port=ntohs(addr.port);
+    try{
+        addr = *reinterpret_cast<NodeAddr*>(puller->pullBytes(sizeof(NodeAddr)));;
+        addr.addr.s_addr=ntohl(addr.addr.s_addr);
+        addr.port=ntohs(addr.port);
+    } catch (EndOfBytesException& e) {
+        throw EndOfDataException();
+    }
     return addr;
 }
