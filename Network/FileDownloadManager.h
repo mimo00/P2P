@@ -18,13 +18,16 @@ private:
     File file;
     int portionSize;
     int chunks;
-    int *parts;
+    int *parts = nullptr;
     FileManager* fileManager;
     NetworkManager* networkManager;
     bool downloadFinished();
     void saveToFile(FileFragment fragment, int offset);
     int getFirstAvailablePart();
     void fileAlloc();
+    bool getFileStatus();
+    void updateFileStatus();
+
 };
 
 

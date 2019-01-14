@@ -21,6 +21,7 @@ public:
     FileFragment getFile(int hash, int offset);
     vector<File> getFilesNames();
     string getDownloadPath(File file);
+    string getStatusPath(File file);
 };
 
 

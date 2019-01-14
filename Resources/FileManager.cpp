@@ -53,12 +53,12 @@ vector<File> FileManager:: getFilesNames(){
     DIR *dp;
     string dir=path;
     struct dirent *dirp;
-    if((dp = opendir(dir.c_str())) == NULL) {
+    if((dp = opendir(dir.c_str())) == nullptr) {
         cout << "Error(" << errno << ") opening " << dir << endl;
         closedir(dp);
         return files;
     } else {
-        while ((dirp = readdir(dp)) != NULL) {
+        while ((dirp = readdir(dp)) != nullptr) {
             if(dirp->d_type!=DT_DIR) {
                 File file;
                 string path=dir+"/"+dirp->d_name;
@@ -80,5 +80,11 @@ const string &FileManager::getPath() const {
 string FileManager::getDownloadPath(File file) {
     string downloadPath = path + "/dwnld";
     string filePath = downloadPath + "/" + file.name;
+    return filePath;
+}
+
+string FileManager::getStatusPath(File file) {
+    string statusPath = path + "/status";
+    string filePath = statusPath + "/" + to_string(file.hash) +"("+file.name+")";
     return filePath;
 }

@@ -28,6 +28,7 @@ void Controller::startNewNetwork() {
 void Controller::connectToNetwork(NodeAddr addr) {
     networkManager->connectToNetwork(addr);
     startListener();
+    //resumer();    do poprawy
 }
 
 vector<NodeAddr> Controller::getNodesAddresses() {
