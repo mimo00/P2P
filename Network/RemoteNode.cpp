@@ -53,7 +53,12 @@ ReceiverTask* RemoteNode::popReceiverTask(int taskId) {
 
 
 SenderTask* RemoteNode::popSenderTask() {
-    return nullptr;
+    if (!senderTasks.empty()) {
+        auto senderTask = senderTasks.back();
+        senderTasks.pop_back();
+        return senderTask;
+    } else
+        return nullptr;
 }
 
 

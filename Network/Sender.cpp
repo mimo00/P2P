@@ -16,10 +16,8 @@ Sender::Sender(RemoteNode* remoteNode, Output* output)
 void Sender::run() {
     while(!stopRequested())
     {
-        auto senderTasks = remoteNode->getSenderTasks();
-        if (!senderTasks->empty()){
-            SenderTask* senderTask = senderTasks->back();
-            senderTasks->pop_back();
+        auto senderTask = remoteNode->popSenderTask();
+        if (senderTask != nullptr){
             try{
                 senderTask->send(output);
                 delete senderTask;
