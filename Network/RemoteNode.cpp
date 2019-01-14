@@ -63,12 +63,6 @@ SenderTask* RemoteNode::popSenderTask() {
 }
 
 
-vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
-    lock_guard<mutex> lock(mutexReceiver);
-    return &receiverTasks;
-}
-
-
 int getId(){
     return rand();
 }
@@ -117,4 +111,11 @@ void RemoteNode::setSenderAndReceiver(Receiver* receiver_, Sender *sender_) {
     receiverThread.detach();
     std::thread senderThread([&](){sender->run();});
     senderThread.detach();
+}
+
+void RemoteNode::closeTasks() {
+    for(int i=0;i<receiverTasks.size();i++){
+        receiverTasks.at(i)->close();
+        delete receiverTasks.at(i);
+    }
 }

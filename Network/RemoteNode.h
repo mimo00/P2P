@@ -36,7 +36,6 @@ private:
 public:
     RemoteNode(NodeAddr nodeAddr, NetworkManager* networkManager);
     ~RemoteNode();
-    vector<ReceiverTask*>* getReceiverTasks();
     NetworkManager *getNetworkManager() const;
     const NodeAddr &getNodeAddr() const;
     void setSenderAndReceiver(Receiver*, Sender*);
@@ -45,6 +44,7 @@ public:
     void addSenderTask(SenderTask*);
     ReceiverTask* popReceiverTask(int taskId);
     SenderTask* popSenderTask();
+    void closeTasks();
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     void getFileFragment(promise<FileFragment>* fragmentPromises, File file,int offset);

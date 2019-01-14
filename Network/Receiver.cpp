@@ -65,11 +65,7 @@ void Receiver::run()
                     processRequest(operationCode, taskId);
             }catch (EndOfDataException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
-                auto receiverTasks = remoteNode->getReceiverTasks();
-                for(int i=0;i<receiverTasks->size();i++){
-                    receiverTasks->at(i)->close();
-                    delete receiverTasks->at(i);
-                }
+                remoteNode->closeTasks();
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
                 return;
             }
