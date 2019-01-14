@@ -30,14 +30,30 @@ RemoteNode::~RemoteNode(){
 
 
 void RemoteNode::addReceiverTask(ReceiverTask* task){
-    mutexReceiver.lock();
+    lock_guard<mutex> lock(mutexReceiver);
     receiverTasks.emplace_back(task);
-    mutexReceiver.unlock();
 }
 
 void RemoteNode::addSenderTask(SenderTask* task){
     lock_guard<mutex> lock(mutexSender);
     senderTasks.emplace_back(task);
+}
+
+
+ReceiverTask* RemoteNode::popReceiverTask(int taskId) {
+    lock_guard<mutex> lock(mutexReceiver);
+    auto it = find_if(receiverTasks.begin(), receiverTasks.end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
+    if (it != receiverTasks.end()){
+        receiverTasks.erase(it);
+        return *it;
+    }
+    else
+        return nullptr;
+}
+
+
+SenderTask* RemoteNode::popSenderTask() {
+    return nullptr;
 }
 
 

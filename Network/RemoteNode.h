@@ -44,6 +44,8 @@ public:
 public:
     void addReceiverTask(ReceiverTask*);
     void addSenderTask(SenderTask*);
+    ReceiverTask* popReceiverTask(int taskId);
+    SenderTask* popSenderTask();
     void getFilesList(promise<vector<File>>*);
     vector<NodeAddr> getNodeAddress();
     void getFileFragment(promise<FileFragment>* fragmentPromises, File file,int offset);

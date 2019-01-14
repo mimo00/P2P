@@ -42,15 +42,11 @@ void Receiver::createResponse(int operationCode, int taskId){
 }
 
 void Receiver::processRequest(int operationCode, int taskId){
-    auto receiverTasks = remoteNode->getReceiverTasks();
-    auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
-    if (it != receiverTasks->end()){
-        (*it)->handle(operationCode,input);
-        receiverTasks->erase(it);
-        delete *it;
-    }
+    auto receiverTask = remoteNode->popReceiverTask(taskId);
+    if (receiverTask != nullptr)
+        receiverTask->handle(operationCode, input);
     else
-        cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+        cout << "Odebralismy nieznany task" << endl;
 }
 
 void Receiver::run()
