@@ -38,19 +38,15 @@ void Receiver::createResponse(int operationCode, int taskId){
             senderTask = new SendFile(taskId,hash,offset, fileManager);
             break;
     }
-    remoteNode->getSenderTasks()->emplace_back(senderTask);
+    remoteNode->addSenderTask(senderTask);
 }
 
 void Receiver::processRequest(int operationCode, int taskId){
-    auto receiverTasks = remoteNode->getReceiverTasks();
-    auto it = find_if(receiverTasks->begin(), receiverTasks->end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
-    if (it != receiverTasks->end()){
-        (*it)->handle(operationCode,input);
-        receiverTasks->erase(it);
-        delete *it;
-    }
+    auto receiverTask = remoteNode->popReceiverTask(taskId);
+    if (receiverTask != nullptr)
+        receiverTask->handle(operationCode, input);
     else
-        cout << "Jest bardzo zle !!! Odebralismy nieznany task nalezy wyrejestrowac noda" << endl;
+        cout << "Odebralismy nieznany task" << endl;
 }
 
 void Receiver::run()
@@ -69,11 +65,7 @@ void Receiver::run()
                     processRequest(operationCode, taskId);
             }catch (EndOfDataException& e){
                 cout<<"Node zerwal polaczenie, wyrejectrowuje noda." << endl;
-                auto receiverTasks = remoteNode->getReceiverTasks();
-                for(int i=0;i<receiverTasks->size();i++){
-                    receiverTasks->at(i)->close();
-                    delete receiverTasks->at(i);
-                }
+                remoteNode->closeTasks();
                 remoteNode->getNetworkManager()->unregisterRemoteNode(remoteNode);
                 return;
             }

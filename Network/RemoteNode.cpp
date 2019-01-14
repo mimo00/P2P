@@ -30,9 +30,8 @@ RemoteNode::~RemoteNode(){
 
 
 void RemoteNode::addReceiverTask(ReceiverTask* task){
-    mutexReceiver.lock();
+    lock_guard<mutex> lock(mutexReceiver);
     receiverTasks.emplace_back(task);
-    mutexReceiver.unlock();
 }
 
 void RemoteNode::addSenderTask(SenderTask* task){
@@ -41,15 +40,28 @@ void RemoteNode::addSenderTask(SenderTask* task){
 }
 
 
-vector<ReceiverTask*>* RemoteNode::getReceiverTasks(){
+ReceiverTask* RemoteNode::popReceiverTask(int taskId) {
     lock_guard<mutex> lock(mutexReceiver);
-    return &receiverTasks;
+    auto it = find_if(receiverTasks.begin(), receiverTasks.end(), [&taskId](const ReceiverTask* obj) {return obj->getTaskId() == taskId;});
+    if (it != receiverTasks.end()){
+        receiverTasks.erase(it);
+        return *it;
+    }
+    else
+        return nullptr;
 }
 
-vector<SenderTask*>* RemoteNode::getSenderTasks(){
+
+SenderTask* RemoteNode::popSenderTask() {
     lock_guard<mutex> lock(mutexSender);
-    return &senderTasks;
+    if (!senderTasks.empty()) {
+        auto senderTask = senderTasks.back();
+        senderTasks.pop_back();
+        return senderTask;
+    } else
+        return nullptr;
 }
+
 
 int getId(){
     return rand();
@@ -99,4 +111,11 @@ void RemoteNode::setSenderAndReceiver(Receiver* receiver_, Sender *sender_) {
     receiverThread.detach();
     std::thread senderThread([&](){sender->run();});
     senderThread.detach();
+}
+
+void RemoteNode::closeTasks() {
+    for(int i=0;i<receiverTasks.size();i++){
+        receiverTasks.at(i)->close();
+        delete receiverTasks.at(i);
+    }
 }
